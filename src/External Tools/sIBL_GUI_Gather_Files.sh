@@ -36,26 +36,6 @@ cp ./Releases/Linux/sIBL_GUI.tar.gz ./Releases/Gathering/sIBL_GUI-$sIBL_GUI_Rele
 cp ./Releases/MacOsX/sIBL_Framework.dmg ./Releases/Gathering/sIBL_Framework-$sIBL_GUI_Release.dmg
 cp ./Releases/MacOsX/sIBL_GUI.dmg ./Releases/Gathering/sIBL_GUI-$sIBL_GUI_Release.dmg
 
-#! Source Code Gathering.
-rm -rf ./Releases/sIBL_GUI_Source/*
-cp ./COPYING ./Releases/sIBL_GUI_Source/
-cp ./*.py ./Releases/sIBL_GUI_Source/
-cp ./*.qrc ./Releases/sIBL_GUI_Source/
-cp -rf ./UI ./Releases/sIBL_GUI_Source/
-cp -rf ./Templates ./Releases/sIBL_GUI_Source/
-cp -rf ./Help ./Releases/sIBL_GUI_Source/
-cp -rf ./Installers ./Releases/sIBL_GUI_Source/
-rm -rf ./Releases/sIBL_GUI_Source/Installers/*.exe
-cp -rf ./Resources ./Releases/sIBL_GUI_Source/
-rm -rf ./Releases/sIBL_GUI_Source/Resources/Builders
-rm -rf ./Releases/sIBL_GUI_Source/Resources/*.psd
-#! Source Cleanup.
-python ./External\ Tools/KSL_Recursive_Remove.py ./Releases/sIBL_GUI_Source .DS_Store
-#! Source Code Archiving.
-cd ./Releases/
-tar -czvf ./Gathering/sIBL_GUI_Source-$sIBL_GUI_Release.tar.gz sIBL_GUI_Source/
-cd ..
-
 #! Templates Gathering.
 cp -rf ./Templates ./Releases/Gathering/
 

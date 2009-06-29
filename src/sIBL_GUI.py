@@ -586,7 +586,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cSpashScreen.setMessage( "sIBL_GUI | Initializing GPS Map." )
 
 		self.WorldMap_QGraphicsView = None
-		self.setInitializeGPSMap()
+		self.setGPSMap()
 
 		# sIBL_GUI Import Tab Initialization.
 		cSpashScreen.setMessage( "sIBL_GUI | Gathering Templates." )
@@ -770,7 +770,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.emit( SIGNAL( "WorldMap_Refresh()" ) )
 
 	@sIBL_Common.sIBL_Execution_Call
-	def setInitializeGPSMap( self ) :
+	def setGPSMap( self ) :
 		'''
 		This Method Initialize The GPS Map.
 		'''
@@ -993,7 +993,13 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		for sIBL in self.cFilteredCollection.keys() :
 			cSIBLAttributes = self.cFilteredCollection[sIBL]
 			cItem = QListWidgetItem( QString( cSIBLAttributes["sIBL Name"] ) )
-			cToolTip = QString( "<p><b>" + cSIBLAttributes["sIBL Name"] + "</b></p>" + "<p>" + "Author : " + cSIBLAttributes["Author"] + "<br>" + "Location : " + cSIBLAttributes["Location"] + "<br>" + "Comment : " + cSIBLAttributes["Comment"] + "</p>" )
+
+			# sIBL V2 Format Support.
+			if "Time" in cSIBLAttributes.keys():
+				cToolTip = QString( "<p><b>" + cSIBLAttributes["sIBL Name"] + "</b></p>" + "<p>" + "Author : " + cSIBLAttributes["Author"] + "<br>" + "Location : " + cSIBLAttributes["Location"] + "<br>" + "Shot Date : " + self.getFormattedShotDate( cSIBLAttributes["Date"], cSIBLAttributes["Time"] ) + "<br>" + "Comment : " + cSIBLAttributes["Comment"] + "</p>" )
+			else :
+				cToolTip = QString( "<p><b>" + cSIBLAttributes["sIBL Name"] + "</b></p>" + "<p>" + "Author : " + cSIBLAttributes["Author"] + "<br>" + "Location : " + cSIBLAttributes["Location"] + "<br>" + "Comment : " + cSIBLAttributes["Comment"] + "</p>" )
+
 			cItem.setToolTip( cToolTip )
 			cIcon = QIcon( cSIBLAttributes["Icon Path"] )
 			cItem.setIcon( cIcon )
@@ -1258,7 +1264,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 			if "Date" in cSIBL.keys():
 				self.Shot_Date_groupBox.show()
-				self.sIBL_Date_Set_label.setText( QString( cSIBL["Date"].replace( ":", "/" ) + "\n" + cSIBL["Time"] ) )
+				self.sIBL_Date_Set_label.setText( QString( self.getFormattedShotDate( cSIBL["Date"], cSIBL["Time"] ) ) )
 			else:
 				self.Shot_Date_groupBox.hide()
 		else:
@@ -1920,7 +1926,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			sIBL_Set_KeyInSettings( "Settings", "OpenGL", 0 )
 			self.OpenGLActive = False
 
-		self.setInitializeGPSMap()
+		self.setGPSMap()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Activate_Antialiasing_checkBox_StateChanged( self, *__None__ ) :
@@ -1935,7 +1941,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			sIBL_Set_KeyInSettings( "Settings", "GPSMapAntialiasing", 0 )
 			self.GPSMapAntialiasingActive = False
 
-		self.setInitializeGPSMap()
+		self.setGPSMap()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Toggle_Log_Window_pushButton_OnClicked( self ) :
@@ -2338,6 +2344,21 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cUpdate = sIBL_GUI_Updater.sIBL_Online_Update( self, showInfoMessage )
 		cUpdate.startWorkerThread()
 
+	# Deprecated Method.
+	@sIBL_Common.sIBL_Execution_Call
+	def setLineEditsTextSize( self, cPointSize ) :
+		'''
+		This Method Sets Line Edits Text Size.
+
+		@param cPointSize: Current Point Size ( Integer )
+		'''
+
+		cFont = QFont()
+		cFont.setPointSize( cPointSize )
+		for cLineEdit in self.cLineEditsList :
+			cLogger.debug( "> Setting '%s' Point Size.", cLineEdit )
+			cLineEdit.setFont( cFont )
+
 	@sIBL_Common.sIBL_Execution_Call
 	def checkPreferencesPaths( self ) :
 		'''
@@ -2659,6 +2680,22 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		for cLineEdit in self.cLineEdits_List :
 			cLineEdit.setCursorPosition( cPosition )
+
+	@sIBL_Common.sIBL_Execution_Call
+	def getFormattedShotDate( self, cDate, cTime ):
+		'''
+		This Method Returns A Formatted Shot Date.
+
+		@param cDate: sIBL Set Date Key Value ( String )
+		@param cTime: sIBL Set Time Key Value ( String )
+		@return: Current Shot Date ( String )
+		'''
+
+		cShotTime = cTime.split( ":" )
+		cShotTime = cShotTime[0] + "H" + cShotTime[1]
+		cShotDate = cDate.replace( ":", "/" )[2:] + " - " + cShotTime
+
+		return cShotDate
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getNiceName( self, cString ) :

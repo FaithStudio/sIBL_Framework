@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>658</width>
-    <height>738</height>
+    <height>908</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -146,7 +146,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>596</width>
-                <height>241</height>
+                <height>411</height>
                </rect>
               </property>
               <attribute name="label" >
@@ -186,7 +186,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>596</width>
-                <height>241</height>
+                <height>411</height>
                </rect>
               </property>
               <attribute name="label" >
@@ -216,19 +216,6 @@
         <string>Import</string>
        </attribute>
        <layout class="QGridLayout" name="Import_tab_gridLayout" >
-        <item row="0" column="2" >
-         <spacer name="Import_Center_horizontalSpacer" >
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0" >
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="0" column="1" >
          <widget class="QGroupBox" name="sIBL_groupBox" >
           <property name="maximumSize" >
@@ -259,170 +246,149 @@
               <string>Infos</string>
              </property>
              <layout class="QGridLayout" name="Infos_groupBox_gridLayout" >
-              <property name="margin" >
-               <number>0</number>
-              </property>
-              <item row="0" column="0" >
-               <widget class="QScrollArea" name="sIBL_Infos_scrollArea" >
-                <property name="frameShape" >
-                 <enum>QFrame::NoFrame</enum>
+              <item row="4" column="0" >
+               <widget class="QGroupBox" name="Comment_groupBox" >
+                <property name="title" >
+                 <string>Comment</string>
                 </property>
-                <property name="horizontalScrollBarPolicy" >
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
                 </property>
-                <property name="widgetResizable" >
+                <property name="flat" >
                  <bool>true</bool>
                 </property>
-                <widget class="QWidget" name="sIBL_Infos_scrollAreaWidgetContents" >
-                 <property name="geometry" >
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>130</width>
-                   <height>215</height>
-                  </rect>
+                <layout class="QGridLayout" name="Comment_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
                  </property>
-                 <layout class="QGridLayout" name="sIBL_Infos_scrollAreaWidgetContents_gridLayout" >
-                  <item row="1" column="0" >
-                   <widget class="QGroupBox" name="Location_groupBox" >
-                    <property name="title" >
-                     <string>Location</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Location_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QLabel" name="sIBL_Location_Set_label" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="margin" >
-                        <number>4</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="2" column="0" >
-                   <widget class="QGroupBox" name="sIBL_Author_groupBox" >
-                    <property name="title" >
-                     <string>Author</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="sIBL_Author_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QLabel" name="sIBL_Author_Set_label" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="margin" >
-                        <number>4</number>
-                       </property>
-                       <property name="openExternalLinks" >
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="5" column="0" >
-                   <widget class="QGroupBox" name="Shot_Date_groupBox" >
-                    <property name="title" >
-                     <string>Shot Date</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Shot_Date_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QLabel" name="sIBL_Date_Set_label" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="text" >
-                        <string/>
-                       </property>
-                       <property name="margin" >
-                        <number>4</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="6" column="0" >
-                   <widget class="QGroupBox" name="Comment_groupBox" >
-                    <property name="title" >
-                     <string>Comment</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Comment_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QTextEdit" name="Comment_textEdit" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="frameShape" >
-                        <enum>QFrame::NoFrame</enum>
-                       </property>
-                       <property name="verticalScrollBarPolicy" >
-                        <enum>Qt::ScrollBarAlwaysOff</enum>
-                       </property>
-                       <property name="horizontalScrollBarPolicy" >
-                        <enum>Qt::ScrollBarAlwaysOff</enum>
-                       </property>
-                       <property name="undoRedoEnabled" >
-                        <bool>false</bool>
-                       </property>
-                       <property name="readOnly" >
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
+                 <item row="0" column="0" >
+                  <widget class="QTextEdit" name="Comment_textEdit" >
+                   <property name="sizePolicy" >
+                    <sizepolicy vsizetype="Maximum" hsizetype="Expanding" >
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="frameShape" >
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="horizontalScrollBarPolicy" >
+                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                   </property>
+                   <property name="undoRedoEnabled" >
+                    <bool>false</bool>
+                   </property>
+                   <property name="readOnly" >
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="0" >
+               <widget class="QGroupBox" name="Shot_Date_groupBox" >
+                <property name="title" >
+                 <string>Shot Date</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat" >
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="Shot_Date_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="sIBL_Date_Set_label" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="text" >
+                    <string/>
+                   </property>
+                   <property name="margin" >
+                    <number>4</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+                <zorder>sIBL_Date_Set_label</zorder>
+                <zorder>Comment_groupBox</zorder>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QGroupBox" name="sIBL_Author_groupBox" >
+                <property name="title" >
+                 <string>Author</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat" >
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="sIBL_Author_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="sIBL_Author_Set_label" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="margin" >
+                    <number>4</number>
+                   </property>
+                   <property name="openExternalLinks" >
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+                <zorder>sIBL_Author_Set_label</zorder>
+                <zorder>Shot_Date_groupBox</zorder>
+               </widget>
+              </item>
+              <item row="0" column="0" >
+               <widget class="QGroupBox" name="Location_groupBox" >
+                <property name="title" >
+                 <string>Location</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat" >
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="Location_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="sIBL_Location_Set_label" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="margin" >
+                    <number>4</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -469,16 +435,6 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="0" >
-               <widget class="QPushButton" name="Refresh_sIBL_File_pushButton" >
-                <property name="statusTip" >
-                 <string>Refresh sIBL File PushButton : Reloads The Current sIBL File.</string>
-                </property>
-                <property name="text" >
-                 <string>Refresh sIBL File</string>
-                </property>
-               </widget>
-              </item>
               <item row="2" column="0" >
                <widget class="QPushButton" name="Open_sIBL_Folder_pushButton" >
                 <property name="statusTip" >
@@ -489,10 +445,27 @@
                 </property>
                </widget>
               </item>
+              <item row="1" column="0" >
+               <widget class="QPushButton" name="Refresh_sIBL_File_pushButton" >
+                <property name="statusTip" >
+                 <string>Refresh sIBL File PushButton : Reloads The Current sIBL File.</string>
+                </property>
+                <property name="text" >
+                 <string>Refresh sIBL File</string>
+                </property>
+               </widget>
+              </item>
              </layout>
+             <zorder>Edit_In_sIBL_Edit_pushButton</zorder>
+             <zorder>Open_sIBL_Folder_pushButton</zorder>
+             <zorder>Refresh_sIBL_File_pushButton</zorder>
             </widget>
            </item>
           </layout>
+          <zorder>sIBL_Set_groupBox</zorder>
+          <zorder>sIBL_Infos_groupBox</zorder>
+          <zorder>sIBL_Options_groupBox</zorder>
+          <zorder>scrollArea</zorder>
          </widget>
         </item>
         <item row="0" column="3" >
@@ -522,197 +495,166 @@
               <string>Infos</string>
              </property>
              <layout class="QGridLayout" name="Template_Infos_groupBox_gridLayout" >
-              <property name="margin" >
-               <number>0</number>
-              </property>
               <item row="0" column="0" >
-               <widget class="QScrollArea" name="Template_scrollArea" >
-                <property name="frameShape" >
-                 <enum>QFrame::NoFrame</enum>
+               <widget class="QGroupBox" name="Release_groupBox" >
+                <property name="title" >
+                 <string>Release</string>
                 </property>
-                <property name="horizontalScrollBarPolicy" >
-                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
                 </property>
-                <property name="widgetResizable" >
+                <property name="flat" >
                  <bool>true</bool>
                 </property>
-                <widget class="QWidget" name="Template_scrollAreaWidgetContents" >
-                 <property name="geometry" >
-                  <rect>
-                   <x>0</x>
-                   <y>-94</y>
-                   <width>134</width>
-                   <height>243</height>
-                  </rect>
+                <layout class="QGridLayout" name="Release_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
                  </property>
-                 <layout class="QGridLayout" name="Template_scrollAreaWidgetContents_gridLayout" >
-                  <item row="0" column="0" >
-                   <widget class="QGroupBox" name="Release_groupBox" >
-                    <property name="title" >
-                     <string>Release</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Release_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QLabel" name="Release_Set_label" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="margin" >
-                        <number>4</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="1" column="0" >
-                   <widget class="QGroupBox" name="Software_Set_groupBox" >
-                    <property name="title" >
-                     <string/>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Software_Set_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QLabel" name="Software_Version_label" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="margin" >
-                        <number>4</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="2" column="0" >
-                   <widget class="QGroupBox" name="Template_Author_groupBox" >
-                    <property name="title" >
-                     <string>Author</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Template_Author_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QLabel" name="Template_Author_Set_label" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="margin" >
-                        <number>4</number>
-                       </property>
-                       <property name="openExternalLinks" >
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="3" column="0" >
-                   <widget class="QGroupBox" name="Template_Loader_Script_groupBox" >
-                    <property name="title" >
-                     <string>Loader Script</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Template_Loader_Script_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QLabel" name="Loader_Script_Set_label" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="margin" >
-                        <number>4</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="4" column="0" >
-                   <widget class="QGroupBox" name="Template_Comment_groupBox" >
-                    <property name="title" >
-                     <string>Comment</string>
-                    </property>
-                    <property name="alignment" >
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="flat" >
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QGridLayout" name="Template_Comment_groupBox_gridLayout" >
-                     <property name="margin" >
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0" >
-                      <widget class="QTextEdit" name="Template_Comment_textEdit" >
-                       <property name="font" >
-                        <font>
-                         <italic>true</italic>
-                        </font>
-                       </property>
-                       <property name="frameShape" >
-                        <enum>QFrame::NoFrame</enum>
-                       </property>
-                       <property name="verticalScrollBarPolicy" >
-                        <enum>Qt::ScrollBarAlwaysOff</enum>
-                       </property>
-                       <property name="horizontalScrollBarPolicy" >
-                        <enum>Qt::ScrollBarAlwaysOff</enum>
-                       </property>
-                       <property name="undoRedoEnabled" >
-                        <bool>false</bool>
-                       </property>
-                       <property name="readOnly" >
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="Release_Set_label" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="margin" >
+                    <number>4</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QGroupBox" name="Software_Set_groupBox" >
+                <property name="title" >
+                 <string/>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat" >
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="Software_Set_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="Software_Version_label" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="margin" >
+                    <number>4</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="2" column="0" >
+               <widget class="QGroupBox" name="Template_Author_groupBox" >
+                <property name="title" >
+                 <string>Author</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat" >
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="Template_Author_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="Template_Author_Set_label" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="margin" >
+                    <number>4</number>
+                   </property>
+                   <property name="openExternalLinks" >
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="3" column="0" >
+               <widget class="QGroupBox" name="Template_Loader_Script_groupBox" >
+                <property name="title" >
+                 <string>Loader Script</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat" >
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="Template_Loader_Script_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="Loader_Script_Set_label" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="margin" >
+                    <number>4</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="4" column="0" >
+               <widget class="QGroupBox" name="Template_Comment_groupBox" >
+                <property name="title" >
+                 <string>Comment</string>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+                <property name="flat" >
+                 <bool>true</bool>
+                </property>
+                <layout class="QGridLayout" name="Template_Comment_groupBox_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0" >
+                  <widget class="QTextEdit" name="Template_Comment_textEdit" >
+                   <property name="font" >
+                    <font>
+                     <italic>true</italic>
+                    </font>
+                   </property>
+                   <property name="frameShape" >
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="horizontalScrollBarPolicy" >
+                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                   </property>
+                   <property name="undoRedoEnabled" >
+                    <bool>false</bool>
+                   </property>
+                   <property name="readOnly" >
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -741,7 +683,7 @@
                    <x>0</x>
                    <y>0</y>
                    <width>256</width>
-                   <height>162</height>
+                   <height>328</height>
                   </rect>
                  </property>
                  <property name="statusTip" >
@@ -774,7 +716,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>96</width>
+                   <width>84</width>
                    <height>61</height>
                   </rect>
                  </property>
@@ -931,19 +873,6 @@
              </layout>
             </widget>
            </item>
-           <item row="4" column="1" >
-            <spacer name="Template_horizontalSpacer" >
-             <property name="orientation" >
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0" >
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
            <item row="7" column="2" >
             <widget class="QGroupBox" name="Remote_Connection_groupBox" >
              <property name="statusTip" >
@@ -1030,6 +959,19 @@
              </layout>
             </widget>
            </item>
+           <item row="4" column="1" >
+            <spacer name="Template_horizontalSpacer" >
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </widget>
         </item>
@@ -1048,6 +990,19 @@
         </item>
         <item row="0" column="0" >
          <spacer name="Import_Left_horizontalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="2" >
+         <spacer name="Import_Center_horizontalSpacer" >
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
@@ -1080,7 +1035,7 @@
              <x>0</x>
              <y>0</y>
              <width>618</width>
-             <height>311</height>
+             <height>481</height>
             </rect>
            </property>
            <attribute name="label" >
@@ -1120,6 +1075,9 @@
                   <string>Custom Text Editor</string>
                  </property>
                  <layout class="QGridLayout" name="Custom_Text_Editor_Path_groupBox_gridLayout" >
+                  <property name="sizeConstraint" >
+                   <enum>QLayout::SetMaximumSize</enum>
+                  </property>
                   <item row="0" column="0" >
                    <widget class="QLineEdit" name="Custom_Text_Editor_Path_lineEdit" >
                     <property name="statusTip" >
@@ -1152,6 +1110,9 @@
                   <string>Custom File Browser</string>
                  </property>
                  <layout class="QGridLayout" name="Custom_File_Browser_Path_gridLayout" >
+                  <property name="sizeConstraint" >
+                   <enum>QLayout::SetMaximumSize</enum>
+                  </property>
                   <item row="0" column="0" >
                    <widget class="QLineEdit" name="Custom_File_Browser_Path_lineEdit" >
                     <property name="statusTip" >
@@ -1199,6 +1160,9 @@
                      <string>Templates Path</string>
                     </property>
                     <layout class="QGridLayout" name="Templates_Path_groupBox_gridLayout" >
+                     <property name="sizeConstraint" >
+                      <enum>QLayout::SetMaximumSize</enum>
+                     </property>
                      <item row="0" column="0" >
                       <widget class="QLineEdit" name="Templates_Path_lineEdit" >
                        <property name="statusTip" >
@@ -1246,6 +1210,9 @@
                      <string>Help Files Path</string>
                     </property>
                     <layout class="QGridLayout" name="Help_Files_Settings_Path_groupBox_gridLayout" >
+                     <property name="sizeConstraint" >
+                      <enum>QLayout::SetMaximumSize</enum>
+                     </property>
                      <item row="0" column="0" >
                       <widget class="QLineEdit" name="Help_Files_Path_lineEdit" >
                        <property name="statusTip" >
@@ -1296,6 +1263,9 @@
                   <string>sIBL_Framework Path</string>
                  </property>
                  <layout class="QGridLayout" name="sIBL_Framework_Path_groupBox_gridLayout" >
+                  <property name="sizeConstraint" >
+                   <enum>QLayout::SetMaximumSize</enum>
+                  </property>
                   <item row="0" column="0" >
                    <widget class="QLineEdit" name="sIBL_Framework_Path_lineEdit" >
                     <property name="statusTip" >
@@ -1328,6 +1298,9 @@
                   <string>sIBLedit Path</string>
                  </property>
                  <layout class="QGridLayout" name="sIBLedit_Path_groupBox_gridLayout" >
+                  <property name="sizeConstraint" >
+                   <enum>QLayout::SetMaximumSize</enum>
+                  </property>
                   <item row="0" column="0" >
                    <widget class="QLineEdit" name="sIBLedit_Path_lineEdit" >
                     <property name="statusTip" >
@@ -1480,8 +1453,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>618</width>
-             <height>311</height>
+             <width>206</width>
+             <height>164</height>
             </rect>
            </property>
            <attribute name="label" >
@@ -1596,8 +1569,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>618</width>
-             <height>311</height>
+             <width>413</width>
+             <height>134</height>
             </rect>
            </property>
            <attribute name="label" >
@@ -1917,6 +1890,8 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../sIBL_GUI.qrc" />
+  <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
