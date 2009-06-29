@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="sIBL_GUI" >
+    <file>Resources/sIBL_GUI_SpashScreen.png</file>
+    <file>Resources/Grid_Background.png</file>
+    <file>Resources/Marker.png</file>
+    <file>Resources/Marker_Small.png</file>
+    <file>Resources/GPL_V3.png</file>
+    <file>Resources/sIBL_GUI_Logo.png</file>
+    <file>Resources/Icon_Light.png</file>
+  </qresource>
+</RCC>

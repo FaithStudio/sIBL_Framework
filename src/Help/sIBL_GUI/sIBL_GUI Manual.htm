@@ -1,0 +1,557 @@
+<html>
+    <head>
+        <title>sIBL_GUI - Manual - Help File</title>
+        <style type="text/css">
+            body {
+                text-align: justify;
+                margin: 10px 10px 10px 10px;
+                background-color: rgb(180, 180, 180);
+                color: rgb(24, 24, 24);
+            }
+
+            A:link {
+                text-decoration: none;
+                color: rgb(16, 64, 128);
+            }
+
+            A:visited {
+                text-decoration: none;
+                color: rgb(16, 64, 128);
+            }
+
+            A:active {
+                text-decoration: none;
+                color: rgb(16, 64, 128);
+            }
+
+            A:hover {
+                text-decoration: underline;
+                color: rgb(16, 64, 128);
+            }
+        </style>
+    </head>
+    <body>
+        <p align="center">
+            <span style="font-weight: 700; font-size: 24pt">s I B L _ G U I</span>
+            <br/>
+            <span style="font-weight: 700; font-size: 20pt">Manual - Help File</span>
+        </p>
+        <p align="justify">
+            <span style="font-size: 18pt; font-weight: 700">Table Of Contents </span>
+            <ul>
+                <li>
+                    Introduction
+                </li>
+                <li>
+                    The Concept
+                </li>
+                <li>
+                    Installation
+                </li>
+                <li>
+                    Usage
+                </li>
+                <li>
+                    Change Log
+                </li>
+                <li>
+                    About
+                </li>
+            </ul>
+        </p>
+        <p align="justify">
+            <span style="font-size: 18pt; font-weight: 700">Introduction</span>
+            <br/>
+            This document introduces sIBL_GUI, a tool to make easier the process of importing sIBL files in your <b>Target 3D Package</b>. What is sIBL ? It's a short for <span style="font-style: italic">"Smart IBL"&nbsp;</span>. It's a standard describing all informations and files needeed to provide fast and easy Image Based Lighting Setup. A lot more informations are available here : <a href="http://www.smartibl.com">http://www.smartibl.com</a>.
+        </p>
+        <p align="justify">
+            <span style="font-size: 18pt; font-weight: 700">The Concept </span>
+            <br/>
+            Why doing an external application to load sIBL files in a 3D package and not directly use scripting possibilities of the 3D package ? There are advantages and inconvenients in both methods.
+            <br/>
+            Let's explain how sIBL_GUI works behind : the heart of the application is not sIBL_GUI executable in fact but sIBL_Framework. sIBL_GUI is a frontend for it and call sIBL_Framework each time you need to output a loader script : Basically it uses a Template for your 3D package plus a sIBL file then output the Loader Script that you will have to execute in the Target 3D package and the sIBL will setup alone.
+            <br/>
+            Advantage of doing this way is that all the sIBL parsing, Collection Browsing is handled by sIBL_GUI/Framework, you just just have to deal with a simple Loader Script for each 3D package. For example it took me only a few hours to convert the XSI 7.0 Template in a Maya 2008 one. Rescripting an entire browser with a nice interface would have taken days and I must admit it : I failed to do it for XSI,&nbsp; that's why I decided to build an external application.
+            <br/>
+            If you want more technicals informations about sIBL_GUI and sIBL_Framework visit this thread : <a href="http://www.hdrlabs.com/cgi-bin/forum/YaBB.pl?num=1219865135">sIBL_Framework And sIBL_GUI Thread</a>.
+        </p>
+        <p align="justify">
+            <span style="font-size: 18pt; font-weight: 700">Installation</span>
+            <p align="justify">
+                <span style="font-size: 14pt; font-weight: 700">Windows Platform :</span>
+                <br/>
+                Installation on Windows is pretty straightforward, just launch "sIBL_GUI_Setup.exe".
+            </p>
+            <p align="justify">
+                <span style="font-size: 14pt; font-weight: 700">Linux Platform :</span>
+                <br/>
+                You will need some <b>QT Libraries</b>
+                in order to run sIBL_GUI under Linux :
+                <ul>
+                    <li>
+                        Debian Distributions ( Ubuntu ) :
+                        <br/>
+                        <i>sudo apt-get install libqt4-core</i>
+                        <br/>
+                        <i>sudo apt-get install libqt4-gui</i>
+                    </li>
+                    <li>
+                        RPM Distributions ( Fedora ):
+                        <br/>
+                        <i>su root</i>
+                        <br/>
+                        <i>yum install qt</i>
+                        <br/>
+                        <i>yum install qt-x11</i>
+                    </li>
+                </ul>
+                <p>
+                    You also need a defined "TMPDIR" variable ( a temporary files folder ). Type <b>echo $TMPDIR</b>
+                    in a shell, if nothing is printed, that means the variable does not exist, enter <b>export TMPDIR="/tmp"</b>
+                    to define it ( You can also put the line in your .bashrc to prevent exporting the variable every time ). Once the variable is defined, uncompress the sIBL_GUI archive into the folder of your choice, CD to the folder, <b>chmod +x</b>
+                    both sIBL_Framework and sIBL_GUI then start sIBL_GUI with <b>./sIBL_GUI</b>
+                    from a shell or directly by double clicking sIBL_GUI from your file browser.
+                </p>
+                <p align="justify">
+                    <span style="font-size: 14pt; font-weight: 700">Mac Os X Platform :</span>
+                    <br/>
+                    Download "sIBL_Framework.dmg" and "sIBL_GUI.dmg". Open them and drag "sIBL_Framework" and "sIBL_GUI" into your "Application" folder. Notice that both Applications need to be in the same folder, otherwise you will need to edit sIBL_Framework path in sIBL_GUI preferences.
+                </p>
+            </p>
+        </p>
+        <p align="justify">
+            <span style="font-size: 18pt; font-weight: 700">Usage</span>
+            <p>
+                An XSI oriented screencast is available here : <a href="http://kelsolaar.hdrlabs.com/sIBL_Framework/XSI/sIBL_GUI_For_XSI/Screencast/sIBL_GUI_For_XSI.wmv">sIBL_GUI_For_XSI Screencast</a>
+            </p>
+            <ul>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">Collection Wizard</span>
+                    <p>
+                        <p>
+                            The first time <b>sIBL_GUI</b>
+                            is started, the <b>New Collection Wizard</b>
+                            will appear :
+                        </p>
+                        <br/>
+                        <br/>
+                        <img src="Resources/New%20Collection%20Wizard%20-%20A.jpg">
+                    </p>
+                    <br/>
+                    <p>
+                        <p>
+                            If you choose <b>Ok</b>, you will be prompted to enter a name for your new <b>Collection</b>, otherwise interface will directly start on the <b>Collections Browser Tab</b>.
+                        </p>
+                        <br/>
+                        <br/>
+                        <img src="Resources/New%20Collection%20Wizard%20-%20B.jpg">
+                    </p>
+                    <br/>
+                    <p>
+                        <p>
+                            After entered the name, a browser tree will popup, choose the root of one of your <b>Collections</b>.
+                        </p>
+                        <br/>
+                        <br/>
+                        <img src="Resources/New%20Collection%20Wizard%20-%20C.jpg">
+                    </p>
+                    <br/>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">Collections Browser Tab</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Collections%20Browser%20Tab.jpg">
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20GPS%20Map.jpg">
+                    <p>
+                        Once you added your first <b>Collection</b>, interface will start on <b>Collections Browser Tab</b>. This is where you can choose and select the <b>sIBL Set</b>
+                        you want to load into your <b>Target 3D Package</b>. You can filter your <b>Global Collection</b>
+                        with the three filtering comboBoxes or directly search into it using the <b>Search line</b>.
+                        <br/>
+                        The comboBoxes are tri-directionnal : when your choose an item in one of the comboBoxes, the two others items will update to reflect the new <b>Filtered Global Collection</b>
+                        content.
+                        <br/>
+                        The <b>Search Line</b>
+                        will match your entry with the parameters from all your <b>sIBL Sets</b>. You can for example search for the word "Bright" and all <b>sIBL Sets</b>
+                        containing "Bright" will show. <i>Comments Field</i>
+                        of <b>sIBL Sets</b>
+                        are also matched ( making the <i>Comments Field</i>
+                        acting as Tags Clouds ).
+                        <br/>
+                        Double-click the <b>sIBL Set</b>
+                        you want to import and it will be brought to the <b>Import Tab</b>.
+                        <br/>
+                        <br/>
+                        <span style="font-size: 12pt; font-weight: 700">Interactable Widgets Descriptions :</span>
+                        <ul>
+                            <li>
+                                <b>Collections ComboBox</b>
+                                : Global Collection Filtering by Sub-Collections.
+                                <br/>
+                                Tips : You can directly use the mouse scrollwheel over a ComboBox to cycle beetween items without clicking.
+                            </li>
+                            <li>
+                                <b>Authors ComboBox</b>
+                                : Global Collection Filtering by Authors.
+                            </li>
+                            <li>
+                                <b>Locations ComboBox</b>
+                                : Global Collection Filtering by Locations.
+                            </li>
+                            <li>
+                                <b>Search LineEdit</b>
+                                : Searches the input text through the Global Collection ( sIBL Sets Parameters ).
+                            </li>
+                            <li>
+                                <b>Collections List</b>
+                                : Current Filtered Collection, double-click an item to send it to Import Tab.
+                                <br/>
+                                Tips : Leaving your mouse over a sIBL Set will provide you main informations about it.
+                            </li>
+                            <li>
+                                <b>GPS Map</b>
+                                : The <b>GPS Map</b>
+                                Shows the location of your <b>sIBL Sets</b>
+                                on a World Map. You can Zoom with the ScrollWheel and Pan by Dragging with the Left Mouse Button. Leaving the mouse over a <b>Marker</b>
+                                will pop a Preview with some Informations about the <b>sIBL Set</b>. Double Click a <b>Marker</b>
+                                will send it to the <b>Import Tab</b>.
+                            </li>
+                        </ul>
+                    </p>
+                    <br/>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">Import Tab</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Import%20Tab.jpg">
+                    <p>
+                        <b>Import Tab</b>
+                        is where you configure your <b>Loader Script</b>. You can choose your <b>Target 3D Package</b>
+                        using one of the <b>Templates</b>, tweak options for the <b>Loader Script</b>, etc... On the left you will find informations and options for the selected <b>sIBL Set</b>, and on the right are options to tweak the <b>Template</b>
+                        / <b>Loader Script</b>
+                        output.
+                        <br/>
+                        Basically, you select the <b>Target 3D Package</b>
+                        and the <b>Rendering Engine</b>
+                        you want to work with by choosing a <b>Template</b>, you customize your <b>Loader Script</b>
+                        options by tweaking the <b>Common / Additional Attributes</b>
+                        and you output the <b>Loader Script</b>. Depending your <b>Target 3D Package</b>, it will support <b>Remote Connection</b>
+                        allowing you to directly send the <b>Loader Script</b>.
+                        <br/>
+                        <br/>
+                        <span style="font-size: 12pt; font-weight: 700">Interactable Widgets Descriptions :</span>
+                        <ul>
+                            <li>
+                                <b>Edit In sIBL Edit PushButton</b>
+                                : Sends the sIBL File to sIBL Edit for further editing ( You will need to define a sIBLedit path in the Preferences Tab )
+                            </li>
+                            <li>
+                                <b>Refresh sIBL File PushButton</b>
+                                : Reloads the current sIBL Set.
+                            </li>
+                            <li>
+                                <b>Open sIBL Folder PushButton</b>
+                                : Opens the folder containing the current sIBL Set.
+                            </li>
+                            <li>
+                                <b>Software ComboBox</b>
+                                : Target 3D Package for the Loader Script.
+                            </li>
+                            <li>
+                                <b>Template ComboBox</b>
+                                : Template for the Loader Script ( It's often a Rendering Engine ).
+                            </li>
+                            <li>
+                                <b>Open Templates Folder PushButton</b>
+                                : Opens the folder containing the Templates.
+                                <br/>
+                                Tips : You can define your Custom File Browser in the Preferences Tab. Hardcoded Browsers are : Explorer.exe on Windows, Nautilus, Konqueror, Thunar on Linux and Finder on Mac Os X.
+                            </li>
+                            <li>
+                                <b>Edit Current Template PushButton</b>
+                                : Edits the current Template in default Text Editor.
+                                <br/>
+                                Tips : You can define your Custom Text Editor in the Preferences Tab. Hardcoded Text Editors are : Notepad.exe on Windows, Gedit, Kwrite, Nedit, Mousepad on Linux and TextEdit on Mac Os X.
+                            </li>
+                            <li>
+                                <b>Common Attributes Page</b>
+                                : Common Attributes settings of the Loader Script.
+                            </li>
+                            <li>
+                                <b>Additional Attributes Page</b>
+                                : Additional Attributes settings of the Loader Script.
+                            </li>
+                            <li>
+                                <b>Output Loader Script PushButton</b>
+                                : Outputs the Loader Script to the "TMP" ( Windows ) or "TMPDIR" ( Linux, MacOsX ) variable path.
+                            </li>
+                            <li>
+                                <b>Open Output Folder Script PushButton</b>
+                                : Opens the folder containing the current Loader Script.
+                            </li>
+                            <li>
+                                <b>Send To Software PushButton</b>
+                                : Direct connection to Target 3D Package if Remote Connection is available.
+                            </li>
+                            <li>
+                                <b>Ip Address LineEdit</b>
+                                : Ip Adress of the computer running the Target 3D Package.
+                                <br/>
+                                Tips : 127.0.0.1 is the same as "Localhost" and aims your current computer.
+                            </li>
+                            <li>
+                                <b>Software Port SpinBox</b>
+                                : Opened Port of the Target 3D Package.
+                                <br/>
+                            </li>
+                        </ul>
+                    </p>
+                    <br/>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">Preferences Tab</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Preferences%20Tab%20-%20Overall%20Settings.jpg">
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Preferences%20Tab%20-%20Collections%20Settings.jpg">
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Preferences%20Tab%20-%20Online%20Update.jpg">
+                    <p>
+                        <b>Preferences Tab</b>
+                        is where you can define options for <b>sIBL_GUI</b>, Add/Remove <b>Sub Collections</b>, activate the <b>Log Window</b>, etc...
+                        <br/>
+                        <br/>
+                        <span style="font-size: 12pt; font-weight: 700">Interactable Widgets Descriptions :</span>
+                        <ul>
+                            <span style="font-size: 12pt; font-weight: 700">Overall Settings :</span>
+                            <br/>
+                            <br/>
+                            <li>
+                                <b>sIBL Edit Path LineEdit</b>
+                                : sIBL Edit executable path.
+                                <br/>
+                                Tips : You can manually edit the line content, if the path you entered is not valid, the line will reset for the Stored Preferences Value ( This is true for all LineEdit of the Preferences Tab ).
+                            </li>
+                            <li>
+                                <b>sIBL Framework Path LineEdit</b>
+                                : Current sIBL_Framework executable path.
+                            </li>
+                            <li>
+                                <b>Custom Text Editor Path LineEdit</b>
+                                : Custom Text Editor executable path ( You need to enter the full path for it ).
+                            </li>
+                            <li>
+                                <b>Custom File Browser Path LineEdit</b>
+                                : Current File Browser executable path ( You need to enter the full path for it ).
+                            </li>
+                            <li>
+                                <b>Help Path LineEdit</b>
+                                : Current Help folder Path.
+                                <br/>
+                            </li>
+                            <li>
+                                <b>Templates Path LineEdit</b>
+                                : Current Templates folder Path.
+                                <br/>
+                                Tips : Templates folder is recursively parsed so you can structure it the way you want, just avoid using same names for your Templates.
+                            </li>
+                            <li>
+                                <b>Activate Open GL CheckBox</b>
+                                : Activate Open GL Support for the GPS Map.
+                                <br/>
+                            </li>
+                            <li>
+                                <b>Activate Antialiasing CheckBox</b>
+                                : Activate Antialiasing for the GPS Map.
+                                <br/>
+                            </li>
+                            <li>
+                                <b>Verbose Level ComboBox</b>
+                                : Defines sIBL_GUI Verbose Level : Each option comprise the ones over it in the List.
+                            </li>
+                            <li>
+                                <b>Toggles Log Window PushButton</b>
+                                : Show The log Window.
+                                <br/>
+                                Tips : The Log Window is tearable.
+                            </li>
+                            <br/>
+                            <span style="font-size: 12pt; font-weight: 700">Collections Settings :</span>
+                            <br/>
+                            <br/>
+                            <li>
+                                <b>Collections Paths</b>
+                                : Current Sub Collections paths.
+                                <br/>
+                                Tips : You can manually edit the Table content, if anything you entered is not valid, the line will reset for the Stored Preferences Value. If you entered the same path two times or you have the same sIBL Sets multiple times in different Sub-Collections results can be unpredictable.
+                            </li>
+                            <li>
+                                <b>Edit PushButton</b>
+                                : Edit the selected Sub Collection Path.
+                            </li>
+                            <li>
+                                <b>Refresh Collection PushButton</b>
+                                : Refresh Global Collection, reparsing all directories, etc...
+                            </li>
+                            <li>
+                                <b>Add PushButton</b>
+                                : Adds a new Sub Collection.
+                            </li>
+                            <li>
+                                <b>Remove PushButton</b>
+                                : Removes Selected Sub Collections.
+                                <br/>
+                                Tips : You can select multiple Sub-Collections at once.
+                            </li>
+                            <br/>
+                            <span style="font-size: 12pt; font-weight: 700">Online Update :</span>
+                            <br/>
+                            <br/>
+                            <li>
+                                <b>Check For New Releases PushButton</b>
+                                : Launch sIBL_GUI - Updater.
+                                <br/>
+                            </li>
+                            <li>
+                                <b>Check For New Releases On Startup CheckBox</b>
+                                : Launch sIBL_GUI - Updater.
+                                <br/>
+                            </li>
+                            <li>
+                                <b>Get Latest Online Help PushButton</b>
+                                : Launch sIBL_GUI - FTP to Download Online Help.
+                                <br/>
+                            </li>
+                            <li>
+                                <b>Get Latest Templates PushButton</b>
+                                : Launch sIBL_GUI - FTP to Download Templates.
+                                <br/>
+                            </li>
+                        </ul>
+                    </p>
+                    <br/>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">Help Tab</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Help%20Tab.jpg">
+                    <p>
+                        <b>Help Tab</b>
+                        is where you can read sIBL_GUI related Manuals.
+                        <br/>
+                        <br/>
+                        <span style="font-size: 12pt; font-weight: 700">Interactable Widgets Descriptions :</span>
+                        <ul>
+                            <li>
+                                <b>Available Topics ComboBox</b>
+                                : Choose the Manual you want to read.
+                            </li>
+                            <li>
+                                <b>Help Viewer</b>
+                                : Displays the chosen Manual.
+                            </li>
+                        </ul>
+                    </p>
+                    <br/>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">About Tab</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20About%20Tab.jpg">
+                    <p>
+                        <b>About Tab</b>
+                        shows thanks, licensing and legal stuff about sIBL_GUI.
+                    </p>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">Log Window</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Log%20Window.jpg">
+                    <p>
+                        <b>Log Window</b>
+                        verbose nearly everything happening into <b>sIBL_GUI</b>, it can help finding what's going wrong if <b>sIBL_GUI</b>
+                        don't work the way it should.
+                    </p>
+                    <br/>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">sIBL_GUI - Updater</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20Updater.jpg">
+                    <p>
+                        <b>sIBL_GUI - Updater</b>
+                        allow you to see if your sIBL_GUI Release is up to date. You can check the latest sIBL_GUI version with it's Change Log, and the New / Updated Templates.
+                        <br/>
+                        <br/>
+                        <span style="font-size: 12pt; font-weight: 700">Interactable Widgets Descriptions :</span>
+                        <ul>
+                            <li>
+                                <b>Open Repository PushButton</b>
+                                : Open the Online Repository in a Web Browser.
+                            </li>
+                            <li>
+                                <b>Get Latest Templates PushButton</b>
+                                : Launch sIBL_GUI - FTP to Download Templates.
+                            </li>
+                            <li>
+                                <b>Close PushButton</b>
+                                : Close sIBL_GUI - Updater.
+                            </li>
+                        </ul>
+                    </p>
+                    <br/>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">sIBL_GUI - FTP</span>
+                    <br/>
+                    <br/>
+                    <img src="Resources/sIBL_GUI%20-%20FTP.jpg">
+                    <p>
+                        <b>sIBL_GUI - FTP</b>
+                        is a small FTP Client that download sIBL_GUI related files.
+                        <br/>
+                        <br/>
+                        <span style="font-size: 12pt; font-weight: 700">Interactable Widgets Descriptions :</span>
+                        <ul>
+                            <li>
+                                <b>Start Download PushButton</b>
+                                : Starts the related files download.
+                            </li>
+                            <li>
+                                <b>Cancel / Close PushButton</b>
+                                : Cancel current Download/ Close sIBL_GUI - FTP.
+                            </li>
+                        </ul>
+                    </p>
+                    <br/>
+                </li>
+            </ul>
+        </p>
+        <p align="justify">
+            <span style="font-size: 18pt; font-weight: 700">Change Log</span>
+            <br/>
+            <a href="http://kelsolaar.hdrlabs.com/sIBL_Framework/sIBL_GUI/ChangeLog/Change%20Log.htm">sIBL_GUI Change Log</a>
+        </p>
+        <p align="justify">
+            <span style="font-size: 18pt; font-weight: 700">About</span>
+            <br/>
+            sIBL_GUI And sIBL_Framework by Thomas Mansencal - 2008 / 2009
+            <br/>
+            Copyright (C) 2008 / 2009 - Thomas Mansencal - kelsolaar_fool@hotmail.com
+            <br/>
+            This Software Is Released Under Terms Of GNU GPL V3 License : <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>
+            <br/>
+            <a href="http://my.opera.com/KelSolaar/">http://my.opera.com/KelSolaar/</a>
+        </p>
+    </body>
+</html>

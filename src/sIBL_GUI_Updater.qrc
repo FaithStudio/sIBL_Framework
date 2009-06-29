@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="sIBL_GUI FTP" >
+    <file>Resources/sIBL_GUI_Small_Logo.png</file>
+    <file>Resources/Icon_Light.png</file>
+  </qresource>
+</RCC>

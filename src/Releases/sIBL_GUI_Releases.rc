@@ -1,0 +1,23 @@
+[sIBL_GUI]
+Release = 1.9.1
+Type = "Nightly"
+
+[XSI_MR]
+Release = 1.4.0
+Type = "Nightly"
+Comment = "This Is XSI Mental Ray Template !"
+
+[Maya_MR]
+Release = 1.4.0
+Type = "Nightly"
+Comment = "This Is Maya Mental Ray Template !"
+
+[3dsMax_MR]
+Release = 0.9.5
+Type = "Nightly"
+Comment = "This Is A 3dsMax Mental Ray Example Template !"
+
+[3dsMax_Scanline]
+Release = 0.9.5
+Type = "Nightly"
+Comment = "This Is A 3dsMax Scanline Ray Example Template !"

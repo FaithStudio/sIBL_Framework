@@ -1,0 +1,1927 @@
+<ui version="4.0" >
+ <class>sIBL_GUI</class>
+ <widget class="QMainWindow" name="sIBL_GUI" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>658</width>
+    <height>738</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>sIBL_GUI</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../sIBL_GUI.qrc" >
+    <normaloff>:/sIBL_GUI/Resources/Icon_Light.png</normaloff>:/sIBL_GUI/Resources/Icon_Light.png</iconset>
+  </property>
+  <property name="locale" >
+   <locale country="UnitedStates" language="English" />
+  </property>
+  <property name="dockNestingEnabled" >
+   <bool>true</bool>
+  </property>
+  <property name="dockOptions" >
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks</set>
+  </property>
+  <widget class="QWidget" name="sIBL_GUI_centralwidget" >
+   <layout class="QGridLayout" name="sIBL_GUI_centralwidget_gridLayout" >
+    <item row="0" column="0" >
+     <widget class="QLabel" name="Logo_label" >
+      <property name="text" >
+       <string/>
+      </property>
+      <property name="pixmap" >
+       <pixmap resource="../sIBL_GUI.qrc" >:/sIBL_GUI/Resources/sIBL_GUI_Logo.png</pixmap>
+      </property>
+      <property name="alignment" >
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" >
+     <widget class="QTabWidget" name="sIBL_GUI_tabWidget" >
+      <property name="tabPosition" >
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape" >
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <property name="elideMode" >
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <widget class="QWidget" name="Collections_Browser_tab" >
+       <property name="statusTip" >
+        <string>Collections Browser Tab : Browse The Global Collection, Search And Filter It.</string>
+       </property>
+       <attribute name="title" >
+        <string>Collections Browser</string>
+       </attribute>
+       <layout class="QGridLayout" name="Collections_Browser_tab_gridLayout" >
+        <item row="0" column="0" >
+         <widget class="QGroupBox" name="Filters_groupBox" >
+          <property name="title" >
+           <string>Filters</string>
+          </property>
+          <layout class="QGridLayout" name="Filters_groupBox_gridLayout" >
+           <item row="0" column="0" >
+            <widget class="QLabel" name="Collections_label" >
+             <property name="text" >
+              <string>Collections :</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" >
+            <widget class="QComboBox" name="Collections_comboBox" >
+             <property name="statusTip" >
+              <string>Collections ComboBox :  Global Collection Sub-Collections Filtering.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2" >
+            <widget class="QLabel" name="Authors_label" >
+             <property name="text" >
+              <string>Authors :</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3" >
+            <widget class="QComboBox" name="Authors_comboBox" >
+             <property name="statusTip" >
+              <string>Authors ComboBox : Global Collection Authors Filtering.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4" >
+            <widget class="QLabel" name="Locations_label" >
+             <property name="text" >
+              <string>Locations :</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5" >
+            <widget class="QComboBox" name="Locations_comboBox" >
+             <property name="statusTip" >
+              <string>Locations ComboBox : Global Collection Locations Filtering.</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QGroupBox" name="Search_groupBox" >
+          <property name="title" >
+           <string>Search</string>
+          </property>
+          <layout class="QGridLayout" name="Search_groupBox_gridLayout" >
+           <item row="0" column="0" >
+            <widget class="QLineEdit" name="Search_lineEdit" >
+             <property name="statusTip" >
+              <string>Search LineEdit : Searches Input Text Through The Global Collection.</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2" >
+         <widget class="QGroupBox" name="Browser_GPS_Map_groupBox" >
+          <property name="title" >
+           <string>Browser / GPS Map</string>
+          </property>
+          <layout class="QGridLayout" name="Collections_groupBox_gridLayout" >
+           <item row="0" column="0" >
+            <widget class="QToolBox" name="Browser_GPS_Map_toolBox" >
+             <property name="currentIndex" >
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="Browser_Page" >
+              <property name="geometry" >
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>596</width>
+                <height>241</height>
+               </rect>
+              </property>
+              <attribute name="label" >
+               <string>Browser</string>
+              </attribute>
+              <layout class="QGridLayout" name="Browser_Page_gridLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <item row="0" column="0" >
+                <widget class="QListWidget" name="Collections_listWidget" >
+                 <property name="statusTip" >
+                  <string>Collections List : Double-click An Item To Send It To Import Tab.</string>
+                 </property>
+                 <property name="frameShape" >
+                  <enum>QFrame::Box</enum>
+                 </property>
+                 <property name="movement" >
+                  <enum>QListView::Static</enum>
+                 </property>
+                 <property name="resizeMode" >
+                  <enum>QListView::Adjust</enum>
+                 </property>
+                 <property name="viewMode" >
+                  <enum>QListView::IconMode</enum>
+                 </property>
+                 <property name="wordWrap" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="GPS_Map_Page" >
+              <property name="geometry" >
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>596</width>
+                <height>241</height>
+               </rect>
+              </property>
+              <attribute name="label" >
+               <string>GPS Map</string>
+              </attribute>
+              <layout class="QGridLayout" name="GPS_Map_Page_gridLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Import_tab" >
+       <property name="enabled" >
+        <bool>true</bool>
+       </property>
+       <property name="statusTip" >
+        <string>Import Tab : Define Options, Used Template And Other Settings For The Loader Script Generation.</string>
+       </property>
+       <attribute name="title" >
+        <string>Import</string>
+       </attribute>
+       <layout class="QGridLayout" name="Import_tab_gridLayout" >
+        <item row="0" column="2" >
+         <spacer name="Import_Center_horizontalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1" >
+         <widget class="QGroupBox" name="sIBL_groupBox" >
+          <property name="maximumSize" >
+           <size>
+            <width>202</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="statusTip" >
+           <string>sIBL GroupBox : Infos About The Current sIBL.</string>
+          </property>
+          <property name="title" >
+           <string>sIBL</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="flat" >
+           <bool>true</bool>
+          </property>
+          <layout class="QGridLayout" name="Preview_groupBox_gridLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <item row="1" column="0" >
+            <widget class="QGroupBox" name="sIBL_Infos_groupBox" >
+             <property name="title" >
+              <string>Infos</string>
+             </property>
+             <layout class="QGridLayout" name="Infos_groupBox_gridLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item row="0" column="0" >
+               <widget class="QScrollArea" name="sIBL_Infos_scrollArea" >
+                <property name="frameShape" >
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy" >
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="widgetResizable" >
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="sIBL_Infos_scrollAreaWidgetContents" >
+                 <property name="geometry" >
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>130</width>
+                   <height>215</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="sIBL_Infos_scrollAreaWidgetContents_gridLayout" >
+                  <item row="1" column="0" >
+                   <widget class="QGroupBox" name="Location_groupBox" >
+                    <property name="title" >
+                     <string>Location</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Location_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QLabel" name="sIBL_Location_Set_label" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="margin" >
+                        <number>4</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" >
+                   <widget class="QGroupBox" name="sIBL_Author_groupBox" >
+                    <property name="title" >
+                     <string>Author</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="sIBL_Author_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QLabel" name="sIBL_Author_Set_label" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="margin" >
+                        <number>4</number>
+                       </property>
+                       <property name="openExternalLinks" >
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="5" column="0" >
+                   <widget class="QGroupBox" name="Shot_Date_groupBox" >
+                    <property name="title" >
+                     <string>Shot Date</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Shot_Date_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QLabel" name="sIBL_Date_Set_label" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="text" >
+                        <string/>
+                       </property>
+                       <property name="margin" >
+                        <number>4</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="6" column="0" >
+                   <widget class="QGroupBox" name="Comment_groupBox" >
+                    <property name="title" >
+                     <string>Comment</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Comment_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QTextEdit" name="Comment_textEdit" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="frameShape" >
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="verticalScrollBarPolicy" >
+                        <enum>Qt::ScrollBarAlwaysOff</enum>
+                       </property>
+                       <property name="horizontalScrollBarPolicy" >
+                        <enum>Qt::ScrollBarAlwaysOff</enum>
+                       </property>
+                       <property name="undoRedoEnabled" >
+                        <bool>false</bool>
+                       </property>
+                       <property name="readOnly" >
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QGroupBox" name="sIBL_Set_groupBox" >
+             <property name="title" >
+              <string>Preview</string>
+             </property>
+             <layout class="QGridLayout" name="sIBL_Set_groupBox_gridLayout" >
+              <item row="0" column="0" >
+               <widget class="QLabel" name="Preview_label" >
+                <property name="statusTip" >
+                 <string>Preview Label : Preview Of The Current sIBL.</string>
+                </property>
+                <property name="text" >
+                 <string/>
+                </property>
+                <property name="pixmap" >
+                 <pixmap resource="../sIBL_GUI.qrc" >:/sIBL_GUI/Resources/Icon_Light.png</pixmap>
+                </property>
+                <property name="alignment" >
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="0" >
+            <widget class="QGroupBox" name="sIBL_Options_groupBox" >
+             <property name="title" >
+              <string>Options</string>
+             </property>
+             <layout class="QGridLayout" name="sIBL_Options_gridLayout" >
+              <item row="0" column="0" >
+               <widget class="QPushButton" name="Edit_In_sIBL_Edit_pushButton" >
+                <property name="statusTip" >
+                 <string>Edit In sIBL Edit PushButton : Sends The sIBL File To sIBL Edit.</string>
+                </property>
+                <property name="text" >
+                 <string>Edit In sIBL Edit</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QPushButton" name="Refresh_sIBL_File_pushButton" >
+                <property name="statusTip" >
+                 <string>Refresh sIBL File PushButton : Reloads The Current sIBL File.</string>
+                </property>
+                <property name="text" >
+                 <string>Refresh sIBL File</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" >
+               <widget class="QPushButton" name="Open_sIBL_Folder_pushButton" >
+                <property name="statusTip" >
+                 <string>Open sIBL Folder PushButton : Opens Folder Containing The Current sIBL.</string>
+                </property>
+                <property name="text" >
+                 <string>Open sIBL Folder</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="3" >
+         <widget class="QGroupBox" name="Template_groupBox" >
+          <property name="statusTip" >
+           <string>Template GroupBox : Options And Infos About The Current Template And Loader Script.</string>
+          </property>
+          <property name="title" >
+           <string>Template</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="flat" >
+           <bool>true</bool>
+          </property>
+          <layout class="QGridLayout" name="Template_groupBox_gridLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <item rowspan="5" row="0" column="2" >
+            <widget class="QGroupBox" name="Template_Infos_groupBox" >
+             <property name="statusTip" >
+              <string>Template Infos GroupBox : Infos About The Current Template.</string>
+             </property>
+             <property name="title" >
+              <string>Infos</string>
+             </property>
+             <layout class="QGridLayout" name="Template_Infos_groupBox_gridLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <item row="0" column="0" >
+               <widget class="QScrollArea" name="Template_scrollArea" >
+                <property name="frameShape" >
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="horizontalScrollBarPolicy" >
+                 <enum>Qt::ScrollBarAlwaysOff</enum>
+                </property>
+                <property name="widgetResizable" >
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="Template_scrollAreaWidgetContents" >
+                 <property name="geometry" >
+                  <rect>
+                   <x>0</x>
+                   <y>-94</y>
+                   <width>134</width>
+                   <height>243</height>
+                  </rect>
+                 </property>
+                 <layout class="QGridLayout" name="Template_scrollAreaWidgetContents_gridLayout" >
+                  <item row="0" column="0" >
+                   <widget class="QGroupBox" name="Release_groupBox" >
+                    <property name="title" >
+                     <string>Release</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Release_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QLabel" name="Release_Set_label" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="margin" >
+                        <number>4</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="1" column="0" >
+                   <widget class="QGroupBox" name="Software_Set_groupBox" >
+                    <property name="title" >
+                     <string/>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Software_Set_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QLabel" name="Software_Version_label" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="margin" >
+                        <number>4</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" >
+                   <widget class="QGroupBox" name="Template_Author_groupBox" >
+                    <property name="title" >
+                     <string>Author</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Template_Author_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QLabel" name="Template_Author_Set_label" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="margin" >
+                        <number>4</number>
+                       </property>
+                       <property name="openExternalLinks" >
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="3" column="0" >
+                   <widget class="QGroupBox" name="Template_Loader_Script_groupBox" >
+                    <property name="title" >
+                     <string>Loader Script</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Template_Loader_Script_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QLabel" name="Loader_Script_Set_label" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="margin" >
+                        <number>4</number>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="4" column="0" >
+                   <widget class="QGroupBox" name="Template_Comment_groupBox" >
+                    <property name="title" >
+                     <string>Comment</string>
+                    </property>
+                    <property name="alignment" >
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                    <property name="flat" >
+                     <bool>true</bool>
+                    </property>
+                    <layout class="QGridLayout" name="Template_Comment_groupBox_gridLayout" >
+                     <property name="margin" >
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0" >
+                      <widget class="QTextEdit" name="Template_Comment_textEdit" >
+                       <property name="font" >
+                        <font>
+                         <italic>true</italic>
+                        </font>
+                       </property>
+                       <property name="frameShape" >
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="verticalScrollBarPolicy" >
+                        <enum>Qt::ScrollBarAlwaysOff</enum>
+                       </property>
+                       <property name="horizontalScrollBarPolicy" >
+                        <enum>Qt::ScrollBarAlwaysOff</enum>
+                       </property>
+                       <property name="undoRedoEnabled" >
+                        <bool>false</bool>
+                       </property>
+                       <property name="readOnly" >
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item rowspan="7" row="1" column="0" >
+            <widget class="QGroupBox" name="Options_groupBox" >
+             <property name="sizePolicy" >
+              <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title" >
+              <string>Options</string>
+             </property>
+             <layout class="QGridLayout" name="Options_gridLayout" >
+              <item row="0" column="0" colspan="2" >
+               <widget class="QToolBox" name="Options_toolBox" >
+                <property name="currentIndex" >
+                 <number>0</number>
+                </property>
+                <widget class="QWidget" name="Common_Attributes_page" >
+                 <property name="geometry" >
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>256</width>
+                   <height>162</height>
+                  </rect>
+                 </property>
+                 <property name="statusTip" >
+                  <string>Common Attributes : Common Attributes Settings Of The Loader Script.</string>
+                 </property>
+                 <attribute name="label" >
+                  <string>Common Attributes</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="Common_Attributes_page_gridLayout" >
+                  <property name="margin" >
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0" >
+                   <widget class="QTableWidget" name="Common_Attributes_tableWidget" >
+                    <property name="styleSheet" >
+                     <string notr="true" />
+                    </property>
+                    <property name="selectionMode" >
+                     <enum>QAbstractItemView::SingleSelection</enum>
+                    </property>
+                    <property name="cornerButtonEnabled" >
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="Additional_Attributes_page" >
+                 <property name="geometry" >
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>96</width>
+                   <height>61</height>
+                  </rect>
+                 </property>
+                 <property name="statusTip" >
+                  <string>Additional Attributes : Additional Attributes Settings Of The Loader Script.</string>
+                 </property>
+                 <attribute name="label" >
+                  <string>Additional Attributes</string>
+                 </attribute>
+                 <layout class="QGridLayout" name="Additional_Attributes_page_gridLayout" >
+                  <property name="margin" >
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0" >
+                   <widget class="QTableWidget" name="Additional_Attributes_tableWidget" >
+                    <property name="styleSheet" >
+                     <string notr="true" />
+                    </property>
+                    <property name="selectionMode" >
+                     <enum>QAbstractItemView::SingleSelection</enum>
+                    </property>
+                    <property name="cornerButtonEnabled" >
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item rowspan="2" row="5" column="2" >
+            <widget class="QGroupBox" name="Loader_Script_groupBox" >
+             <property name="statusTip" >
+              <string>Loader Script GroupBox : Output Options For The Loader Script.</string>
+             </property>
+             <property name="title" >
+              <string>Loader Script</string>
+             </property>
+             <layout class="QGridLayout" name="Loader_Script_groupBox_gridLayout" >
+              <item row="2" column="0" >
+               <widget class="QPushButton" name="Output_Loader_Script_pushButton" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>0</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="statusTip" >
+                 <string>Output Loader Script PushButton : Outputs The Loader Script To The "TMP" Or "TMPDIR" Variable Path. </string>
+                </property>
+                <property name="text" >
+                 <string>Output Loader Script</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" >
+               <widget class="QPushButton" name="Open_Output_Folder_pushButton" >
+                <property name="enabled" >
+                 <bool>true</bool>
+                </property>
+                <property name="minimumSize" >
+                 <size>
+                  <width>0</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="statusTip" >
+                 <string>Open Output Folder Script PushButton : Opens Folder Containing The Current Loader Script.</string>
+                </property>
+                <property name="text" >
+                 <string>Open Output Folder</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QGroupBox" name="Software_Templates_groupBox" >
+             <property name="title" >
+              <string>Selection</string>
+             </property>
+             <layout class="QGridLayout" name="Software_Templates_groupBox_gridLayout" >
+              <item row="5" column="0" >
+               <widget class="QPushButton" name="Edit_Current_Template_pushButton" >
+                <property name="enabled" >
+                 <bool>true</bool>
+                </property>
+                <property name="statusTip" >
+                 <string>Edit Current Template PushButton : Edits The Current Template In Default Text Editor.</string>
+                </property>
+                <property name="text" >
+                 <string>Edit Current Template</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1" >
+               <widget class="QPushButton" name="Open_Templates_Folder_pushButton" >
+                <property name="enabled" >
+                 <bool>true</bool>
+                </property>
+                <property name="statusTip" >
+                 <string>Open Templates Folder PushButton : Opens Folder Containing The Templates.</string>
+                </property>
+                <property name="text" >
+                 <string>Open Templates Folder</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" >
+               <widget class="QLabel" name="Template_label" >
+                <property name="text" >
+                 <string>Current Template :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1" >
+               <widget class="QComboBox" name="Template_comboBox" >
+                <property name="statusTip" >
+                 <string>Template ComboBox : Template For The Loader Script.</string>
+                </property>
+                <property name="sizeAdjustPolicy" >
+                 <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" >
+               <widget class="QLabel" name="Software_label" >
+                <property name="text" >
+                 <string>Current Software :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1" >
+               <widget class="QComboBox" name="Software_comboBox" >
+                <property name="statusTip" >
+                 <string>Software ComboBox : Target Application For The Loader Script.</string>
+                </property>
+                <property name="sizeAdjustPolicy" >
+                 <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0" colspan="2" >
+               <widget class="Line" name="Templates_line" >
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="1" >
+            <spacer name="Template_horizontalSpacer" >
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="7" column="2" >
+            <widget class="QGroupBox" name="Remote_Connection_groupBox" >
+             <property name="statusTip" >
+              <string>Remote Connection GroupBox : Direct Submit Of the Loader Script If The Software Support Remote Connection.</string>
+             </property>
+             <property name="title" >
+              <string>Remote Connection</string>
+             </property>
+             <layout class="QGridLayout" name="Socket_Connection_gridLayout" >
+              <item row="0" column="0" >
+               <widget class="QPushButton" name="Send_To_Software_pushButton" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>0</width>
+                  <height>24</height>
+                 </size>
+                </property>
+                <property name="statusTip" >
+                 <string>Send To Software PushButton : Direct Connection To Target Application If Remote Connection Is Available.</string>
+                </property>
+                <property name="text" >
+                 <string>Send To Software</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QFrame" name="Remote_Connection_Options_frame" >
+                <layout class="QGridLayout" name="Remote_Connection_Options_frame_gridLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <item row="1" column="0" >
+                  <widget class="QLabel" name="Port_label" >
+                   <property name="text" >
+                    <string>Port :</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1" >
+                  <widget class="QSpinBox" name="Software_Port_spinBox" >
+                   <property name="minimumSize" >
+                    <size>
+                     <width>0</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="statusTip" >
+                    <string>Software Port SpinBox : Opened Port Of The Target 3D Package.</string>
+                   </property>
+                   <property name="alignment" >
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                   <property name="maximum" >
+                    <number>65535</number>
+                   </property>
+                   <property name="value" >
+                    <number>2048</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0" >
+                  <widget class="QLabel" name="Address_label" >
+                   <property name="text" >
+                    <string>IP :</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1" >
+                  <widget class="QLineEdit" name="Address_lineEdit" >
+                   <property name="statusTip" >
+                    <string>Ip Address LineEdit : Ip Adress Of The Computer Running The Target 3D Package.</string>
+                   </property>
+                   <property name="text" >
+                    <string>127.0.0.1</string>
+                   </property>
+                   <property name="alignment" >
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="4" >
+         <spacer name="Import_Right_horizontalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0" >
+         <spacer name="Import_Left_horizontalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Preferences_tab" >
+       <property name="statusTip" >
+        <string>Preferences Tab : Define sIBL_GUI Options, Sub Collections Paths, Rtc.</string>
+       </property>
+       <attribute name="title" >
+        <string>Preferences</string>
+       </attribute>
+       <layout class="QGridLayout" name="Preferences_tab_gridLayout" >
+        <item row="0" column="0" >
+         <widget class="QToolBox" name="Preferences_toolBox" >
+          <property name="currentIndex" >
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="Overall_Settings_page" >
+           <property name="geometry" >
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>618</width>
+             <height>311</height>
+            </rect>
+           </property>
+           <attribute name="label" >
+            <string>Overall Settings</string>
+           </attribute>
+           <layout class="QGridLayout" name="Overall_Settings_page_gridLayout" >
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
+            </property>
+            <item row="1" column="0" >
+             <widget class="QGroupBox" name="Custom_Executables_groupBox" >
+              <property name="title" >
+               <string>Custom Executables</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="flat" >
+               <bool>true</bool>
+              </property>
+              <layout class="QGridLayout" name="Custom_Executables_groupBox_gridLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <item row="0" column="0" >
+                <widget class="QGroupBox" name="Custom_Text_Editor_Path_groupBox" >
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16777215</width>
+                   <height>64</height>
+                  </size>
+                 </property>
+                 <property name="title" >
+                  <string>Custom Text Editor</string>
+                 </property>
+                 <layout class="QGridLayout" name="Custom_Text_Editor_Path_groupBox_gridLayout" >
+                  <item row="0" column="0" >
+                   <widget class="QLineEdit" name="Custom_Text_Editor_Path_lineEdit" >
+                    <property name="statusTip" >
+                     <string>Custom Text Editor Path LineEdit : Custom Text Editor Path.</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" >
+                   <widget class="QToolButton" name="Custom_Text_Editor_Path_toolButton" >
+                    <property name="text" >
+                     <string>...</string>
+                    </property>
+                    <property name="popupMode" >
+                     <enum>QToolButton::DelayedPopup</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="1" >
+                <widget class="QGroupBox" name="Custom_File_Browser_Path_groupBox" >
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16777215</width>
+                   <height>64</height>
+                  </size>
+                 </property>
+                 <property name="title" >
+                  <string>Custom File Browser</string>
+                 </property>
+                 <layout class="QGridLayout" name="Custom_File_Browser_Path_gridLayout" >
+                  <item row="0" column="0" >
+                   <widget class="QLineEdit" name="Custom_File_Browser_Path_lineEdit" >
+                    <property name="statusTip" >
+                     <string>Custom File Browser Path LineEdit : Current File Browser Path.</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" >
+                   <widget class="QToolButton" name="Custom_File_Browser_Path_toolButton" >
+                    <property name="text" >
+                     <string>...</string>
+                    </property>
+                    <property name="popupMode" >
+                     <enum>QToolButton::DelayedPopup</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="1" column="1" >
+                <widget class="QGroupBox" name="Templates_Setting_groupBox" >
+                 <property name="title" >
+                  <string>Templates Settings</string>
+                 </property>
+                 <property name="alignment" >
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="flat" >
+                  <bool>true</bool>
+                 </property>
+                 <layout class="QGridLayout" name="Templates_Setting_groupBox_gridLayout" >
+                  <property name="margin" >
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0" >
+                   <widget class="QGroupBox" name="Templates_Path_groupBox" >
+                    <property name="maximumSize" >
+                     <size>
+                      <width>16777215</width>
+                      <height>64</height>
+                     </size>
+                    </property>
+                    <property name="title" >
+                     <string>Templates Path</string>
+                    </property>
+                    <layout class="QGridLayout" name="Templates_Path_groupBox_gridLayout" >
+                     <item row="0" column="0" >
+                      <widget class="QLineEdit" name="Templates_Path_lineEdit" >
+                       <property name="statusTip" >
+                        <string>Templates Path LineEdit : Current Templates Folder.</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1" >
+                      <widget class="QToolButton" name="Templates_toolButton" >
+                       <property name="text" >
+                        <string>...</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="1" column="0" >
+                <widget class="QGroupBox" name="Help_Files_Settings_groupBox" >
+                 <property name="title" >
+                  <string>Help Files Settings</string>
+                 </property>
+                 <property name="alignment" >
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="flat" >
+                  <bool>true</bool>
+                 </property>
+                 <layout class="QGridLayout" name="Help_Files_Settings_groupBox_gridLayout" >
+                  <property name="margin" >
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0" >
+                   <widget class="QGroupBox" name="Help_Files_Settings_Path_groupBox" >
+                    <property name="maximumSize" >
+                     <size>
+                      <width>16777215</width>
+                      <height>64</height>
+                     </size>
+                    </property>
+                    <property name="title" >
+                     <string>Help Files Path</string>
+                    </property>
+                    <layout class="QGridLayout" name="Help_Files_Settings_Path_groupBox_gridLayout" >
+                     <item row="0" column="0" >
+                      <widget class="QLineEdit" name="Help_Files_Path_lineEdit" >
+                       <property name="statusTip" >
+                        <string>Help Files Path LineEdit : Current Help Files Folder.</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1" >
+                      <widget class="QToolButton" name="Help_Files_toolButton" >
+                       <property name="text" >
+                        <string>...</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="0" >
+             <widget class="QGroupBox" name="sIBL_Executables_groupBox" >
+              <property name="title" >
+               <string>sIBL Executables</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="flat" >
+               <bool>true</bool>
+              </property>
+              <layout class="QGridLayout" name="sIBL_Executables_groupBox_gridLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <item row="0" column="1" >
+                <widget class="QGroupBox" name="sIBL_Framework_Path_groupBox" >
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16777215</width>
+                   <height>64</height>
+                  </size>
+                 </property>
+                 <property name="title" >
+                  <string>sIBL_Framework Path</string>
+                 </property>
+                 <layout class="QGridLayout" name="sIBL_Framework_Path_groupBox_gridLayout" >
+                  <item row="0" column="0" >
+                   <widget class="QLineEdit" name="sIBL_Framework_Path_lineEdit" >
+                    <property name="statusTip" >
+                     <string>sIBL Framework Path LineEdit : Current sIBL_Framework Path.</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" >
+                   <widget class="QToolButton" name="sIBL_Framework_Path_toolButton" >
+                    <property name="text" >
+                     <string>...</string>
+                    </property>
+                    <property name="popupMode" >
+                     <enum>QToolButton::DelayedPopup</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="0" >
+                <widget class="QGroupBox" name="sIBLedit_Path_groupBox" >
+                 <property name="maximumSize" >
+                  <size>
+                   <width>16777215</width>
+                   <height>64</height>
+                  </size>
+                 </property>
+                 <property name="title" >
+                  <string>sIBLedit Path</string>
+                 </property>
+                 <layout class="QGridLayout" name="sIBLedit_Path_groupBox_gridLayout" >
+                  <item row="0" column="0" >
+                   <widget class="QLineEdit" name="sIBLedit_Path_lineEdit" >
+                    <property name="statusTip" >
+                     <string>sIBL Edit Path LineEdit : sIBL Edit Path.</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" >
+                   <widget class="QToolButton" name="sIBLedit_Path_toolButton" >
+                    <property name="text" >
+                     <string>...</string>
+                    </property>
+                    <property name="popupMode" >
+                     <enum>QToolButton::DelayedPopup</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="2" column="0" >
+             <widget class="QGroupBox" name="Others_groupBox" >
+              <property name="title" >
+               <string>Others</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="flat" >
+               <bool>true</bool>
+              </property>
+              <layout class="QGridLayout" name="Others_groupBox_gridLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <item row="0" column="4" >
+                <widget class="QGroupBox" name="Log_Settings_groupBox" >
+                 <property name="title" >
+                  <string>Log</string>
+                 </property>
+                 <layout class="QGridLayout" name="Log_Settings_groupBox_gridLayout" >
+                  <item row="0" column="0" >
+                   <layout class="QHBoxLayout" name="Verbosity_horizontalLayout" >
+                    <item>
+                     <widget class="QLabel" name="Verbose_Level_label" >
+                      <property name="text" >
+                       <string>Verbose Level :</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="Verbose_Level_comboBox" >
+                      <property name="statusTip" >
+                       <string>Verbose Level ComboBox : Defines sIBL_GUI Verbose Level : Each Option Comprise The Ones Over It In The List.</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="0" column="1" >
+                   <widget class="QPushButton" name="Toggle_Log_Window_pushButton" >
+                    <property name="minimumSize" >
+                     <size>
+                      <width>0</width>
+                      <height>24</height>
+                     </size>
+                    </property>
+                    <property name="statusTip" >
+                     <string>Toggles Log Window PushButton : Show The Log Window.</string>
+                    </property>
+                    <property name="text" >
+                     <string>Toggle Log Window</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="2" >
+                <widget class="QGroupBox" name="GPS_Map_groupBox" >
+                 <property name="title" >
+                  <string>GPS Map</string>
+                 </property>
+                 <layout class="QGridLayout" name="GPS_Map_groupBox_gridLayout" >
+                  <item row="0" column="0" >
+                   <widget class="QCheckBox" name="Activate_OpenGL_checkBox" >
+                    <property name="statusTip" >
+                     <string>Activate OpenGL CheckBox : Activate Open GL For The GPS Map.</string>
+                    </property>
+                    <property name="text" >
+                     <string>Activate OpenGL</string>
+                    </property>
+                    <property name="checked" >
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" >
+                   <widget class="QCheckBox" name="Activate_Antialiasing_checkBox" >
+                    <property name="statusTip" >
+                     <string>Activate OpenGL CheckBox : Activate Open GL For The GPS Map.</string>
+                    </property>
+                    <property name="text" >
+                     <string>Activate Antialiasing</string>
+                    </property>
+                    <property name="checked" >
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="3" >
+                <spacer name="Others_horizontalSpacer" >
+                 <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0" >
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="3" column="0" >
+             <spacer name="Setting_verticalSpacer" >
+              <property name="orientation" >
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0" >
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="Collection_Management_page" >
+           <property name="geometry" >
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>618</width>
+             <height>311</height>
+            </rect>
+           </property>
+           <attribute name="label" >
+            <string>Collection_Management</string>
+           </attribute>
+           <layout class="QGridLayout" name="Collection_Management_page_gridLayout" >
+            <item row="0" column="0" >
+             <widget class="QGroupBox" name="Collections_Paths_groupBox" >
+              <property name="title" >
+               <string>Collection Paths</string>
+              </property>
+              <layout class="QGridLayout" name="Collections_Paths_groupBox_gridLayout" >
+               <property name="topMargin" >
+                <number>0</number>
+               </property>
+               <property name="bottomMargin" >
+                <number>0</number>
+               </property>
+               <item row="0" column="0" >
+                <widget class="QTableWidget" name="Collections_Paths_tableWidget" >
+                 <property name="statusTip" >
+                  <string>Collections Paths : Current Sub Collections Paths.</string>
+                 </property>
+                 <property name="frameShape" >
+                  <enum>QFrame::Box</enum>
+                 </property>
+                 <property name="alternatingRowColors" >
+                  <bool>true</bool>
+                 </property>
+                 <property name="showGrid" >
+                  <bool>false</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1" >
+                <layout class="QVBoxLayout" name="Collections_Paths_verticalLayout" >
+                 <item>
+                  <widget class="QPushButton" name="Refresh_Collection_pushButton" >
+                   <property name="statusTip" >
+                    <string>Refresh Collection PushButton : Refresh Global Collection, Reparsing All Directories, Etc...</string>
+                   </property>
+                   <property name="text" >
+                    <string>Refresh Collection</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="Edit_Collection_pushButton" >
+                   <property name="text" >
+                    <string>Edit</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer" >
+                   <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeType" >
+                    <enum>QSizePolicy::Preferred</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0" >
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="Add_pushButton" >
+                   <property name="statusTip" >
+                    <string>Add PushButton : Add A New Sub Collection.</string>
+                   </property>
+                   <property name="text" >
+                    <string>Add</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="Remove_pushButton" >
+                   <property name="statusTip" >
+                    <string>Removes PushButton : Remove Selected Sub Collections.</string>
+                   </property>
+                   <property name="text" >
+                    <string>Remove</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="Collections_Paths_verticalSpacer" >
+                   <property name="orientation" >
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0" >
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="Online_Update_page" >
+           <property name="geometry" >
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>618</width>
+             <height>311</height>
+            </rect>
+           </property>
+           <attribute name="label" >
+            <string>Online Update</string>
+           </attribute>
+           <layout class="QGridLayout" name="Online_Update_page_gridLayout" >
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
+            </property>
+            <item row="0" column="0" >
+             <widget class="QGroupBox" name="Online_Repository_groupBox" >
+              <property name="title" >
+               <string>Online Repository</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="flat" >
+               <bool>true</bool>
+              </property>
+              <layout class="QGridLayout" name="Online_Repository_groupBox_gridLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <item row="0" column="3" >
+                <widget class="QGroupBox" name="Downloads_groupBox" >
+                 <property name="title" >
+                  <string>Downloads</string>
+                 </property>
+                 <layout class="QGridLayout" name="Downloads_groupBox_gridLayout" >
+                  <item row="1" column="1" >
+                   <widget class="QPushButton" name="Get_Templates_pushButton" >
+                    <property name="statusTip" >
+                     <string>Get Templates PushButton : Download / Update Templates From Online Repository.</string>
+                    </property>
+                    <property name="text" >
+                     <string>Get Latest Templates</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" >
+                   <widget class="QPushButton" name="Get_Help_pushButton" >
+                    <property name="statusTip" >
+                     <string>Get Help PushButton : Download / Update Help From Online Repository.</string>
+                    </property>
+                    <property name="text" >
+                     <string>Get Latest Online Help</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="1" >
+                <widget class="QGroupBox" name="Online_Updater_groupBox" >
+                 <property name="title" >
+                  <string>Online Updater</string>
+                 </property>
+                 <layout class="QGridLayout" name="Online_Updater_groupBox_gridLayout" >
+                  <item row="0" column="2" >
+                   <widget class="QPushButton" name="Check_For_New_Releases_pushButton" >
+                    <property name="statusTip" >
+                     <string>Check For New_Releases PushButton : sIBL_GUI Will Check If New Releases Are Available Online.</string>
+                    </property>
+                    <property name="text" >
+                     <string>Check For New Releases</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2" >
+                   <widget class="QCheckBox" name="Check_For_New_Releases_checkBox" >
+                    <property name="statusTip" >
+                     <string>Enable New Releases Checking CheckBox : sIBL_GUI Will Check If New Releases Are Available On Startup.</string>
+                    </property>
+                    <property name="text" >
+                     <string>Check For New Releases On Startup</string>
+                    </property>
+                    <property name="checked" >
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2" >
+                   <widget class="QCheckBox" name="Ignore_Missing_Templates_checkBox" >
+                    <property name="text" >
+                     <string>Ignore Missing Templates</string>
+                    </property>
+                    <property name="checked" >
+                     <bool>false</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="0" column="2" >
+                <spacer name="Online_Settings_horizontalSpacer" >
+                 <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0" >
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="1" column="2" >
+                <spacer name="Online_Settings_verticalSpacer" >
+                 <property name="orientation" >
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0" >
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+              <zorder>Downloads_groupBox</zorder>
+              <zorder>Online_Updater_groupBox</zorder>
+              <zorder>Online_Settings_horizontalSpacer</zorder>
+              <zorder>Online_Settings_verticalSpacer</zorder>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="Help_tab" >
+       <property name="statusTip" >
+        <string>Help Tab : Show The Current Help File.</string>
+       </property>
+       <attribute name="title" >
+        <string>Help</string>
+       </attribute>
+       <layout class="QGridLayout" name="Help_tab_gridLayout" >
+        <item row="1" column="0" >
+         <widget class="QGroupBox" name="Help_groupBox" >
+          <layout class="QGridLayout" name="Help_groupBox_gridLayout" >
+           <item row="0" column="0" >
+            <widget class="QWebView" name="Help_webView" >
+             <property name="url" >
+              <url>
+               <string>about:blank</string>
+              </url>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QGroupBox" name="Help_Files_groupBox" >
+          <property name="title" >
+           <string>Help Files</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="flat" >
+           <bool>true</bool>
+          </property>
+          <layout class="QGridLayout" name="Help_Files_gridLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <item row="0" column="0" >
+            <spacer name="Help_Files_horizontalSpacer" >
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1" >
+            <widget class="QGroupBox" name="Available_Topic_groupBox" >
+             <property name="title" >
+              <string>Available Topics</string>
+             </property>
+             <layout class="QGridLayout" name="Available_Topic_groupBox_gridLayout" >
+              <item row="0" column="0" >
+               <widget class="QComboBox" name="Help_Files_comboBox" >
+                <property name="statusTip" >
+                 <string>Help Files ComboBox : Available Help Files Topics.</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="About_tab" >
+       <property name="statusTip" >
+        <string>About Tab : Random Stuff About sIBL_GUI.</string>
+       </property>
+       <attribute name="title" >
+        <string>About</string>
+       </attribute>
+       <layout class="QGridLayout" name="About_gridLayout" >
+        <item row="1" column="0" colspan="3" >
+         <widget class="QLabel" name="About_label" >
+          <property name="openExternalLinks" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <spacer name="Top_verticalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="1" >
+         <spacer name="Bottom_verticalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QDockWidget" name="sIBL_GUI_dockWidget" >
+   <property name="windowIcon" >
+    <iconset resource="../sIBL_GUI.qrc" >
+     <normaloff>:/sIBL_GUI/Resources/Icon_Light.png</normaloff>:/sIBL_GUI/Resources/Icon_Light.png</iconset>
+   </property>
+   <property name="statusTip" >
+    <string>Log Window : Show sIBL_GUI log, This Window Is Tearable.</string>
+   </property>
+   <property name="floating" >
+    <bool>false</bool>
+   </property>
+   <property name="features" >
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas" >
+    <set>Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea</set>
+   </property>
+   <property name="windowTitle" >
+    <string>Log Window</string>
+   </property>
+   <attribute name="dockWidgetArea" >
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="sIBL_GUI_dockWidgetContents" >
+    <layout class="QGridLayout" name="sIBL_GUI_dockWidgetContents_gridLayout" >
+     <item row="0" column="0" >
+      <widget class="QGroupBox" name="Log_groupBox" >
+       <property name="title" >
+        <string>sIBL_GUI</string>
+       </property>
+       <layout class="QGridLayout" name="Log_groupBox_gridLayout" >
+        <item row="0" column="0" >
+         <widget class="QTextEdit" name="Log_textEdit" >
+          <property name="minimumSize" >
+           <size>
+            <width>0</width>
+            <height>128</height>
+           </size>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="acceptRichText" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar" />
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../sIBL_GUI.qrc" />
+  <include location="../sIBL_GUI.qrc" />
+  <include location="../sIBL_GUI.qrc" />
+  <include location="../sIBL_GUI.qrc" />
+  <include location="../sIBL_GUI.qrc" />
+ </resources>
+ <connections/>
+</ui>
