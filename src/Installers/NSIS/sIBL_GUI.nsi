@@ -129,7 +129,7 @@ SectionEnd
 Function .onInit
     InitPluginsDir
     Push $R1
-    File /oname=$PLUGINSDIR\spltmp.bmp ..\..\Resources\sIBL_GUI_Installer_Logo.bmp
+    File /oname=$PLUGINSDIR\spltmp.bmp ..\..\Resources\Builders\sIBL_GUI_Installer_Logo.bmp
     advsplash::show 1000 600 400 -1 $PLUGINSDIR\spltmp
     Pop $R1
     Pop $R1

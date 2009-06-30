@@ -1,15 +1,15 @@
 [sIBL_GUI]
-Release = 1.9.1
-Type = "Nightly"
+Release = 2.0.0
+Type = "Stable"
 
 [XSI_MR]
 Release = 1.4.0
-Type = "Nightly"
+Type = "Stable"
 Comment = "This Is XSI Mental Ray Template !"
 
 [Maya_MR]
 Release = 1.4.0
-Type = "Nightly"
+Type = "Stable"
 Comment = "This Is Maya Mental Ray Template !"
 
 [3dsMax_MR]

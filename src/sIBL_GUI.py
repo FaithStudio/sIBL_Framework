@@ -402,9 +402,11 @@ class WorldMap_QGraphicsView( QGraphicsView ) :
 
 		cKey = cEvent.key()
 		if cKey == Qt.Key_Plus:
-			self.scaleView( 1.25 )
+			self.scaleView( 1.15 )
+			self.worldMapDraw()
 		elif cKey == Qt.Key_Minus:
-			self.scaleView( 1 / 1.25 )
+			self.scaleView( 1 / 1.15 )
+			self.worldMapDraw()
 		else:
 			QGraphicsView.keyPressEvent( self, cEvent )
 
@@ -995,10 +997,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cItem = QListWidgetItem( QString( cSIBLAttributes["sIBL Name"] ) )
 
 			# sIBL V2 Format Support.
-			if "Time" in cSIBLAttributes.keys():
-				cToolTip = QString( "<p><b>" + cSIBLAttributes["sIBL Name"] + "</b></p>" + "<p>" + "Author : " + cSIBLAttributes["Author"] + "<br>" + "Location : " + cSIBLAttributes["Location"] + "<br>" + "Shot Date : " + self.getFormattedShotDate( cSIBLAttributes["Date"], cSIBLAttributes["Time"] ) + "<br>" + "Comment : " + cSIBLAttributes["Comment"] + "</p>" )
+			if "Time" in cSIBLAttributes.keys() and "Date" in cSIBLAttributes.keys():
+				cShotDateString = "Shot Date : " + self.getFormattedShotDate( cSIBLAttributes["Date"], cSIBLAttributes["Time"] )
 			else :
-				cToolTip = QString( "<p><b>" + cSIBLAttributes["sIBL Name"] + "</b></p>" + "<p>" + "Author : " + cSIBLAttributes["Author"] + "<br>" + "Location : " + cSIBLAttributes["Location"] + "<br>" + "Comment : " + cSIBLAttributes["Comment"] + "</p>" )
+				cShotDateString = ""
+
+			cToolTip = QString( "<p><b>" + cSIBLAttributes["sIBL Name"] + "</b></p>" + "<p>" + "Author : " + cSIBLAttributes["Author"] + "<br>" + "Location : " + cSIBLAttributes["Location"] + "<br>" + cShotDateString + "<br>" + "Comment : " + cSIBLAttributes["Comment"] + "</p>" )
 
 			cItem.setToolTip( cToolTip )
 			cIcon = QIcon( cSIBLAttributes["Icon Path"] )
@@ -1397,14 +1401,20 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cSIBL_FrameworkProcess.close()
 
 					# Merging sIBL_Framework Verbose
-					cLogFile = sIBL_Common.sIBL_File( os.path.join( os.path.dirname( os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) ) ), sIBL_Common_Settings.cSIBL_Framework_LogFile ) )
-					if platform.system() == "Darwin":
+					if platform.system() != "Darwin":
+						cLogFilePath = os.path.join( os.path.dirname( os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) ) ), sIBL_Common_Settings.cSIBL_Framework_LogFile )
+					else :
 						csIBL_Framework_AbsolutePath = os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) )
 						cPath_Tokens = csIBL_Framework_AbsolutePath.partition( ".app" )
-						cLogFile = sIBL_Common.sIBL_File( cPath_Tokens[0] + cPath_Tokens[1] + "/Contents/Resources/" + sIBL_Common_Settings.cSIBL_Framework_LogFile )
+						cLogFilePath = cPath_Tokens[0] + cPath_Tokens[1] + "/Contents/Resources/" + sIBL_Common_Settings.cSIBL_Framework_LogFile
 
-					cLogFileContent = cLogFile.getFileContent( asString = True )
-					cLogger.info( cLogFileContent[11:-1] )
+					if os.path.exists( cLogFilePath ):
+						cLogFile = sIBL_Common.sIBL_File( cLogFilePath )
+						cLogFileContent = cLogFile.getFileContent( asString = True )
+						cLogger.info( cLogFileContent[11:-1] )
+					else :
+						sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "sIBL_Framework Log File Not Found, Loader Script Output Failed !" )
+						return False
 
 					cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
 					cLogger.info( "sIBL_GUI | Exiting sIBL_Framework !" )

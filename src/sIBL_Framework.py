@@ -64,6 +64,7 @@ import time
 #***********************************************************************************************
 #***	Internal Imports
 #***********************************************************************************************
+import sIBL_Common
 import sIBL_Common_Settings
 import sIBL_Exceptions
 import sIBL_Parser

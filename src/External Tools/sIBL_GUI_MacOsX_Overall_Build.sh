@@ -12,14 +12,10 @@ rm -rf ./dist/sIBL_Framework.dmg
 cp -f ./COPYING ./dist/sIBL_Framework.app/
 
 #! sIBL_Framework Debug Remove.
-rm -rf `find ./dist/sIBL_Framework.app/ -name *_debug`
+rm -rf `find ./dist/sIBL_Framework.app/ -name *debug*`
 
 #! sIBL_Framework Cleanup.
 python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_Framework.app/ .DS_Store
-
-#! sIBL_Framework DMG.
-hdiutil create "./dist/sIBL_Framework.dmg" -volname "sIBL_Framework" -fs HFS+ -srcfolder "./dist/sIBL_Framework.app"
-cp -f ./dist/sIBL_Framework.dmg ./Releases/MacOsX/
 
 #! sIBL_GUI Build.
 rm -rf ./build
@@ -38,11 +34,11 @@ rm -rf ./dist/sIBL_GUI.app/Contents/Resources/Templates/3ds\ Max
 rm -rf ./dist/sIBL_GUI.app/Contents/Resources/Templates/XSI
 
 #! sIBL_GUI Debug Remove.
-rm -rf `find ./dist/sIBL_GUI.app/ -name *_debug`
+rm -rf `find ./dist/sIBL_GUI.app/ -name *debug*`
 
 #! sIBL_GUI Cleanup.
 python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_GUI.app/ .DS_Store
 
 #! sIBL_GUI DMG.
-hdiutil create ./dist/sIBL_GUI.dmg -volname "sIBL_GUI" -fs HFS+ -srcfolder "./dist/sIBL_GUI.app"
+hdiutil create ./dist/sIBL_GUI.dmg -volname "sIBL_GUI" -fs HFS+ -srcfolder "./dist/sIBL_GUI.app" -srcfolder "./dist/sIBL_Framework.app"
 cp -f ./dist/sIBL_GUI.dmg ./Releases/MacOsX/
