@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './UI/sIBL_GUI.ui'
 #
-# Created: Tue Jun 30 23:38:03 2009
+# Created: Thu Jul 02 08:57:26 2009
 #      by: PyQt4 UI code generator 4.4.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -89,7 +89,7 @@ class Ui_sIBL_GUI(object):
                 self.Browser_Page_gridLayout.addWidget(self.Collections_listWidget, 0, 0, 1, 1)
                 self.Browser_GPS_Map_toolBox.addItem(self.Browser_Page, "")
                 self.GPS_Map_Page = QtGui.QWidget()
-                self.GPS_Map_Page.setGeometry(QtCore.QRect(0, 0, 596, 245))
+                self.GPS_Map_Page.setGeometry(QtCore.QRect(0, 0, 96, 26))
                 self.GPS_Map_Page.setObjectName("GPS_Map_Page")
                 self.GPS_Map_Page_gridLayout = QtGui.QGridLayout(self.GPS_Map_Page)
                 self.GPS_Map_Page_gridLayout.setMargin(0)
@@ -142,7 +142,7 @@ class Ui_sIBL_GUI(object):
                 self.Common_Attributes_page_gridLayout.addWidget(self.Common_Attributes_tableWidget, 0, 0, 1, 1)
                 self.Options_toolBox.addItem(self.Common_Attributes_page, "")
                 self.Additional_Attributes_page = QtGui.QWidget()
-                self.Additional_Attributes_page.setGeometry(QtCore.QRect(0, 0, 84, 61))
+                self.Additional_Attributes_page.setGeometry(QtCore.QRect(0, 0, 96, 61))
                 self.Additional_Attributes_page.setObjectName("Additional_Attributes_page")
                 self.Additional_Attributes_page_gridLayout = QtGui.QGridLayout(self.Additional_Attributes_page)
                 self.Additional_Attributes_page_gridLayout.setMargin(0)
@@ -668,7 +668,7 @@ class Ui_sIBL_GUI(object):
                 self.Collection_Management_page_gridLayout.addWidget(self.Collections_Paths_groupBox, 0, 0, 1, 1)
                 self.Preferences_toolBox.addItem(self.Collection_Management_page, "")
                 self.Online_Update_page = QtGui.QWidget()
-                self.Online_Update_page.setGeometry(QtCore.QRect(0, 0, 413, 134))
+                self.Online_Update_page.setGeometry(QtCore.QRect(0, 0, 618, 315))
                 self.Online_Update_page.setObjectName("Online_Update_page")
                 self.Online_Update_page_gridLayout = QtGui.QGridLayout(self.Online_Update_page)
                 self.Online_Update_page_gridLayout.setContentsMargins(-1, 0, -1, 0)
@@ -923,8 +923,9 @@ class Ui_sIBL_GUI(object):
                 self.Online_Updater_groupBox.setTitle(QtGui.QApplication.translate("sIBL_GUI", "Online Updater", None, QtGui.QApplication.UnicodeUTF8))
                 self.Check_For_New_Releases_pushButton.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "Check For New_Releases PushButton : sIBL_GUI Will Check If New Releases Are Available Online.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Check_For_New_Releases_pushButton.setText(QtGui.QApplication.translate("sIBL_GUI", "Check For New Releases", None, QtGui.QApplication.UnicodeUTF8))
-                self.Check_For_New_Releases_checkBox.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "Enable New Releases Checking CheckBox : sIBL_GUI Will Check If New Releases Are Available On Startup.", None, QtGui.QApplication.UnicodeUTF8))
+                self.Check_For_New_Releases_checkBox.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "Check For New Releases On Startup CheckBox : sIBL_GUI Will Check If New Releases Are Available On Startup.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Check_For_New_Releases_checkBox.setText(QtGui.QApplication.translate("sIBL_GUI", "Check For New Releases On Startup", None, QtGui.QApplication.UnicodeUTF8))
+                self.Ignore_Missing_Templates_checkBox.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "Ignore Missing Templates CheckBox : sIBL_GUI Will Ignore Templates You Don\'t Have Locally When Checking For Updates.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Ignore_Missing_Templates_checkBox.setText(QtGui.QApplication.translate("sIBL_GUI", "Ignore Missing Templates", None, QtGui.QApplication.UnicodeUTF8))
                 self.Preferences_toolBox.setItemText(self.Preferences_toolBox.indexOf(self.Online_Update_page), QtGui.QApplication.translate("sIBL_GUI", "Online Update", None, QtGui.QApplication.UnicodeUTF8))
                 self.sIBL_GUI_tabWidget.setTabText(self.sIBL_GUI_tabWidget.indexOf(self.Preferences_tab), QtGui.QApplication.translate("sIBL_GUI", "Preferences", None, QtGui.QApplication.UnicodeUTF8))
@@ -940,6 +941,7 @@ class Ui_sIBL_GUI(object):
                 self.Log_groupBox.setTitle(QtGui.QApplication.translate("sIBL_GUI", "sIBL_GUI", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
+import sIBL_GUI_rc
 import sIBL_GUI_rc
 import sIBL_GUI_rc
 import sIBL_GUI_rc

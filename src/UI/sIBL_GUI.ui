@@ -185,8 +185,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>596</width>
-                <height>245</height>
+                <width>96</width>
+                <height>26</height>
                </rect>
               </property>
               <property name="statusTip" >
@@ -332,7 +332,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>84</width>
+                   <width>96</width>
                    <height>61</height>
                   </rect>
                  </property>
@@ -741,11 +741,6 @@
                   </widget>
                  </item>
                 </layout>
-                <zorder>Port_label</zorder>
-                <zorder>Software_Port_spinBox</zorder>
-                <zorder>Address_label</zorder>
-                <zorder>Address_lineEdit</zorder>
-                <zorder>scrollArea_2</zorder>
                </widget>
               </item>
              </layout>
@@ -922,7 +917,6 @@
                       </widget>
                      </item>
                     </layout>
-                    <zorder>sIBL_Location_Set_label</zorder>
                    </widget>
                   </item>
                   <item row="1" column="0" >
@@ -1629,8 +1623,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>413</width>
-             <height>134</height>
+             <width>618</width>
+             <height>315</height>
             </rect>
            </property>
            <attribute name="label" >
@@ -1706,7 +1700,7 @@
                   <item row="1" column="2" >
                    <widget class="QCheckBox" name="Check_For_New_Releases_checkBox" >
                     <property name="statusTip" >
-                     <string>Enable New Releases Checking CheckBox : sIBL_GUI Will Check If New Releases Are Available On Startup.</string>
+                     <string>Check For New Releases On Startup CheckBox : sIBL_GUI Will Check If New Releases Are Available On Startup.</string>
                     </property>
                     <property name="text" >
                      <string>Check For New Releases On Startup</string>
@@ -1718,6 +1712,9 @@
                   </item>
                   <item row="2" column="2" >
                    <widget class="QCheckBox" name="Ignore_Missing_Templates_checkBox" >
+                    <property name="statusTip" >
+                     <string>Ignore Missing Templates CheckBox : sIBL_GUI Will Ignore Templates You Don't Have Locally When Checking For Updates.</string>
+                    </property>
                     <property name="text" >
                      <string>Ignore Missing Templates</string>
                     </property>
@@ -1886,8 +1883,6 @@
      </widget>
     </item>
    </layout>
-   <zorder>Logo_label</zorder>
-   <zorder>sIBL_GUI_tabWidget</zorder>
   </widget>
   <widget class="QDockWidget" name="sIBL_GUI_dockWidget" >
    <property name="windowIcon" >
@@ -1952,6 +1947,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
