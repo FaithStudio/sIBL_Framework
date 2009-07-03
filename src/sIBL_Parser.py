@@ -88,7 +88,7 @@ class sIBL_Parser( sIBL_Common.sIBL_File ):
 		cLogger.debug( "> %s", "Initializing sIBL_Parser() Class." )
 		cLogger.debug( "> self.filePath : '%s'.", filePath )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		self.filePath = filePath
 
 		self.cFileContent = self.getFileContent()

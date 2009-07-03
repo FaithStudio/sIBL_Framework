@@ -1,5 +1,5 @@
 [Template]
-Release = @Release | 1.4.5 | String | Template Release
+Release = @Release | 1.4.6 | String | Template Release
 Date = @Date | 3 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
@@ -385,7 +385,7 @@ global proc sIBL_Maya_MR_Environment_Shaders_Creation(string $camerasList[], int
 
 	if ($createBackground)
 	{
-		string $connectionEntries[] = {"eye"};
+		string $connectionEntries[] = {"eye", "transparent", "refraction"};
 		sIBL_Maya_MR_CreateEnvironmentShadersBranch($cRaySwitch, $connectionEntries, $cBackgroundFilePath, "sIBL_Background");
 	}
 

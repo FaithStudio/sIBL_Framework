@@ -105,7 +105,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		QWidget.__init__( self )
 		self.setupUi( self )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		self.cSIBL_GUI = cSIBL_GUI
 		self.cParent = cParent
 		self.cLocalReleasesFile = cLocalReleasesFile
@@ -249,7 +249,7 @@ class sIBL_Online_Update( QObject ):
 
 		cLogger.debug( "> Initializing sIBL_Online_Update() Class." )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		cLogger.debug( "> Change Log URL : '%s'.", sIBL_GUI_Settings.cReleasesFile )
 		self.cReleasesFilePath = sIBL_GUI_Settings.cReleasesFile
 

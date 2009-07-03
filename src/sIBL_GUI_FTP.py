@@ -104,7 +104,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.Download_progressBar.hide()
 		self.Download_progressBar.setValue( 0 )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		self.cParent = cParent
 		self.cSIBL_GUI_Instance = cSIBL_GUI_Instance
 		self.cHost = cHost
@@ -258,7 +258,7 @@ class sIBL_FTP_Worker( QThread ):
 
 		QThread.__init__( self, cParent )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		self.cHost = cHost
 		self.cPort = cPort
 		self.cLogin = cLogin

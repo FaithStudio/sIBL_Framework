@@ -90,7 +90,7 @@ class sIBL_FTP( object ):
 
 		cLogger.debug( "> Initializing sIBL_FTP() Class." )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		self.cFTP = ftplib.FTP()
 
 		self.cWalkerFilesList = []

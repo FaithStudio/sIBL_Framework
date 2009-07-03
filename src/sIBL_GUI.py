@@ -109,7 +109,10 @@ class Popup_QGraphicsItem( QGraphicsItem ) :
 		'''
 
 		cLogger.debug( "> Initializing Popup_QGraphicsItem() Class." )
+
 		QGraphicsItem.__init__( self )
+
+		# --- Setting Class Attributes. ---
 		self.cSIBL_GUI = cSIBL_GUI
 		self.cCollectionItem_Name = cCollectionItem_Name
 		self.cIBLAttributes = self.cSIBL_GUI.cGlobalCollection[self.cCollectionItem_Name]
@@ -168,7 +171,10 @@ class Marker_QGraphicsItem( QGraphicsItem ) :
 		'''
 
 		cLogger.debug( "> Initializing Marker_QGraphicsItem() Class." )
+
 		QGraphicsItem.__init__( self )
+
+		# --- Setting Class Attributes. ---
 		self.cSIBL_GUI = cSIBL_GUI
 		self.cMarkerScale = cMarkerScale
 		self.cCollectionItem_Name = cCollectionItem_Name
@@ -262,7 +268,10 @@ class WorldMap_QGraphicsItem( QGraphicsItem ) :
 		'''
 
 		cLogger.debug( "> Initializing WorldMap_QGraphicsItem() Class." )
+
 		QGraphicsItem.__init__( self )
+
+		# --- Setting Class Attributes. ---
 		self.cWorldMap_QPixmap = cWorldMap_QPixmap
 		self.setCursor( Qt.CrossCursor )
 
@@ -299,7 +308,10 @@ class WorldMap_QGraphicsView( QGraphicsView ) :
 
 		cLogger.debug( "> Initializing WorldMap_QGraphicsView() Class." )
 		cLogger.info( "sIBL_GUI | Initializing World Map !" )
+
 		QGraphicsView.__init__( self )
+
+		# --- Setting Class Attributes. ---
 		self.cSIBL_GUI = cSIBL_GUI
 
 		self.cWorldMap_QPixmap = QPixmap()
@@ -421,7 +433,7 @@ class Variable_QPushButton( QPushButton ) :
 		cLogger.debug( "> Initializing Variable_QPushButton() Class." )
 		QPushButton.__init__( self, cParent )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		self.cState = cState
 
 		self.trueColor = cColors[0]
@@ -472,6 +484,7 @@ class Variable_QPushButton( QPushButton ) :
 		'''
 
 		cLogger.debug( "> Setting Variable QPushButton() To 'False' State." )
+
 		self.cState = False
 
 		cPalette = QPalette()
@@ -501,7 +514,7 @@ class sIBL_GUI_SplashScreen( QSplashScreen ) :
 
 		self.setWindowFlags( self.windowFlags() | Qt.WindowStaysOnTopHint )
 
-		# Setting Class Attributes.
+		# --- Setting Class Attributes. ---
 		self.cWaitTime = cWaitTime
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -540,15 +553,36 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		QMainWindow.__init__( self )
 		self.setupUi( self )
 
-		# sIBL_GUI Log Window Initialization.
-		# self.cLogWatcher = QFileSystemWatcher( self )
-		# self.cLogWatcher.addPath( cSIBL_GUI_LogFile )
+		# --- Setting Class Attributes. ---
+		# Allocating Core Data Structures.
+		self.cGlobalCollection = None
+		self.cGlobalTemplates = None
+		self.cGlobalHelpFiles = None
+		self.cFilteredCollection = None
+		# Allocating Various Stuff.
+		self.cEditedIBL = None
+		self.GPSMapAntialiasingActive = None
+		self.OpenGLActive = None
+		self.WorldMap_QGraphicsView = None
+		self.cTextEdits_List = None
+		self.cLogFileSize = None
+		self.cTimer = None
+		# Initializing sIBL_GUI FTP Refresh Attributes.
+		self.cFTP_UI = None
+		self.cFTP_Session_Active = False
+		self.cTemplates_Changed = False
+		self.cHelp_Changed = False
+		self.cHelpFilesList = None
+		# Initializing Interface Buttons Color Attributes.
+		self.greenColor = QColor( 128, 192, 128 )
+		self.redColor = QColor( 192, 128, 128 )
 
 		# Replacing QFileSystemWatcher By A Custom HXC Faster File Watcher
 		self.cLogFileSize = os.path.getsize( cSIBL_GUI_LogFile )
 		self.cTimer = QTimer( self )
 		self.cTimer.start( 20 )
 
+		# --- sIBL_GUI Log Window Initialization. ---
 		self.Log_textEdit.setReadOnly( True )
 		self.Log_textEdit.setWordWrapMode( QTextOption.NoWrap )
 		self.Log_textEdit.setFontFamily( "Courier" )
@@ -559,7 +593,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.sIBL_GUI_dockWidget.close()
 		self.resize( 1, 1 )
 
-		# sIBL_GUI Preferences Tab Initialization.
+		# --- sIBL_GUI Preferences Tab Initialization. ---
 		cSpashScreen.setMessage( "sIBL_GUI | Restoring Settings." )
 
 		self.setVerboseLevelComboBox()
@@ -576,48 +610,41 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.setCheckBoxStateFromSettings( self.Check_For_New_Releases_checkBox, "Settings", "OnlineUpdate" )
 		self.setCheckBoxStateFromSettings( self.Ignore_Missing_Templates_checkBox, "Settings", "IgnoreMissingTemplates" )
 
-		# sIBL_GUI Collection Tab Initialization.
+		# --- sIBL_GUI Collection Tab Initialization. ---
 		cSpashScreen.setMessage( "sIBL_GUI | Gathering sIBL Sets." )
 
+		# Collections Initialization.
 		self.initializeCollectionsRelationships()
+
 		self.Collections_listWidget.setSpacing( 4 )
 		self.Collections_listWidget.setIconSize( QSize( 128, 128 ) )
 		self.setCollectionsListWidget()
 
-		# sIBL_GUI GPS Map Initialization
+		# --- sIBL_GUI GPS Map Initialization. ---
 		cSpashScreen.setMessage( "sIBL_GUI | Initializing GPS Map." )
-
-		self.WorldMap_QGraphicsView = None
 		self.setGPSMap()
 
-		# sIBL_GUI Import Tab Initialization.
+		# --- sIBL_GUI Import Tab Initialization. ---
 		cSpashScreen.setMessage( "sIBL_GUI | Gathering Templates." )
 
-		self.greenColor = QColor( 128, 192, 128 )
-		self.redColor = QColor( 192, 128, 128 )
 		self.cTextEdits_List = ( self.Comment_textEdit, self.Template_Comment_textEdit )
+		self.initializeLineAndTextEditsPalette()
 
 		# sIBL V2 Format Support.
 		self.Shot_Date_groupBox.hide()
 
-		self.initializeLineAndTextEditsPalette()
+		# Templates Initialization.
 		self.initializeTemplatesRelationships()
 
-		# sIBL_GUI Help Tab Initialization.
-
+		# --- sIBL_GUI Help Tab Initialization. ---
 		self.initializeHelpRelationships()
 		self.setHelpTextBrowser()
 
-		# sIBL_GUI About Tab Initialization.
+		# --- sIBL_GUI About Tab Initialization. ---
 		cSpashScreen.setMessage( "sIBL_GUI | Setting Version Number And About Message." )
 		self.setAboutMessage()
 
-		# Initializing sIBL_GUI FTP Refresh Attributes.
-		self.cFTP_Session_Active = False
-		self.cTemplates_Changed = False
-		self.cHelp_Changed = False
-
-		# sIBL_GUI Signals / Slots.
+		# --- sIBL_GUI Signals / Slots. ---
 		# self.connect( self.cLogWatcher, SIGNAL( "fileChanged(const QString&)" ), self.setLogTextEdit )
 		self.connect( self.cTimer, SIGNAL( "timeout()" ), self.refreshLogTextEdit )
 
@@ -670,6 +697,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		self.connect( self.sIBL_GUI_tabWidget, SIGNAL( "currentChanged(int)" ), self.sIBL_GUI_tabWidget_OnChanged )
 
+		# Hiding Splashscreen.
 		cLogger.debug( "> Hiding SplashScreen." )
 		cSpashScreen.setMessage( "sIBL_GUI | Initialization Finished." )
 		cSpashScreen.hide()
