@@ -3,14 +3,19 @@ Release = 2.0.0
 Type = "Stable"
 
 [XSI_MR]
-Release = 1.4.0
+Release = 1.4.1
 Type = "Stable"
 Comment = "This Is XSI Mental Ray Template !"
 
 [Maya_MR]
-Release = 1.4.0
+Release = 1.4.5
 Type = "Stable"
 Comment = "This Is Maya Mental Ray Template !"
+
+[Maya_VRay]
+Release = 0.9.0
+Type = "Nightly"
+Comment = "This Is VRay For Maya Template ! ( Notice That This Template Is Beta ! )"
 
 [3dsMax_MR]
 Release = 0.9.5
