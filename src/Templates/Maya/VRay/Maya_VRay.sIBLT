@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 0.9.1 | String | Template Release
-Date = @Date | 3 July 2009 | String | Date
+Release = @Release | 0.9.2 | String | Template Release
+Date = @Date | 4 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -422,7 +422,6 @@ global proc sIBL_Maya_VRay_ActivateIndirectIllumination()
 global proc sIBL_Maya_VRay_ActivateLinearWorkflow()
 {
 	setAttr "vraySettings.cmap_gamma" 2.2;
-	setAttr "vraySettings.cmap_linearworkflow" 1;
 	setAttr "vraySettings.cmap_affectBackground" 0;
 }
 
