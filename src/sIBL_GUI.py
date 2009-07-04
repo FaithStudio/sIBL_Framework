@@ -219,10 +219,10 @@ class Marker_QGraphicsItem( QGraphicsItem ) :
 		@param cEvent: QEvent ( QEvent )
 		'''
 
-		cIBLAttributes = self.cSIBL_GUI.cGlobalCollection[self.cCollectionItem_Name]
+		self.cSIBL_GUI.cEditedIBL = self.cCollectionItem_Name
 		self.cSIBL_GUI.sIBL_GUI_tabWidget.setCurrentIndex( 1 )
-		cLogger.info( "sIBL_GUI | Starting '%s' Import !", cIBLAttributes["sIBL Name"] )
-		self.cSIBL_GUI.setSIBLInfos( cIBLAttributes["sIBL Name"] )
+		cLogger.info( "sIBL_GUI | Starting '%s' Import !", self.cSIBL_GUI.cEditedIBL )
+		self.cSIBL_GUI.setEditedSIBLInfos()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def hoverEnterEvent( self, cEvent ) :
@@ -1150,7 +1150,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	def setOptionsToolBox( self, cTemplateFile, cSection, cTableWidget ) :
 		'''
 		This Method Defines And Sets Options TableWidgets.
+
+		@param cTemplateFile: Current Template File. ( sIBL_File )
+		@param cSection: Seeked Section. ( String )
+		@param cTableWidget: Current Table Widget. ( QTableWidget )
 		'''
+
 		cTableWidget.hide()
 
 		cFileTemplateAttributes = cTemplateFile.getSectionAttributes( cSection )
@@ -1215,6 +1220,8 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	def setPortWidgetsVisibility( self, cVisibilityState ) :
 		'''
 		This Method Hide/UnHide Remote Connections Widgets Depending The Current Remote Connection Options
+
+		@param cVisibilityState: Current Port Widgets Visibility State. ( Boolean )
 		'''
 
 		if cVisibilityState is True:
@@ -1270,19 +1277,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 
 	@sIBL_Common.sIBL_Execution_Call
-	def setSIBLInfos( self, cSIBLName ) :
+	def setEditedSIBLInfos( self ) :
 		'''
 		This Method Sets sIBL Widgets Informations.
 		'''
-		cSIBL = None
-		for sIBL in self.cGlobalCollection.keys() :
-			cSIBLAttributes = self.cGlobalCollection[sIBL]
-			if cSIBLAttributes["sIBL Name"] == cSIBLName:
-				cSIBL = cSIBLAttributes
-				break
 
-		# Special Case Where The sIBL Has Changed Of Name During An Edit In sIBLedit.
-		if cSIBL is not None :
+		if self.cEditedIBL is not None:
+			cSIBL = self.cGlobalCollection[self.cEditedIBL]
+			# Special Case Where The sIBL Has Changed Of Name During An Edit In sIBLedit.
 			cLogger.debug( "> Setting sIBL Infos Widgets : '%s'.", "sIBL_Set_groupBox, Preview_label, Comment_label, sIBL_Location_Set_label, sIBL_Author_Set_label" )
 			self.sIBL_Set_groupBox.setTitle( QString( cSIBL["sIBL Name"] ) )
 			self.Preview_label.setPixmap( QPixmap( cSIBL["Icon Path"] ) )
@@ -1304,6 +1306,24 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 0 )
 
 	@sIBL_Common.sIBL_Execution_Call
+	def getSIBLFromSIBLName( self, cName ) :
+		'''
+		This Method Gets The Current sIBL His Name.
+
+		@param cName: Current sIBL Name. ( String )
+		@return: Seeked SIBL. ( String )
+		'''
+
+		for sIBL in self.cGlobalCollection.keys() :
+				cSIBLAttributes = self.cGlobalCollection[sIBL]
+				if cSIBLAttributes["sIBL Name"] == cName :
+					cLogger.debug( "> sIBL Name '%s' Owner Is : '%s'.", cName, sIBL )
+					return sIBL
+
+		cLogger.debug( "> No sIBL  Owner For : '%s'.", cName )
+		return None
+
+	@sIBL_Common.sIBL_Execution_Call
 	def sendListWidgetItemToImportTab( self, *__None__ ) :
 		'''
 		This Method Sends Double Clicked sIBL To The Import Tab.
@@ -1312,21 +1332,19 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.sIBL_GUI_tabWidget.setCurrentIndex( 1 )
 		cSelectedQListWidgetItems = self.Collections_listWidget.selectedItems()
 		cLogger.info( "sIBL_GUI | Starting '%s' Import !", cSelectedQListWidgetItems[0].text() )
-		self.setSIBLInfos( cSelectedQListWidgetItems[0].text() )
+		self.cEditedIBL = self.getSIBLFromSIBLName( cSelectedQListWidgetItems[0].text() )
+
+		self.setEditedSIBLInfos()
 
 	@sIBL_Common.sIBL_Execution_Call
-	def getSIBLFromsIBLSetGroupBoxTitle( self ) :
+	def getSIBLPath( self ) :
 		'''
 		This Method Gets The Current sIBL From Widget Title.
 		'''
 
-		for sIBL in self.cGlobalCollection.keys() :
-				cSIBLAttributes = self.cGlobalCollection[sIBL]
-				if cSIBLAttributes["sIBL Name"] == self.sIBL_Set_groupBox.title() :
-					cSIBL = cSIBLAttributes
-					break
-		cLogger.debug( "> Current Imported sIBL Path : '%s'.", cSIBL["sIBL Path"] )
-		return cSIBL["sIBL Path"]
+		cSIBLAttributes = self.cGlobalCollection[self.cEditedIBL]
+		cLogger.debug( "> Current Imported sIBL Path : '%s'.", cSIBLAttributes["sIBL Path"] )
+		return cSIBLAttributes["sIBL Path"]
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getTemplateFilePathFromComboBox( self ) :
@@ -1393,7 +1411,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			if self.cGlobalTemplates is not None :
 				if self.sIBL_Set_groupBox.title() != "Preview" :
 					cLogger.debug( "> %s", "Gathering Informations For sIBL_Framework Launch." )
-					cSIBLPath = self.getSIBLFromsIBLSetGroupBoxTitle()
+					cSIBLPath = self.getSIBLPath()
 
 					# Getting Template File Path From Template_comboBox.
 					cTemplatePath = self.getTemplateFilePathFromComboBox()
@@ -1567,10 +1585,10 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Triggers Current Imported sIBL File Reload In The Import Tab.
 		'''
 
-		currentSIBL = str( self.sIBL_Set_groupBox.title() )
-		cLogger.debug( "> Current sIBL : '%s'.", currentSIBL )
+		cLogger.debug( "> Current sIBL : '%s'.", self.cEditedIBL )
 		self.initializeCollectionsRelationships()
-		self.setSIBLInfos( currentSIBL )
+
+		self.setEditedSIBLInfos()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Edit_In_sIBL_Edit_pushButton_OnClicked( self ) :
@@ -1579,7 +1597,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if self.sIBL_Set_groupBox.title() != "Preview" :
-			cSIBLPath = self.getSIBLFromsIBLSetGroupBoxTitle()
+			cSIBLPath = self.getSIBLPath()
 			if self.sIBLedit_Path_lineEdit.text() != "" :
 				cSIBLEditPath = os.path.abspath( str( self.sIBLedit_Path_lineEdit.text() ) )
 				if platform.system() == "Windows" or platform.system() == "Linux":
@@ -1601,7 +1619,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if self.sIBL_Set_groupBox.title() != "Preview" :
-			cSIBLPath = self.getSIBLFromsIBLSetGroupBoxTitle()
+			cSIBLPath = self.getSIBLPath()
 			cPath = os.path.dirname( cSIBLPath )
 			self.exploreProvidedFolder( "Opening Current sIBL Folder With", cPath )
 		else :
