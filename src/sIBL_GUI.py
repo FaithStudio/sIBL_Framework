@@ -740,6 +740,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 		This Method Refresh The Log Window ( Can't Be Decorated For Recursion Issues ).
 		'''
+
 		try :
 			cFileSize = os.path.getsize( cSIBL_GUI_LogFile )
 			if  cFileSize != self.cLogFileSize :
@@ -752,6 +753,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 		This Method Set The Log Window ( Can't Be Decorated For Recursion Issues ).
 		'''
+
 		try :
 			cLogFile = open( cSIBL_GUI_LogFile, "r" )
 			cLogFileContent = cLogFile.read()
@@ -1026,7 +1028,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 			# sIBL V2 Format Support.
 			if "Time" in cSIBLAttributes.keys() and "Date" in cSIBLAttributes.keys():
-				cShotDateString = "Shot Date : " + self.getFormattedShotDate( cSIBLAttributes["Date"], cSIBLAttributes["Time"] )
+				cShotDateString = "Shot Date : " + self.getFormatedShotDate( cSIBLAttributes["Date"], cSIBLAttributes["Time"] )
 			else :
 				cShotDateString = ""
 
@@ -1077,6 +1079,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		@return: Templates From The Templates Directory. ( Dictionary )
 		'''
+
 		cLogger.info( "sIBL_GUI | Retrieving Templates !" )
 
 		cTemplates = sIBL_Recursive_Walker.sIBL_Recursive_Walker( os.path.abspath( str( self.Templates_Path_lineEdit.text() ) ).replace( "\\", "/" ) + "/" )
@@ -1298,7 +1301,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 			if "Date" in cSIBL.keys():
 				self.Shot_Date_groupBox.show()
-				self.sIBL_Date_Set_label.setText( QString( self.getFormattedShotDate( cSIBL["Date"], cSIBL["Time"] ) ) )
+				self.sIBL_Date_Set_label.setText( QString( self.getFormatedShotDate( cSIBL["Date"], cSIBL["Time"] ) ) )
 			else:
 				self.Shot_Date_groupBox.hide()
 		else:
@@ -1867,6 +1870,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 		This Method Fills Templates Path Widget.
 		'''
+
 		cTemplatesPath = sIBL_Get_KeyFromSettings( "Settings", "TemplatesPath" )
 		cLogger.debug( "> Setting Templates Path LineEdit : '%s'.", str( cTemplatesPath ) )
 		self.Templates_Path_lineEdit.setText( cTemplatesPath )
@@ -1936,6 +1940,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 		This Method Fills Help Files Path Widget.
 		'''
+
 		cHelpFilesPath = sIBL_Get_KeyFromSettings( "Settings", "HelpFilesPath" )
 		cLogger.debug( "> Setting Help Files LineEdit : '%s'.", str( cHelpFilesPath ) )
 		self.Help_Files_Path_lineEdit.setText( cHelpFilesPath )
@@ -2144,34 +2149,6 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Collection Name Already Exists In Global Collection !" )
 
 	@sIBL_Common.sIBL_Execution_Call
-	def Add_pushButton_OnClicked( self ) :
-		'''
-		This Method Is Called When Add Button Is Clicked.
-		'''
-
-		self.getNewCollection()
-
-	@sIBL_Common.sIBL_Execution_Call
-	def Remove_pushButton_OnClicked( self ) :
-		'''
-		This Method Is Called When Remove Button Is Clicked.
-		'''
-
-		cSelectedItems = self.Collections_Paths_tableWidget.selectedItems()
-		if len( cSelectedItems ) != 0 :
-			cRemoveList = cSelectedItems
-			for cItem in cSelectedItems :
-				for cItemCompared in cSelectedItems :
-					if cItem.row() == cItemCompared.row() and cItem != cItemCompared :
-						cRemoveList.remove( cItemCompared )
-			for item in cRemoveList :
-				cLogger.debug( "> Removing Row : '%s'.", item.row() )
-				self.Collections_Paths_tableWidget.removeRow( item.row() )
-			self.initializeCollectionsRelationships()
-			cLogger.debug( "> %s", "Saving Preferences !" )
-			self.setCollectionsPaths()
-
-	@sIBL_Common.sIBL_Execution_Call
 	def Edit_Collection_pushButton_OnClicked( self ) :
 		'''
 		This Method Is Called When Edit Button Is Clicked.
@@ -2198,6 +2175,34 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					self.setCollectionsPaths()
 				else :
 					sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Directory Already Exists In Global Collection !" )
+
+	@sIBL_Common.sIBL_Execution_Call
+	def Add_pushButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Add Button Is Clicked.
+		'''
+
+		self.getNewCollection()
+
+	@sIBL_Common.sIBL_Execution_Call
+	def Remove_pushButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Remove Button Is Clicked.
+		'''
+
+		cSelectedItems = self.Collections_Paths_tableWidget.selectedItems()
+		if len( cSelectedItems ) != 0 :
+			cRemoveList = cSelectedItems
+			for cItem in cSelectedItems :
+				for cItemCompared in cSelectedItems :
+					if cItem.row() == cItemCompared.row() and cItem != cItemCompared :
+						cRemoveList.remove( cItemCompared )
+			for item in cRemoveList :
+				cLogger.debug( "> Removing Row : '%s'.", item.row() )
+				self.Collections_Paths_tableWidget.removeRow( item.row() )
+			self.initializeCollectionsRelationships()
+			cLogger.debug( "> %s", "Saving Preferences !" )
+			self.setCollectionsPaths()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def startEmptyCollectionWizard( self ) :
@@ -2400,21 +2405,6 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cUpdate = sIBL_GUI_Updater.sIBL_Online_Update( self, showInfoMessage )
 		cUpdate.startWorkerThread()
 
-	# Deprecated Method.
-	@sIBL_Common.sIBL_Execution_Call
-	def setLineEditsTextSize( self, cPointSize ) :
-		'''
-		This Method Sets Line Edits Text Size.
-
-		@param cPointSize: Current Point Size ( Integer )
-		'''
-
-		cFont = QFont()
-		cFont.setPointSize( cPointSize )
-		for cLineEdit in self.cLineEditsList :
-			cLogger.debug( "> Setting '%s' Point Size.", cLineEdit )
-			cLineEdit.setFont( cFont )
-
 	@sIBL_Common.sIBL_Execution_Call
 	def checkPreferencesPaths( self ) :
 		'''
@@ -2529,6 +2519,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		@return: Helps Files. ( Dictionary )
 		'''
+
 		cLogger.info( "sIBL_GUI | Retrieving Help Files !" )
 
 		cHelpFiles = sIBL_Recursive_Walker.sIBL_Recursive_Walker( os.path.abspath( str( self.Help_Files_Path_lineEdit.text() ) ).replace( "\\", "/" ) + "/" )
@@ -2555,6 +2546,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	#***************************************************************************************
 	@sIBL_Common.sIBL_Execution_Call
 	def setAboutMessage( self ):
+		'''
+		This Method Sets The About Message.
+		'''
+
+		cLogger.debug( "> Setting About Tab Message : '%s'.", sIBL_GUI_About.cSIBL_GUI_AboutMessage )
 		self.About_label.setText( sIBL_GUI_About.cSIBL_GUI_AboutMessage )
 
 	#***************************************************************************************
@@ -2727,18 +2723,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			self.cHelp_Changed = False
 
 	@sIBL_Common.sIBL_Execution_Call
-	def setLineEditsCursorPosition( self, cPosition ) :
-		'''
-		This Method Sets The Cursor Postion For Line Edits.
-
-		@param cPosition: Cursor Position. ( Integer )
-		'''
-
-		for cLineEdit in self.cLineEdits_List :
-			cLineEdit.setCursorPosition( cPosition )
-
-	@sIBL_Common.sIBL_Execution_Call
-	def getFormattedShotDate( self, cDate, cTime ):
+	def getFormatedShotDate( self, cDate, cTime ):
 		'''
 		This Method Returns A Formatted Shot Date.
 
