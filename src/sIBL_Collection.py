@@ -87,6 +87,7 @@ class sIBL_Collection( object ):
 
 		cLogger.debug( "> %s", "Initializing sIBL_Collection() Class." )
 
+		# --- Setting Class Attributes. ---
 		self.rDirectoryPath = rDirectoryPath
 		cLogger.debug( "> self.rDirectoryPath : '%s'.", self.rDirectoryPath )
 

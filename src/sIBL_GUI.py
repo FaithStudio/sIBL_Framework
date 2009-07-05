@@ -2786,7 +2786,7 @@ def sIBL_Set_DefaultSettingsFile( cFileName ) :
 	cSettings.setValue( "HelpFilesPath", QVariant( "Help/" ) )
 	cSettings.setValue( "VerbosityLevel", QVariant( "3" ) )
 	cSettings.setValue( "OnlineUpdate", QVariant( "1" ) )
-	cSettings.setValue( "IgnoreMissingTemplates", QVariant( "1" ) )
+	cSettings.setValue( "IgnoreMissingTemplates", QVariant( "0" ) )
 	cSettings.setValue( "OpenGL", QVariant( "0" ) )
 	cSettings.setValue( "GPSMapAntialiasing", QVariant( "1" ) )
 	cSettings.endGroup()

@@ -86,6 +86,8 @@ class sIBL_Recursive_Walker( object ):
 		'''
 
 		cLogger.debug( "> %s", "Initializing sIBL_Walker() Class." )
+
+		# --- Setting Class Attributes. ---
 		self.rDirectoryPath = rDirectoryPath
 		cLogger.debug( "> self.rDirectoryPath : '%s'.", self.rDirectoryPath )
 

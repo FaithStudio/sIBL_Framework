@@ -175,6 +175,8 @@ class sIBL_EnvironmentVariables( object ):
 		@param cVariable: Current Variable To Be Manipulated. ( String )
 		'''
 		cLogger.debug( "> %s", "Initializing sIBL_EnvironmentVariables() Class." )
+
+		# --- Setting Class Attributes. ---
 		self.cVariable = cVariable
 		cLogger.debug( "> self.cVariable : '%s'.", self.cVariable )
 
@@ -232,6 +234,30 @@ def sIBL_Wait( cWaitTime ):
 
 	time.sleep( cWaitTime )
 
+@sIBL_Execution_Call
+def sIBL_Path_Join( cStringA, cStringB, cJoinCharacter ):
+	'''
+	This Definition Joins Two Strings Together.
+
+	@param cStringA: String A ( String )
+	@param cStringB: String B ( String )
+	@param cJoinCharacter: Join Character ( String )
+	@return: Joined String. ( String )
+	'''
+
+	cLogger.debug( "> Joining '%s' And '%s' With '%s'.", cStringA, cStringB, cJoinCharacter )
+
+	if cStringA.endswith( cJoinCharacter ):
+		if cStringB.startswith( cJoinCharacter ):
+			return cStringA + cStringB[1:]
+		else :
+			return cStringA + cStringB
+	else :
+		if cStringB.startswith( cJoinCharacter ):
+			return cStringA + cStringB
+		else :
+			return cStringA + cJoinCharacter + cStringB
+
 class sIBL_File( object ):
 	'''
 	This Class Provides Methods To Read / Write Files.
@@ -247,6 +273,7 @@ class sIBL_File( object ):
 
 		cLogger.debug( "> Initializing sIBL_File() Class." )
 
+		# --- Setting Class Attributes. ---
 		self.filePath = filePath
 		cLogger.debug( "> self.filePath : '%s'.", self.filePath )
 
@@ -256,7 +283,6 @@ class sIBL_File( object ):
 		This Method Reads Provided File And Return The Content As A List Or A String.
 
 		@param asString ( Optional ): Returned Object Will Be A String. ( String )
-
 		@return: Current Read File Content. ( List / String )
 		'''
 

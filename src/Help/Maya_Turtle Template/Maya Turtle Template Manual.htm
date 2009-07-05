@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>XSI - MR - Template - Manual - Help File</title>
+        <title>Maya - Turtle - Template - Manual - Help File</title>
         <style type="text/css">
             body {
                 text-align: justify;
@@ -32,7 +32,7 @@
     </head>
     <body>
         <p align="center">
-            <span style="font-weight: 700; font-size: 24pt">X S I - M e n t a l  R a y - T e m p l a t e</span>
+            <span style="font-weight: 700; font-size: 24pt">M a y a - T u r t l e - T e m p l a t e</span>
             <br/>
             <span style="font-weight: 700; font-size: 20pt">Manual - Help File</span>
         </p>
@@ -56,7 +56,7 @@
         <p align="justify">
             <span style="font-size: 18pt; font-weight: 700">Introduction</span>
             <br/>
-            XSI MR is a sIBL_GUI Template for XSI and Mental Ray starting from 7.X versions. It provides a bridge beetween XSI, Mental Ray and Smart IBL. There is also an XSI Addon with everything you need to use sIBL_GUI smoothly with XSI here : <a href="http://www.hdrlabs.com/cgi-bin/forum/YaBB.pl?num=1221392511/0">sIBL_GUI For XSI</a>
+            Maya Turtle is a sIBL_GUI Template for Maya and Turtle starting from 2K versions. It provides a bridge beetween Maya, Turtle and Smart IBL. There is also an Helper Script with everything you need to use sIBL_GUI smoothly with Maya here : <a href="http://www.hdrlabs.com/cgi-bin/forum/YaBB.pl?num=1223936394/2#2">sIBL_GUI For Maya - Helper Script</a>
         </p>
         <p align="justify">
             <span style="font-size: 18pt; font-weight: 700">Options</span>
@@ -64,52 +64,40 @@
                 <li>
                     <span style="font-size: 14pt; font-weight: 700">Common Attributes</span>
 					<p>
-                        <b>Create / Update Lights :</b> Create the sIBL Dynamics Lights.
+                        <b>Create Lights :</b> Create the sIBL Dynamics Lights.
                     </p>
                     <p>
-                        <b>Create / Update Background :</b> Create / Update the Background Environment Branch of the <i>Raytype</i> Shader ( Using the High Resolution LDR file of the current IBL Set ).
+                        <b>Create Background :</b> Create the Background Environment Branch ( Using the High Resolution LDR file of the current IBL Set ).
                     </p>
                     <p>
-                        <b>Create / Update Reflection :</b> Create / Update the Reflection Environment Branch of the <i>Raytype</i> Shader ( Using the Reflection HDR file of the current IBL Set ).
+                        <b>Create Reflection :</b> Create the Reflection Environment Branch ( Using the Reflection HDR file of the current IBL Set ).
                     </p>
                     <p>
-                        <b>Create / Update Lighting :</b> Create / Update the Lighting Environment Branch of the <i>Raytype</i> Shader ( Using the Lighting HDR file of the current IBL Set ).
+                        <b>Create Lighting :</b> Create the Lighting Environment Branch ( Using the Lighting HDR file of the current IBL Set ).
                     </p>
                     <p>
-                        <b>Create / Update Sun :</b> Create / Update the light used as Sun.
+                        <b>Create Sun :</b> Create the light used as Sun.
                     </p>
                 </li>
                 <li>
                     <span style="font-size: 14pt; font-weight: 700">Additional Attributes</span>
 					<p>
-                        <b>Physical Sun :</b> The Sun is created with a <i>mia_Physical_Sun</i> shader instead of the default <i>soft_light</i> one.
+                        <b>Create Ground :</b> A <i>Plane</i> is added to the <i>Scene</i>.
                     </p>
 					<p>
-                        <b>Create Ground :</b> A <i>Grid</i> is added to the <i>Scene</i>.
+                        <b>Hide Lights :</b> Hides all current <i>Scene</i> lights.
                     </p>
 					<p>
-                        <b>Activate Final Gather :</b> Ambiant Lighting ( <i>Ambience</i> ) of the scene is desactivated and <i>Final Gathering</i> is set for the current / selected <i>Pass(es)</i>.
+                        <b>Activate Linear Workflow :</b> Set the <i>Output Gamma</i> to <i>2.2</i>.
                     </p>
 					<p>
                         <b>Create FeedBack :</b> Make the Feedback visible and attach to it the current IBL LDR Background image so there is a visual feedback in the <i>Viewport</i>.
                     </p>
 					<p>
-                        <b>Passes Selection Dialog :</b> A <i>Pass(es)</i> selection dialog appears so you can precisely choose wich <i>Pass(es)</i> will be affected by the IBL.
+                        <b>Activate Global Illumination :</b> <i>Global Illumination</i> is activated in the current <i>Scene</i>.
                     </p>
 					<p>
-                        <b>Override User Tweaks :</b> User tweaks on the <i>Scene</i> IBL Setup will be be overriden when updating the <i>Scene</i>.
-                    </p>
-					<p>
-                        <b>Update Scene :</b> Update the <i>Scene</i> IBL Setup with the new provided informations, this option works with the "Override User Tweaks" one, there is a lot of possibilities available, basically you can mix different IBL with those 2 options.
-                    </p>
-					<p>
-                        <b>Activate Color Management :</b> Activate XSI 7.0 <i>Color Management</i> ( Preferences > Display > Color Management ).
-                    </p>
-					<p>
-                        <b>Feedback Radius :</b> Sets the Feedback radius in XSI units.
-                    </p>
-					<p>
-                        <b>Hide Lights :</b> Hides all current <i>Scene</i> lights.
+                        <b>Feedback Radius :</b> Sets the Feedback radius in Maya units.
                     </p>
                 </li>
             </ul>
@@ -117,7 +105,7 @@
         <p align="justify">
             <span style="font-size: 18pt; font-weight: 700">Change Log</span>
             <br/>
-            <a href="http://kelsolaar.hdrlabs.com/sIBL_Framework/XSI/sIBL_GUI_For_XSI/Change%20Log/Change%20Log.htm">sIBL_GUI For XSI Change Log</a>
+            <a href="http://www.hdrlabs.com/cgi-bin/forum/YaBB.pl?num=1223936394/2#2">sIBL_GUI For Maya Change Log</a>
         </p>
        <p align="justify">
             <span style="font-size: 18pt; font-weight: 700">About</span>

@@ -185,10 +185,10 @@ class sIBL_FTP( object ):
 
 			cSubDirectories = []
 			for cDirectory in cDirectories.keys() :
-				cSubDirectories.append( os.path.join( cWorkingDirectory, cDirectory ) )
+				cSubDirectories.append( sIBL_Common.sIBL_Path_Join( cWorkingDirectory, cDirectory, "/" ) )
 
 			for cFile in cFiles.keys() :
-				self.cWalkerFilesList.append( os.path.join( cWorkingDirectory, cFile ) )
+				self.cWalkerFilesList.append( sIBL_Common.sIBL_Path_Join( cWorkingDirectory, cFile, "/" ) )
 
 			for cSubDirectory in cSubDirectories:
 				cLogger.debug( " > Entering : '%s'.", cSubDirectory )
