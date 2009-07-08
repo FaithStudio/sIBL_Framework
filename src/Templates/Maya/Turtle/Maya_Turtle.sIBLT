@@ -296,9 +296,12 @@ global proc sIBL_Maya_Turtle_Feedback_Creation(string $cBackgroundFilePath, floa
 	string $cFile = `createNode file`;
 	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
 
+	if (!`attributeExists "resolution" $cFile`)
+		addAttr -ln "resolution" -at long $cFile;
+ 	setAttr  ($cFile + ".resolution") 2048;
+
 	setAttr -type "string" ($cFile + ".fileTextureName") $cBackgroundFilePath;
 	string $cPlace2DTexture = `createNode place2dTexture`;
-
 
 	connectAttr -f ($cPlace2DTexture + ".outUV") ($cFile + ".uvCoord");
 	connectAttr -f ($cPlace2DTexture + ".outUvFilterSize") ($cFile + ".uvFilterSize");
@@ -473,8 +476,8 @@ global proc string sIBL_Maya_Turtle_GetTransform(string $shape)
 
 global proc int sIBL_Maya_Turtle_ObjectExists(string $cObject, string $cErrorMessage)
 {
-	string $cFeedback[] = `ls -fl $cObject`;
-	if ($cFeedback[0] != "")
+	string $cObjectList[] = `ls -fl $cObject`;
+	if ($cObjectList[0] != "")
 	{
 		return 1;
 	}

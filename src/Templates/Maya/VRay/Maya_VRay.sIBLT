@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 0.9.3 | String | Template Release
-Date = @Date | 5 July 2009 | String | Date
+Release = @Release | 1.0.0 | String | Template Release
+Date = @Date | 9 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -212,6 +212,11 @@ global proc sIBL_Maya_VRay_Environment_Deletion()
 	if(size($sFiles) != 0)
 		delete($sFiles);
 
+	// sIBL Vray VRayObjectProperties Deletion
+	string $cVRayObjPropertiesNodes[] = `ls -type "VRayObjectProperties" "sIBL*"` ;
+	if(size($cVRayObjPropertiesNodes) != 0)
+		delete($cVRayObjPropertiesNodes);
+
 	// sIBL lambert Shaders Deletion
 	string $cLambertShader[] = `ls -type "lambert" "sIBL_Feedback*"` ;
 	if(size($cLambertShader) != 0)
@@ -289,11 +294,6 @@ global proc string sIBL_Maya_VRay_FeedbackGeometry_Creation(float $feedbackRadiu
 	for( $cLock in $cLocksList )
 		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);
 
-	//string $cFeedBackShape[] = sIBL_Maya_VRay_GetShapes($cFeedback[0]);
-	//string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions" };
-	//for( $cStat in $cRenderStats )
-	//	setAttr ($cFeedBackShape[0] + "." + $cStat) false;
-
 	return $cFeedback[0];
 }
 
@@ -310,6 +310,10 @@ global proc sIBL_Maya_VRay_Feedback_Creation(string $cBackgroundFilePath, float 
 	string $cFile = `createNode file`;
 	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
 
+	if (!`attributeExists "resolution" $cFile`)
+		addAttr -ln "resolution" -at long $cFile;
+ 	setAttr  ($cFile + ".resolution") 2048;
+
 	setAttr -type "string" ($cFile + ".fileTextureName") $cBackgroundFilePath;
 	string $cPlace2DTexture = `createNode place2dTexture`;
 
@@ -325,9 +329,20 @@ global proc sIBL_Maya_VRay_Feedback_Creation(string $cBackgroundFilePath, float 
 	select -r $cFeedback;
 	sets -e -forceElement $cShadingEngine;
 
+	string $cVRayObjPropertiesNode = `createNode "VRayObjectProperties"`;
+	connectAttr -f ($cFeedback + ".instObjGroups[0]") ($cVRayObjPropertiesNode + ".dnSetMembers[0]");
+	string $cAttributesList[] = {"generateGI", "receiveGI", "generateCaustics", "receiveCaustics", "giVisibility", "reflectionVisibility", "refractionVisibility" };
+	for( $cAttribute in $cAttributesList )
+		setAttr ($cVRayObjPropertiesNode + "." + $cAttribute) 0;
+
+	$cAttributesList = {"castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions" };
+	for( $cAttribute in $cAttributesList )
+		setAttr ($cFeedback + "." + $cAttribute) 0;
+
 	rename $cLambertShader ("sIBL_Feedback_" + `nodeType $cLambertShader`);
 	rename $cShadingEngine ("sIBL_Feedback_" + `nodeType $cShadingEngine`);
 	rename $cFile ("sIBL_Feedback_" + `nodeType $cFile`);
+	rename $cVRayObjPropertiesNode ("sIBL_" + `nodeType $cVRayObjPropertiesNode`);
 	rename $cPlace2DTexture ("sIBL_Feedback_" + `nodeType $cPlace2DTexture`);
 }
 
@@ -478,8 +493,8 @@ global proc string sIBL_Maya_VRay_GetTransform(string $shape)
 
 global proc int sIBL_Maya_VRay_ObjectExists(string $cObject, string $cErrorMessage)
 {
-	string $cFeedback[] = `ls -fl $cObject`;
-	if ($cFeedback[0] != "")
+	string $cObjectList[] = `ls -fl $cObject`;
+	if ($cObjectList[0] != "")
 	{
 		return 1;
 	}

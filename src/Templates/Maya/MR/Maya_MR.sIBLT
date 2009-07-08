@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.4.7 | String | Template Release
-Date = @Date | 5 July 2009 | String | Date
+Release = @Release | 1.5.0 | String | Template Release
+Date = @Date | 9 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -36,6 +36,7 @@ createLights = @createLights | 1 | Boolean | Create Dynamic Lights
 createFeedBack = @createFeedBack | 1 | Boolean | Create Feedback
 feedbackRadius = @feedbackRadius | 500 | Float | Feedback Radius
 createGround = @createGround | 1 | Boolean | Create Ground
+shadowCatcher = @shadowCatcher | 1 | Boolean | Ground Shadow Catcher
 hideLights = @hideLights | 1 | Boolean | Hide Lights
 physicalSun = @physicalSun | 1 | Boolean | Physical Sun
 activateFinalGather = @activateFinalGather | 1 | Boolean | Activate Final Gather
@@ -77,6 +78,7 @@ int $createLights = @createLights;
 int $createFeedBack = @createFeedBack;
 float $feedbackRadius = @feedbackRadius;
 int $createGround = @createGround;
+int $shadowCatcher = @shadowCatcher;
 int $hideLights = @hideLights;
 int $physicalSun = @physicalSun;
 int $activateFinalGather = @activateFinalGather;
@@ -104,6 +106,7 @@ sIBL_Maya_MR_Setup($cBackgroundFilePath,
 		$createLights,
 		$createFeedBack,
 		$createGround,
+		$shadowCatcher,
 		$feedbackRadius,
 		$hideLights,
 		$physicalSun,
@@ -132,6 +135,7 @@ global proc sIBL_Maya_MR_Setup(string $cBackgroundFilePath,
 			int $createLights,
 			int $createFeedBack,
 			int $createGround,
+			int $shadowCatcher,
 			float $feedbackRadius,
 			int $hideLights,
 			int $physicalSun,
@@ -204,7 +208,7 @@ global proc sIBL_Maya_MR_Setup(string $cBackgroundFilePath,
 			sIBL_Maya_MR_ConnectFeedBackToSIBLShaders($cFeedback, $createBackground, $createLighting, $createReflection);
 
 			if($createGround)
-				sIBL_Maya_MR_CreateGround($feedbackRadius);
+				sIBL_Maya_MR_CreateGround($feedbackRadius, $shadowCatcher);
 
 			if ($activateFinalGather)
 				sIBL_Maya_MR_ActivateFinalGather();
@@ -339,6 +343,11 @@ global proc sIBL_Maya_MR_Environment_Deletion()
 	if(size($cPlace2dTexture) != 0)
 		delete($cPlace2dTexture);
 
+	// sIBL Mip_matteshadow Deletion
+	string $cMip_MSNodes[] = `ls -type "mip_matteshadow" "sIBL*"` ;
+	if(size($cMip_MSNodes) != 0)
+		delete($cMip_MSNodes);
+
 	// sIBL Expressions Deletion
 	string $cExpression[] = `ls -type "expression" "sIBL*"` ;
 	if(size($cExpression) != 0)
@@ -461,6 +470,10 @@ global proc sIBL_Maya_MR_Feedback_Creation(string $cBackgroundFilePath, float $f
 	connectAttr -f ($cLambertShader + ".outColor") ($cShadingEngine + ".surfaceShader");
 	string $cFile = `createNode file`;
 	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
+
+	if (!`attributeExists "resolution" $cFile`)
+		addAttr -ln "resolution" -at long $cFile;
+ 	setAttr  ($cFile + ".resolution") 2048;
 
 	setAttr -type "string" ($cFile + ".fileTextureName") $cBackgroundFilePath;
 	string $cPlace2DTexture = `createNode place2dTexture`;
@@ -601,7 +614,7 @@ global proc sIBL_Maya_MR_ActivateTonemapping(string $camerasList[], int $createB
 		setAttr "sIBL_Background_mip_gamma_gain.gamma" 0.4545;
 }
 
-global proc sIBL_Maya_MR_CreateGround(float $feedbackRadius)
+global proc sIBL_Maya_MR_CreateGround(float $feedbackRadius, int $shadowCatcher)
 {
 	string $sIBLGroup = sIBL_Maya_MR_GetSIBLGroup();
 	string $cGround[] = `nurbsPlane`;
@@ -613,6 +626,32 @@ global proc sIBL_Maya_MR_CreateGround(float $feedbackRadius)
 		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
 
 	setAttr ($cGround[0] + ".rotateZ") 90;
+
+	if($shadowCatcher)
+	{
+		if( `objExists "sIBL_Background_mip_gamma_gain"` )
+		{
+			string $cMip_MSNode = `createNode "mip_matteshadow"`;
+			connectAttr -f sIBL_Background_mip_gamma_gain.outValue ( $cMip_MSNode + ".background" );
+			setAttr ($cMip_MSNode + ".catch_indirect") 1;
+
+			string $cLambertShader = `shadingNode -asShader lambert`;
+			string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
+			sets -renderable true -noSurfaceShader true -empty -name $cShadingEngine;
+			connectAttr -f ($cLambertShader + ".outColor") ($cShadingEngine + ".surfaceShader");
+
+			connectAttr -f ($cMip_MSNode + ".message") ($cShadingEngine + ".miMaterialShader");
+
+			select -r $cGround[0];
+			sets -e -forceElement $cShadingEngine;
+
+			rename $cMip_MSNode ("sIBL_MatteShadow_" + `nodeType $cMip_MSNode`);
+			rename $cLambertShader ("sIBL_MatteShadow_" + `nodeType $cLambertShader`);
+			rename $cShadingEngine ("sIBL_MatteShadow_" + `nodeType $cShadingEngine`);
+		}
+		else
+			warning("sIBL_GUI | No Background Detected, Shadow Catcher Will Not Be Set !\n");
+	}
 
 	rename $cGround[0] "sIBL_Ground";
 }
@@ -651,8 +690,8 @@ global proc string sIBL_Maya_MR_GetTransform(string $shape)
 
 global proc int sIBL_Maya_MR_ObjectExists(string $cObject, string $cErrorMessage)
 {
-	string $cFeedback[] = `ls -fl $cObject`;
-	if ($cFeedback[0] != "")
+	string $cObjectList[] = `ls -fl $cObject`;
+	if ($cObjectList[0] != "")
 	{
 		return 1;
 	}
