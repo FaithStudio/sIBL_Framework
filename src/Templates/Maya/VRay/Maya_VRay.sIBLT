@@ -285,9 +285,6 @@ global proc string sIBL_Maya_VRay_FeedbackGeometry_Creation(float $feedbackRadiu
 
 	setAttr ($cFeedback[0] + ".rotateZ") 90;
 
-	// Need To Know How To Prune With VRay Translator
-	setAttr ($cFeedback[0] + ".visibility") 0;
-
 	string $cLocksList[] = { "tx", "ty", "tz", "ry", "rz" };
 	for( $cLock in $cLocksList )
 		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);
