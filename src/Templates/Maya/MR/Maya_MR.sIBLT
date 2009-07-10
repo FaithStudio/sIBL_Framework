@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.5.0 | String | Template Release
-Date = @Date | 9 July 2009 | String | Date
+Release = @Release | 1.5.1 | String | Template Release
+Date = @Date | 10 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -294,74 +294,57 @@ global proc sIBL_Maya_MR_HideLights()
 		HideSelectedObjects();
 }
 
+global proc sIBL_Maya_MR_DeleteType( string $cType, string $cFilter)
+{
+		string $cTypesList[] = `ls -type $cType $cFilter`;
+		if(size($cTypesList) != 0)
+			delete($cTypesList);
+}
+
 global proc sIBL_Maya_MR_Environment_Deletion()
 {
-	// sIBL Transform Group Deletion
+	// sIBL Transform Group Deletion.
 	string $sceneSIBLGroup[] = `ls -fl "sIBL"`;
 	if ($sceneSIBLGroup[0] != "")
 	{
 		delete($sceneSIBLGroup);
 	}
 
-	// sIBL mip_rayswitch Shader Deletion
-	string $sMip_rayswitch[] = `ls -type "mip_rayswitch" "sIBL*"` ;
-	if(size($sMip_rayswitch) != 0)
-		delete($sMip_rayswitch);
+	// sIBL mip_rayswitch Shader Deletion.
+	sIBL_Maya_MR_DeleteType("mip_rayswitch", "sIBL*");
 
-	// sIBL mip_gamma_gain Shaders Deletion
-	string $sMip_gamma_gain[] = `ls -type "mip_gamma_gain" "sIBL*"` ;
-	if(size($sMip_gamma_gain) != 0)
-		delete($sMip_gamma_gain);
+	// sIBL mip_gamma_gain Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("mip_gamma_gain", "sIBL*");
 
-	// sIBL mib_lookup_spherical Shaders Deletion
-	string $sMib_lookup_spherical[] = `ls -type "mib_lookup_spherical" "sIBL*"` ;
-	if(size($sMib_lookup_spherical) != 0)
-		delete($sMib_lookup_spherical);
+	// sIBL mib_lookup_spherical Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("mib_lookup_spherical", "sIBL*");
 
-	// sIBL mentalrayTexture Shaders Deletion
-	string $sMentalrayTexture[] = `ls -type "mentalrayTexture" "sIBL*"` ;
-	if(size($sMentalrayTexture) != 0)
-		delete($sMentalrayTexture);
+	// sIBL mentalrayTexture Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("mentalrayTexture", "sIBL*");
 
-	// sIBL shadingEngine Shaders Deletion
-	string $sShadingEngine[] = `ls -type "shadingEngine" "sIBL_Feedback*"` ;
-	if(size($sShadingEngine) != 0)
-		delete($sShadingEngine);
+	// sIBL shadingEngine Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("shadingEngine", "sIBL*");
 
-	// sIBL lambert Shaders Deletion
-	string $cLambertShader[] = `ls -type "lambert" "sIBL_Feedback*"` ;
-	if(size($cLambertShader) != 0)
-		delete($cLambertShader);
+	// sIBL lambert Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("lambert", "sIBL*");
 
-	// sIBL file Shaders Deletion
-	string $sFile[] = `ls -type "file" "sIBL_Feedback*"` ;
-	if(size($sFile) != 0)
-		delete($sFile);
+	// sIBL file Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("file", "sIBL*");
 
-	// sIBL place2dTexture Shaders Deletion
-	string $cPlace2dTexture[] = `ls -type "place2dTexture" "sIBL_Feedback*"` ;
-	if(size($cPlace2dTexture) != 0)
-		delete($cPlace2dTexture);
+	// sIBL place2dTexture Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("place2dTexture", "sIBL*");
 
-	// sIBL Mip_matteshadow Deletion
-	string $cMip_MSNodes[] = `ls -type "mip_matteshadow" "sIBL*"` ;
-	if(size($cMip_MSNodes) != 0)
-		delete($cMip_MSNodes);
+	// sIBL Mip_matteshadow Deletion.
+	sIBL_Maya_MR_DeleteType("mip_matteshadow", "sIBL*");
 
-	// sIBL Expressions Deletion
-	string $cExpression[] = `ls -type "expression" "sIBL*"` ;
-	if(size($cExpression) != 0)
-		delete($cExpression);
+	// sIBL Expressions Deletion.
+	sIBL_Maya_MR_DeleteType("expression", "sIBL*");
 
-	// sIBL mia_exposure_simple Shaders Deletion
-	string $cMia_exposure_simple[] = `ls -type "mia_exposure_simple" "sIBL_*"` ;
-	if(size($cMia_exposure_simple) != 0)
-		delete($cMia_exposure_simple);
+	// sIBL mia_exposure_simple Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("mia_exposure_simple", "sIBL*");
 
-	// sIBL mia_physicalsun Shaders Deletion
-	string $cMia_physicalsun[] = `ls -type "mia_physicalsun" "sIBL_*"` ;
-	if(size($cMia_physicalsun) != 0)
-		delete($cMia_physicalsun);
+	// sIBL mia_physicalsun Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("mia_physicalsun", "sIBL*");
 }
 
 global proc sIBL_Maya_MR_CreateEnvironmentShadersBranch(string $cRaySwitch, string $connectionEntries[], string $cFilePath, string $cPrefix)
@@ -468,14 +451,16 @@ global proc sIBL_Maya_MR_Feedback_Creation(string $cBackgroundFilePath, float $f
 	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
 	sets -renderable true -noSurfaceShader true -empty -name $cShadingEngine;
 	connectAttr -f ($cLambertShader + ".outColor") ($cShadingEngine + ".surfaceShader");
-	string $cFile = `createNode file`;
-	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
 
+	string $cFile = `createNode file`;
 	if (!`attributeExists "resolution" $cFile`)
 		addAttr -ln "resolution" -at long $cFile;
  	setAttr  ($cFile + ".resolution") 2048;
 
 	setAttr -type "string" ($cFile + ".fileTextureName") $cBackgroundFilePath;
+
+	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
+
 	string $cPlace2DTexture = `createNode place2dTexture`;
 
 	connectAttr -f ($cPlace2DTexture + ".outUV") ($cFile + ".uvCoord");
@@ -525,9 +510,12 @@ global proc sIBL_Maya_MR_GetLight( string $cLigthType, int $physicalSun, string 
 	{
 		string $cPhysicalSunShader = `createNode mia_physicalsun`;
 		string $cLightShape[] = sIBL_Maya_MR_GetShapes($cLight);
-		connectAttr -force ($cPhysicalSunShader + ".message") ($cLightShape[0] + ".miLightShader");
 		setAttr ($cPhysicalSunShader + ".y_is_up") 1;
 		setAttr ($cPhysicalSunShader + ".multiplier") ($cIntensity/10);
+
+		connectAttr -force ($cPhysicalSunShader + ".message") ($cLightShape[0] + ".miLightShader");
+		connectAttr -force ($cPhysicalSunShader + ".message") ($cLightShape[0] + ".miPhotonEmitter");
+
 		rename $cPhysicalSunShader ( $cLightName +"_mia_physicalsun");
 	}
 
@@ -557,7 +545,7 @@ global proc sIBL_Maya_MR_GetLight( string $cLigthType, int $physicalSun, string 
 
 global proc sIBL_Maya_MR_Sun_Creation(float $sunU, float $sunV, float $sunColor[], float $sunMultiplier, float $feedbackRadius, int $physicalSun)
 {
-	sIBL_Maya_MR_GetLight("directionalLight", 1, "sIBL_Sun", ($feedbackRadius / 10), $sunColor, $sunMultiplier, $sunU, $sunV);
+	sIBL_Maya_MR_GetLight("directionalLight", $physicalSun, "sIBL_Sun", ($feedbackRadius / 10), $sunColor, $sunMultiplier, $sunU, $sunV);
 }
 
 global proc sIBL_Maya_MR_DynamicLights_Creation(string $compactedDynamicLights, float $feedbackRadius)
@@ -619,13 +607,15 @@ global proc sIBL_Maya_MR_CreateGround(float $feedbackRadius, int $shadowCatcher)
 	string $sIBLGroup = sIBL_Maya_MR_GetSIBLGroup();
 	string $cGround[] = `nurbsPlane`;
 	delete -ch;
-	parent $cGround[0] $sIBLGroup ;
+
+	setAttr ($cGround[0] + ".rotateZ") 90;
+	makeIdentity -apply true -t 0 -r 0 -s 1 -n 0 $cGround[0];
 
 	string $cScaleAttributesList[] = {"scaleX", "scaleY", "scaleZ"};
 	for( $cScaleAttribute in $cScaleAttributesList )
 		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
 
-	setAttr ($cGround[0] + ".rotateZ") 90;
+	parent $cGround[0] $sIBLGroup ;
 
 	if($shadowCatcher)
 	{

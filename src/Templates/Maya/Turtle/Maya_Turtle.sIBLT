@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 0.5.0 | String | Template Release
-Date = @Date | 5 July 2009 | String | Date
+Release = @Release | 1.0.0 | String | Template Release
+Date = @Date | 10 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -140,7 +140,7 @@ global proc sIBL_Maya_Turtle_Setup(string $cBackgroundFilePath,
 	if ($hideLights)
 		sIBL_Maya_Turtle_HideLights();
 
-	sIBL_Maya_Turtle_Environment_Creation($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath);
+	sIBL_Maya_Turtle_Environment_Creation($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath, $feedbackRadius);
 
 	if ($createFeedBack)
 	{
@@ -188,53 +188,139 @@ global proc sIBL_Maya_Turtle_HideLights()
 		HideSelectedObjects();
 }
 
+global proc sIBL_Maya_Turtle_DeleteType( string $cType, string $cFilter)
+{
+		string $cTypesList[] = `ls -type $cType $cFilter`;
+		if(size($cTypesList) != 0)
+			delete($cTypesList);
+}
+
 global proc sIBL_Maya_Turtle_Environment_Deletion()
 {
-	// sIBL Transform Group Deletion
+	// sIBL Transform Group Deletion.
 	string $sceneSIBLGroup[] = `ls -fl "sIBL"`;
 	if ($sceneSIBLGroup[0] != "")
 	{
 		delete($sceneSIBLGroup);
 	}
 
-	// sIBL Texture Files Deletion
-	string $sFiles[] = `ls -type "file" "sIBL*"` ;
-	if(size($sFiles) != 0)
-		delete($sFiles);
+	// sIBL Texture Files Deletion.
+	sIBL_Maya_Turtle_DeleteType("file", "sIBL*");
 
-	// sIBL place2dTexture Shaders Deletion
-	string $cPlace2dTexture[] = `ls -type "place2dTexture" "sIBL_Feedback*"` ;
-	if(size($cPlace2dTexture) != 0)
-		delete($cPlace2dTexture);
+	// sIBL place2dTexture Shaders Deletion.
+	sIBL_Maya_Turtle_DeleteType("place2dTexture", "sIBL*");
 
+	// sIBL lambert Shaders Deletion.
+	sIBL_Maya_Turtle_DeleteType("lambert", "sIBL*");
 
-	// sIBL lambert Shaders Deletion
-	string $cLambertShader[] = `ls -type "lambert" "sIBL_Feedback*"` ;
-	if(size($cLambertShader) != 0)
-		delete($cLambertShader);
+	// sIBL GammaCorrect Deletion.
+	sIBL_Maya_Turtle_DeleteType("gammaCorrect", "sIBL*");
+
+	// sIBL Surface Shaders Deletion.
+	sIBL_Maya_Turtle_DeleteType("surfaceShader", "sIBL*");
 }
 
-global proc sIBL_Maya_Turtle_Environment_Creation(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath)
+global proc sIBL_Maya_Turtle_Create_Environment_Sphere_Branch(float $feedbackRadius, string $cBranchType, string $cFilePath, float $cGamma)
+{
+	string $sIBLGroup = sIBL_Maya_Turtle_GetSIBLGroup();
+
+	string $cEnvironmentSphere[] = `sphere -name ( "sIBL_" +  $cBranchType + "_Environment_Sphere")`;
+	rebuildSurface -ch 1 -rpo 1 -rt 0 -end 1 -kr 0 -kcp 0 -kc 0 -su 4 -du 3 -sv 8 -dv 3 -tol 0.01 -fr 0  -dir 2 $cEnvironmentSphere;
+
+	string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes($cEnvironmentSphere[0]);
+	select -r $cEnvironmentSphereShapes[0];
+	ilrAttributesOnSelection("ilrRenderStatsAttributes", 1);
+
+	setAttr ($cEnvironmentSphereShapes[0] + ".overrideEnabled") 1;
+	setAttr ($cEnvironmentSphereShapes[0] + ".overrideDisplayType") 1;
+	setAttr ($cEnvironmentSphereShapes[0] + ".overrideLevelOfDetail") 1;
+
+	delete -ch;
+
+	setAttr ($cEnvironmentSphere[0] + ".rotateZ") (90);
+	setAttr ($cEnvironmentSphere[0] + ".scaleZ") (-1);
+	makeIdentity -apply true -t 0 -r 0 -s 1 -n 0 $cEnvironmentSphere[0];
+
+	string $cScaleAttributesList[] = {"scaleX", "scaleY", "scaleZ"};
+	for( $cScaleAttribute in $cScaleAttributesList )
+		setAttr ($cEnvironmentSphere[0] + "." + $cScaleAttribute) $feedbackRadius;
+
+	string $cSurfaceShader = `shadingNode -asShader surfaceShader`;
+	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
+	sets -renderable true -noSurfaceShader true -empty -name $cShadingEngine;
+	connectAttr -f ($cSurfaceShader + ".outColor") ($cShadingEngine + ".surfaceShader");
+
+	string $cGammaNode = `createNode gammaCorrect`;
+	string $cGammaNodeAttributesList[] = {"gammaX", "gammaY", "gammaZ"};
+	for( $cGammaAttribute in $cGammaNodeAttributesList )
+		setAttr ($cGammaNode + "." + $cGammaAttribute) $cGamma;
+
+	connectAttr -f ($cGammaNode + ".outValue") ($cSurfaceShader + ".outColor");
+
+	string $cFile = `createNode file`;
+
+	setAttr -type "string" ($cFile + ".fileTextureName") $cFilePath;
+
+	if (!`attributeExists "resolution" $cFile`)
+		addAttr -ln "resolution" -at long $cFile;
+ 	setAttr  ($cFile + ".resolution") 2048;
+
+	connectAttr -f ($cFile + ".outColor") ($cGammaNode + ".value");
+
+	string $cPlace2DTexture = `createNode place2dTexture`;
+
+	connectAttr -f ($cPlace2DTexture + ".outUV") ($cFile + ".uvCoord");
+	connectAttr -f ($cPlace2DTexture + ".outUvFilterSize") ($cFile + ".uvFilterSize");
+
+	string $cUVAttributes[] = { "coverage", "translateFrame", "rotateFrame", "mirrorU", "mirrorV", "stagger", "wrapU", "wrapV" , "repeatUV" , "vertexUvOne" , "vertexUvTwo" , "vertexUvThree" , "vertexCameraOne", "noiseUV", "offset", "rotateUV"};
+	for( $cUVAttribute in $cUVAttributes )
+		connectAttr -f ($cPlace2DTexture + "." + $cUVAttribute) ($cFile + "." + $cUVAttribute);
+
+	setAttr ($cPlace2DTexture + ".rotateFrame") 90;
+
+	select -r $cEnvironmentSphere[0];
+	sets -e -forceElement $cShadingEngine;
+
+	parent $cEnvironmentSphere[0] $sIBLGroup;
+
+	rename $cEnvironmentSphere[0] ("sIBL_" +  $cBranchType + "_Environment_Sphere");
+	rename $cSurfaceShader ("sIBL_" +  $cBranchType + "_" + `nodeType $cSurfaceShader`);
+	rename $cShadingEngine ("sIBL_" +  $cBranchType + "_" + `nodeType $cShadingEngine`);
+	rename $cGammaNode ("sIBL_" +  $cBranchType + "_" + `nodeType $cGammaNode`);
+	rename $cFile ("sIBL_" +  $cBranchType + "_" + `nodeType $cFile`);
+	rename $cPlace2DTexture ("sIBL_" +  $cBranchType + "_" + `nodeType $cPlace2DTexture`);
+}
+
+global proc sIBL_Maya_Turtle_Environment_Creation(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath, float $feedbackRadius)
 {
 	if ($createBackground)
 	{
-		setAttr TurtleRenderOptions.rtEnvironment 3;
-	}
-	else
-	{
-		setAttr TurtleRenderOptions.rtEnvironment 0;
+		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 50, "Background", $cBackgroundFilePath, 1/2.2);
+
+		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Background_Environment_Sphere");
+		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
+		for( $cStat in $cRenderStats )
+			setAttr ($cEnvironmentSphereShapes[0] + "." + $cStat) false;
 	}
 
 	if ($createLighting)
 	{
-		setAttr TurtleRenderOptions.giEnvironment 3;
-		setAttr -type "string" TurtleRenderOptions.iblImageFile $cReflectionFilePath;
-		setAttr "TurtleRenderOptions.iblEmitLight" 1;
+		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 55, "Lighting", $cLightingFilePath, 1);
+
+		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Lighting_Environment_Sphere");
+		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrSmoothGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
+		for( $cStat in $cRenderStats )
+			setAttr ($cEnvironmentSphereShapes[0] + "." + $cStat) false;
 	}
 
-	if (!$createReflection)
+	if ($createReflection)
 	{
-		setAttr "TurtleRenderOptions.rtEnvironmentRefl" 0;
+		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 60, "Reflection", $cReflectionFilePath, 1);
+
+		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Reflection_Environment_Sphere");
+		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
+		for( $cStat in $cRenderStats )
+			setAttr ($cEnvironmentSphereShapes[0] + "." + $cStat) false;
 	}
 }
 
@@ -257,6 +343,15 @@ global proc string sIBL_Maya_Turtle_FeedbackGeometry_Creation(float $feedbackRad
 {
  	string $cFeedback[] = `sphere -name "sIBL_Feedback"`;
 	rebuildSurface -ch 1 -rpo 1 -rt 0 -end 1 -kr 0 -kcp 0 -kc 0 -su 4 -du 3 -sv 8 -dv 3 -tol 0.01 -fr 0  -dir 2 $cFeedback;
+
+	string $cFeedBackShapes[] = sIBL_Maya_Turtle_GetShapes($cFeedback[0]);
+	select -r $cFeedBackShapes[0];
+	ilrAttributesOnSelection("ilrRenderStatsAttributes", 1);
+
+	string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
+	for( $cStat in $cRenderStats )
+			setAttr ($cFeedBackShapes[0] + "." + $cStat) false;
+
 	delete -ch;
 
 	setAttr ($cFeedback[0] + ".scaleZ") (-1);
@@ -268,17 +363,9 @@ global proc string sIBL_Maya_Turtle_FeedbackGeometry_Creation(float $feedbackRad
 
 	setAttr ($cFeedback[0] + ".rotateZ") 90;
 
-	// Need To Know How To Prune With Turtle Translator
-	setAttr ($cFeedback[0] + ".visibility") 0;
-
 	string $cLocksList[] = { "tx", "ty", "tz", "ry", "rz" };
 	for( $cLock in $cLocksList )
 		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);
-
-	//string $cFeedBackShape[] = sIBL_Maya_Turtle_GetShapes($cFeedback[0]);
-	//string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions" };
-	//for( $cStat in $cRenderStats )
-	//	setAttr ($cFeedBackShape[0] + "." + $cStat) false;
 
 	return $cFeedback[0];
 }
@@ -293,14 +380,16 @@ global proc sIBL_Maya_Turtle_Feedback_Creation(string $cBackgroundFilePath, floa
 	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
 	sets -renderable true -noSurfaceShader true -empty -name $cShadingEngine;
 	connectAttr -f ($cLambertShader + ".outColor") ($cShadingEngine + ".surfaceShader");
-	string $cFile = `createNode file`;
-	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
 
+	string $cFile = `createNode file`;
 	if (!`attributeExists "resolution" $cFile`)
 		addAttr -ln "resolution" -at long $cFile;
  	setAttr  ($cFile + ".resolution") 2048;
 
 	setAttr -type "string" ($cFile + ".fileTextureName") $cBackgroundFilePath;
+
+	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
+
 	string $cPlace2DTexture = `createNode place2dTexture`;
 
 	connectAttr -f ($cPlace2DTexture + ".outUV") ($cFile + ".uvCoord");
@@ -392,20 +481,20 @@ global proc sIBL_Maya_Turtle_DynamicLights_Creation(string $compactedDynamicLigh
 
 global proc sIBL_Maya_Turtle_ConnectFeedBackToSIBLShaders(string $cFeedback, int $connectToBackground, int $connectToLighting, int $connectToReflection)
 {
-/*	if ($connectToBackground)
+	if ($connectToBackground)
 	{
-		expression -name "sIBL_Background_Rotate_Expression" -s ("sIBL_Background_TurtlePlaceEnvTex.horRotation = -" + $cFeedback + ".rotateX + 90;");
+		expression -name "sIBL_Background_Expression" -s ("sIBL_Background_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Background_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX;\nsIBL_Background_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY;\nsIBL_Background_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ;");
 	}
 
 	if ($connectToLighting)
 	{
-		expression -name "sIBL_Lighting_Rotate_Expression" -s ("sIBL_Lighting_TurtlePlaceEnvTex.horRotation = -" + $cFeedback + ".rotateX + 90;");
+		expression -name "sIBL_Lighting_Expression" -s ("sIBL_Lighting_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Lighting_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX;\nsIBL_Lighting_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY;\nsIBL_Lighting_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ;");
 	}
 
 	if ($connectToReflection)
 	{
-		expression -name "sIBL_Reflection_Rotate_Expression" -s ("sIBL_Reflection_TurtlePlaceEnvTex.horRotation = -" + $cFeedback + ".rotateX + 90;");
-	}*/
+		expression -name "sIBL_Reflection_Expression" -s ("sIBL_Reflection_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Reflection_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX;\nsIBL_Reflection_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY;\nsIBL_Reflection_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ;");
+	}
 }
 
 global proc sIBL_Maya_Turtle_activateGlobalIllumination()
@@ -425,13 +514,15 @@ global proc sIBL_Maya_Turtle_CreateGround(float $feedbackRadius)
 	string $sIBLGroup = sIBL_Maya_Turtle_GetSIBLGroup();
 	string $cGround[] = `nurbsPlane`;
 	delete -ch;
-	parent $cGround[0] $sIBLGroup ;
+
+	setAttr ($cGround[0] + ".rotateZ") 90;
+	makeIdentity -apply true -t 0 -r 0 -s 1 -n 0 $cGround[0];
 
 	string $cScaleAttributesList[] = {"scaleX", "scaleY", "scaleZ"};
 	for( $cScaleAttribute in $cScaleAttributesList )
 		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
 
-	setAttr ($cGround[0] + ".rotateZ") 90;
+	parent $cGround[0] $sIBLGroup ;
 
 	rename $cGround[0] "sIBL_Ground";
 }

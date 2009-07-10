@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.0.0 | String | Template Release
-Date = @Date | 9 July 2009 | String | Date
+Release = @Release | 1.0.1 | String | Template Release
+Date = @Date | 10 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -188,39 +188,36 @@ global proc sIBL_Maya_VRay_HideLights()
 		HideSelectedObjects();
 }
 
+global proc sIBL_Maya_VRay_DeleteType( string $cType, string $cFilter)
+{
+		string $cTypesList[] = `ls -type $cType $cFilter`;
+		if(size($cTypesList) != 0)
+			delete($cTypesList);
+}
+
 global proc sIBL_Maya_VRay_Environment_Deletion()
 {
-	// sIBL Transform Group Deletion
+	// sIBL Transform Group Deletion.
 	string $sceneSIBLGroup[] = `ls -fl "sIBL"`;
 	if ($sceneSIBLGroup[0] != "")
 	{
 		delete($sceneSIBLGroup);
 	}
 
-	// sIBL Texture Files Deletion
-	string $sFiles[] = `ls -type "file" "sIBL*"` ;
-	if(size($sFiles) != 0)
-		delete($sFiles);
+	// sIBL Texture Files Deletion.
+	sIBL_Maya_VRay_DeleteType("file", "sIBL*");
 
-	// sIBL place2dTexture Shaders Deletion
-	string $cPlace2dTexture[] = `ls -type "place2dTexture" "sIBL_Feedback*"` ;
-	if(size($cPlace2dTexture) != 0)
-		delete($cPlace2dTexture);
+	// sIBL place2dTexture Shaders Deletion.
+	sIBL_Maya_VRay_DeleteType("place2dTexture", "sIBL*");
 
-	// sIBL Vray Placements Deletion
-	string $sFiles[] = `ls -type "VRayPlaceEnvTex" "sIBL*"` ;
-	if(size($sFiles) != 0)
-		delete($sFiles);
+	// sIBL Vray Placements Deletion.
+	sIBL_Maya_VRay_DeleteType("VRayPlaceEnvTex", "sIBL*");
 
-	// sIBL Vray VRayObjectProperties Deletion
-	string $cVRayObjPropertiesNodes[] = `ls -type "VRayObjectProperties" "sIBL*"` ;
-	if(size($cVRayObjPropertiesNodes) != 0)
-		delete($cVRayObjPropertiesNodes);
+	// sIBL Vray VRayObjectProperties Deletion.
+	sIBL_Maya_VRay_DeleteType("VRayObjectProperties", "sIBL*");
 
-	// sIBL lambert Shaders Deletion
-	string $cLambertShader[] = `ls -type "lambert" "sIBL_Feedback*"` ;
-	if(size($cLambertShader) != 0)
-		delete($cLambertShader);
+	// sIBL lambert Shaders Deletion.
+	sIBL_Maya_VRay_DeleteType("lambert", "sIBL*");
 }
 
 global proc sIBL_Maya_VRay_CreateEnvironmentTexturesBranch(string $cSlot, string $cFilePath, string $cPrefix)
@@ -230,7 +227,6 @@ global proc sIBL_Maya_VRay_CreateEnvironmentTexturesBranch(string $cSlot, string
 
 	string $cVrayPlacement = `createNode VRayPlaceEnvTex`;
 	setAttr ($cVrayPlacement + ".mappingType") 2;
-
 
 	connectAttr -f ($cVrayPlacement + ".outUV") ($cFile + ".uvCoord");
 
@@ -307,14 +303,16 @@ global proc sIBL_Maya_VRay_Feedback_Creation(string $cBackgroundFilePath, float 
 	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
 	sets -renderable true -noSurfaceShader true -empty -name $cShadingEngine;
 	connectAttr -f ($cLambertShader + ".outColor") ($cShadingEngine + ".surfaceShader");
-	string $cFile = `createNode file`;
-	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
 
+	string $cFile = `createNode file`;
 	if (!`attributeExists "resolution" $cFile`)
 		addAttr -ln "resolution" -at long $cFile;
  	setAttr  ($cFile + ".resolution") 2048;
 
 	setAttr -type "string" ($cFile + ".fileTextureName") $cBackgroundFilePath;
+
+	connectAttr -f ($cFile + ".outColor") ($cLambertShader + ".color");
+
 	string $cPlace2DTexture = `createNode place2dTexture`;
 
 	connectAttr -f ($cPlace2DTexture + ".outUV") ($cFile + ".uvCoord");
@@ -450,13 +448,15 @@ global proc sIBL_Maya_VRay_CreateGround(float $feedbackRadius)
 	string $sIBLGroup = sIBL_Maya_VRay_GetSIBLGroup();
 	string $cGround[] = `nurbsPlane`;
 	delete -ch;
-	parent $cGround[0] $sIBLGroup ;
+
+	setAttr ($cGround[0] + ".rotateZ") 90;
+	makeIdentity -apply true -t 0 -r 0 -s 1 -n 0 $cGround[0];
 
 	string $cScaleAttributesList[] = {"scaleX", "scaleY", "scaleZ"};
 	for( $cScaleAttribute in $cScaleAttributesList )
 		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
 
-	setAttr ($cGround[0] + ".rotateZ") 90;
+	parent $cGround[0] $sIBLGroup ;
 
 	rename $cGround[0] "sIBL_Ground";
 }
