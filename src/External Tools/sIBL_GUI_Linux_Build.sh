@@ -24,7 +24,7 @@ cp -rf /media/psf/Developement/sIBL/src/Help /media/psf/Developement/sIBL/src/Re
 cp -rf /media/psf/Developement/sIBL/src/COPYING /media/psf/Developement/sIBL/src/Releases/Linux/sIBL_GUI/
 rm -rf /media/psf/Developement/sIBL/src/Releases/Linux/sIBL_GUI/Templates/3ds\ Max
 mkdir /media/psf/Developement/sIBL/src/Releases/Linux/sIBL_GUI/Resources
-cp /media/psf/Developement/sIBL/src/Resources/Earth_Map.png /media/psf/Developement/sIBL/src/Releases/Linux/sIBL_GUI/Resources/
+cp /media/psf/Developement/sIBL/src/Resources/Earth_Map.jpg /media/psf/Developement/sIBL/src/Releases/Linux/sIBL_GUI/Resources/
 cd /media/psf/Developement/sIBL/src/Releases/Linux/
 
 #! sIBL_GUI Linux Release Cleanup.

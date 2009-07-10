@@ -30,7 +30,7 @@ cp -f ./Releases/MacOsX/Utilities/qt.conf ./dist/sIBL_GUI.app/Contents/Resources
 cp -rf ./Releases/MacOsX/Utilities/imageformats ./dist/sIBL_GUI.app/Contents/MacOs
 cp -rf ./Templates ./dist/sIBL_GUI.app/Contents/Resources
 cp -rf ./Help ./dist/sIBL_GUI.app/Contents/Resources
-cp -rf ./Resources/Earth_Map.png ./dist/sIBL_GUI.app/Contents/Resources/Resources
+cp -rf ./Resources/Earth_Map.jpg ./dist/sIBL_GUI.app/Contents/Resources/Resources
 rm -rf ./dist/sIBL_GUI.app/Contents/Resources/Templates/3ds\ Max
 rm -rf ./dist/sIBL_GUI.app/Contents/Resources/Templates/XSI
 

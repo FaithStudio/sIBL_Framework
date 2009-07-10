@@ -12,7 +12,7 @@ xcopy /e /c /i /h /k /y "Y:\sIBL\src\Help" "Y:\sIBL\src\Releases\Windows\sIBL_GU
 xcopy /e /c /i /h /k /y "Y:\sIBL\src\Templates" "Y:\sIBL\src\Releases\Windows\sIBL_GUI\Templates"
 xcopy /e /c /i /h /k /y "Y:\sIBL\src\Releases\Windows\Utilities\PyQt4" "Y:\sIBL\src\Releases\Windows\sIBL_GUI\PyQt4"
 xcopy /c /y "Y:\sIBL\src\Releases\Windows\Utilities\qt.conf" "Y:\sIBL\src\Releases\Windows\sIBL_GUI\"
-xcopy /c /y "Y:\sIBL\src\Resources\Earth_Map.png" "Y:\sIBL\src\Releases\Windows\sIBL_GUI\Resources\"
+xcopy /c /y "Y:\sIBL\src\Resources\Earth_Map.jpg" "Y:\sIBL\src\Releases\Windows\sIBL_GUI\Resources\"
 
 rem // Upx.
 upx "Y:\sIBL\src\Releases\Windows\sIBL_GUI\sIBL_GUI.exe"
