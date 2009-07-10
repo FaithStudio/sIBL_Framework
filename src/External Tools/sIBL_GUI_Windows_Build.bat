@@ -35,3 +35,4 @@ rmdir /S /Q "Y:\sIBL_GUI_For_XSI\Addons\sIBL_GUI_For_XSI\Application\Plugins\sIB
 
 rem // Windows XSI Release .DS_Store Cleanup.
 python "Y:\sIBL\src\External Tools\KSL_Recursive_Remove.py" Y:\sIBL_GUI_For_XSI .DS_Store
+python "Y:\sIBL\src\External Tools\KSL_Recursive_Remove.py" Y:\sIBL_GUI_For_XSI Thumbs.db

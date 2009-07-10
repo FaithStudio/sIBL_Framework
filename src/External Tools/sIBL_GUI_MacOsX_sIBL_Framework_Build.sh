@@ -16,3 +16,4 @@ rm -rf `find ./dist/sIBL_Framework.app/ -name *_debug`
 
 #! sIBL_Framework Cleanup.
 python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_Framework.app/ .DS_Store
+python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_Framework.app/ Thumbs.db

@@ -65,5 +65,6 @@ cp ./Releases/sIBL_GUI_Releases.rc ./Releases/Gathering/
 
 #! Gathering Folder Cleanup.
 python ./External\ Tools/KSL_Recursive_Remove.py ./Releases/Gathering .DS_Store
+python ./External\ Tools/KSL_Recursive_Remove.py ./Releases/Gathering Thumbs.db
 
 export COPYFILE_DISABLE=false

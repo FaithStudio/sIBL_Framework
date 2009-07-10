@@ -16,6 +16,7 @@ rm -rf `find ./dist/sIBL_Framework.app/ -name *debug*`
 
 #! sIBL_Framework Cleanup.
 python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_Framework.app/ .DS_Store
+python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_Framework.app/ Thumbs.db
 
 #! sIBL_GUI Build.
 rm -rf ./build
@@ -38,6 +39,7 @@ rm -rf `find ./dist/sIBL_GUI.app/ -name *debug*`
 
 #! sIBL_GUI Cleanup.
 python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_GUI.app/ .DS_Store
+python ./External\ Tools/KSL_Recursive_Remove.py ./dist/sIBL_GUI.app/ Thumbs.db
 
 #! sIBL_GUI DMG.
 hdiutil create ./dist/sIBL_GUI.dmg -volname "sIBL_GUI" -fs HFS+ -srcfolder "./dist/sIBL_GUI.app" -srcfolder "./dist/sIBL_Framework.app"

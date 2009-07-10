@@ -29,12 +29,13 @@ cd /media/psf/Developement/sIBL/src/Releases/Linux/
 
 #! sIBL_GUI Linux Release Cleanup.
 python /media/psf/Developement/sIBL/src/External\ Tools/KSL_Recursive_Remove.py ./ .DS_Store
+python /media/psf/Developement/sIBL/src/External\ Tools/KSL_Recursive_Remove.py ./ Thumbs.db
 
 #! sIBL_GUI Linux Archiving.
 tar -czvf sIBL_GUI.tar.gz sIBL_GUI/
 
 #! XSI Addon.
-#!rm -rf /media/psf/Developement/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/*
-#!cp -rf /media/psf/Developement/sIBL/src/Releases/Linux/sIBL_GUI/* /media/psf/Developements/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/
-#!cp -f /media/psf/Developement/sIBL/src/sIBL_GUI_Generate_Launcher.py /media/psf/Developement/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/
-#!rm -rf /media/psf/Developement/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/Templates/Maya/
+rm -rf /media/psf/Developement/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/*
+cp -rf /media/psf/Developement/sIBL/src/Releases/Linux/sIBL_GUI/* /media/psf/Developement/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/
+cp -f /media/psf/Developement/sIBL/src/sIBL_GUI_Generate_Launcher.py /media/psf/Developement/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/
+rm -rf /media/psf/Developement/sIBL_GUI_For_XSI/Addons/sIBL_GUI_For_XSI/Application/Plugins/sIBL_GUI_Linux/Templates/Maya/
