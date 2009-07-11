@@ -379,7 +379,7 @@ function  sIBL_XSI_GetPassesList()
 	cSIBL_GUI_Passes_Chooser_Layout.EndRow();
 
 	cSIBL_GUI_Passes_Chooser_Layout.Logic = ToggleAll_OnClicked.toString() + UnToggleAll_OnClicked.toString();
-	cSIBL_GUI_Passes_Chooser_Layout.Language = "JScript" ;
+	cSIBL_GUI_Passes_Chooser_Layout.Language = "JScript";
 
 	var cReturnValue = InspectObj( cSIBL_GUI_Passes_Chooser, "", "sIBL GUI Passes Chooser", siModal, false );
 
@@ -409,7 +409,7 @@ function ToggleAll_OnClicked()
 	for(var i = 1; i < PPG.Inspected.Item(0).Parameters.count; i++)
 	{
 		var cBoolean = "True";
-		PPG.Inspected.Item(0).Parameters(i).value = cBoolean ;
+		PPG.Inspected.Item(0).Parameters(i).value = cBoolean;
 	}
 }
 
@@ -419,7 +419,7 @@ function UnToggleAll_OnClicked()
 	for(var i = 1; i < PPG.Inspected.Item(0).Parameters.count; i++)
 	{
 		var cBoolean = "False";
-		PPG.Inspected.Item(0).Parameters(i).value = cBoolean ;
+		PPG.Inspected.Item(0).Parameters(i).value = cBoolean;
 	}
 }
 

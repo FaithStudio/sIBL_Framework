@@ -237,7 +237,7 @@ global proc sIBL_ScrollListSelectNone()
 global proc sIBL_CameraChooser()
 {
 	string $formLayout = `setParent -q`;
-	formLayout -e -height 300 $formLayout ;
+	formLayout -e -height 300 $formLayout;
 	string $selectAllButton = `button -label "Select All" -command "sIBL_ScrollListSelectAll" selectAllButton`;
 	string $selectNoneButton = `button -label "Select None" -command "sIBL_ScrollListSelectNone" selectNoneButton`;
 
@@ -445,7 +445,7 @@ global proc sIBL_Maya_MR_Feedback_Creation(string $cBackgroundFilePath, float $f
 {
  	string $sIBLGroup = sIBL_Maya_MR_GetSIBLGroup();
 	string $cFeedback = sIBL_Maya_MR_FeedbackGeometry_Creation($feedbackRadius);
-	parent $cFeedback $sIBLGroup ;
+	parent $cFeedback $sIBLGroup;
 
 	string $cLambertShader = `shadingNode -asShader lambert`;
 	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
@@ -490,7 +490,7 @@ global proc string sIBL_Maya_MR_GetLigthsTargetLocator()
 		string $sIBLGroup = sIBL_Maya_MR_GetSIBLGroup();
 
 		$cSIBL_Lights_Target_Locator = `spaceLocator`;
-		parent $cSIBL_Lights_Target_Locator[0] $sIBLGroup ;
+		parent $cSIBL_Lights_Target_Locator[0] $sIBLGroup;
 
 		rename $cSIBL_Lights_Target_Locator[0] "sIBL_Lights_Target_Locator";
 	}
@@ -520,10 +520,10 @@ global proc sIBL_Maya_MR_GetLight( string $cLigthType, int $physicalSun, string 
 	}
 
 	setAttr ($cLight + ".locatorScale") $cScale;
-	setAttr -type double3 ($cLight + ".color") ($cColor[0]/255) ($cColor[1]/255) ($cColor[2]/255) ;
+	setAttr -type double3 ($cLight + ".color") ($cColor[0]/255) ($cColor[1]/255) ($cColor[2]/255);
 	setAttr ($cLight + ".intensity") $cIntensity;
 	setAttr ($cLight + ".useRayTraceShadows") 1;
-	parent $cLight $sIBLGroup ;
+	parent $cLight $sIBLGroup;
 
 	string $cPointOnSurfaceInfo = `createNode pointOnSurfaceInfo`;
 	connectAttr -f ($cFeedback[0] + "Shape.worldSpace[0]") ($cPointOnSurfaceInfo + ".inputSurface");
@@ -615,7 +615,7 @@ global proc sIBL_Maya_MR_CreateGround(float $feedbackRadius, int $shadowCatcher)
 	for( $cScaleAttribute in $cScaleAttributesList )
 		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
 
-	parent $cGround[0] $sIBLGroup ;
+	parent $cGround[0] $sIBLGroup;
 
 	if($shadowCatcher)
 	{

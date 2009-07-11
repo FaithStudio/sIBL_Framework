@@ -37,7 +37,6 @@ createFeedBack = @createFeedBack | 1 | Boolean | Create Feedback
 feedbackRadius = @feedbackRadius | 500 | Float | Feedback Radius
 createGround = @createGround | 1 | Boolean | Create Ground
 hideLights = @hideLights | 1 | Boolean | Hide Lights
-activateIndirectIllumination = @activateIndirectIllumination | 1 | Boolean | Activate Indirect Illumination
 activateLinearWorkflow = @activateLinearWorkflow | 1 | Boolean | Activate Linear Workflow
 
 [Remote Connection]
@@ -76,7 +75,6 @@ int $createFeedBack = @createFeedBack;
 float $feedbackRadius = @feedbackRadius;
 int $createGround = @createGround;
 int $hideLights = @hideLights;
-int $activateIndirectIllumination = @activateIndirectIllumination;
 int $activateLinearWorkflow = @activateLinearWorkflow;
 
 sIBL_Maya_VRay_DLight_Setup($cBackgroundFilePath,
@@ -102,7 +100,6 @@ sIBL_Maya_VRay_DLight_Setup($cBackgroundFilePath,
 		$createGround,
 		$feedbackRadius,
 		$hideLights,
-		$activateIndirectIllumination,
 		$activateLinearWorkflow);
 
 global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
@@ -128,7 +125,6 @@ global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
 			int $createGround,
 			float $feedbackRadius,
 			int $hideLights,
-			int $activateIndirectIllumination,
 			int $activateLinearWorkflow)
 {
 	print("sIBL_GUI | Starting sIBL File Import !\n");
@@ -170,9 +166,6 @@ global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
 
 		if($createGround)
 			sIBL_Maya_VRay_DLight_CreateGround($feedbackRadius);
-
-		if ($activateIndirectIllumination)
-			sIBL_Maya_VRay_DLight_ActivateIndirectIllumination();
 
 		if ($activateLinearWorkflow)
 			sIBL_Maya_VRay_DLight_ActivateLinearWorkflow();
@@ -218,6 +211,9 @@ global proc sIBL_Maya_VRay_DLight_Environment_Deletion()
 
 	// sIBL lambert Shaders Deletion.
 	sIBL_Maya_VRay_DLight_DeleteType("lambert", "sIBL*");
+
+	// sIBL VRayLightDomeShape Shaders Deletion.
+	sIBL_Maya_VRay_DLight_DeleteType("VRayLightDomeShape", "sIBL*");
 }
 
 global proc sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch(string $cSlot, string $cFilePath, string $cPrefix)
@@ -247,7 +243,26 @@ global proc sIBL_Maya_VRay_DLight_Environment_Creation(int $createBackground, in
 
 	if ($createLighting)
 	{
-		sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch("vraySettings.cam_envtexGi", $cLightingFilePath, "sIBL_Lighting");
+
+		setAttr "vraySettings.cam_envtexGi" -type double3 0 0 0 ;
+
+		string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
+
+		string $cVRayDomeLight = `shadingNode -asLight VRayLightDomeShape`;
+		string $cVRayDomeLightShapes[] = sIBL_Maya_VRay_DLight_GetShapes($cVRayDomeLight);
+		string $cVRayDomeLightAttributesList[] = {"domeSpherical", "useDomeTex", "invisible"};
+		for( $cAttribute in $cVRayDomeLightAttributesList )
+			setAttr ($cVRayDomeLightShapes[0] + "." + $cAttribute) 1;
+		string $cVRayDomeLightAttributesList[] = {"affectReflections", "affectSpecular", "texAdaptive"};
+		for( $cAttribute in $cVRayDomeLightAttributesList )
+			setAttr ($cVRayDomeLightShapes[0] + "." + $cAttribute) 0;
+		setAttr ($cVRayDomeLightShapes[0] + ".subdivs") 64;
+
+		sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch(($cVRayDomeLightShapes[0]  + ".domeTex"), $cLightingFilePath, "sIBL_Lighting");
+
+		parent $cVRayDomeLight $sIBLGroup;
+
+		rename $cVRayDomeLight ("sIBL_VRay_DomeLight");
 	}
 
 	if ($createReflection)
@@ -297,7 +312,7 @@ global proc sIBL_Maya_VRay_DLight_Feedback_Creation(string $cBackgroundFilePath,
 {
  	string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
 	string $cFeedback = sIBL_Maya_VRay_DLight_FeedbackGeometry_Creation($feedbackRadius);
-	parent $cFeedback $sIBLGroup ;
+	parent $cFeedback $sIBLGroup;
 
 	string $cLambertShader = `shadingNode -asShader lambert`;
 	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
@@ -353,7 +368,7 @@ global proc string sIBL_Maya_VRay_DLight_GetLigthsTargetLocator()
 		string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
 
 		$cSIBL_Lights_Target_Locator = `spaceLocator`;
-		parent $cSIBL_Lights_Target_Locator[0] $sIBLGroup ;
+		parent $cSIBL_Lights_Target_Locator[0] $sIBLGroup;
 
 		rename $cSIBL_Lights_Target_Locator[0] "sIBL_Lights_Target_Locator";
 	}
@@ -370,10 +385,10 @@ global proc sIBL_Maya_VRay_DLight_GetLight( string $cLigthType, string $cLightNa
 	string $cLight = `shadingNode -asLight $cLigthType`;
 
 	setAttr ($cLight + ".locatorScale") $cScale;
-	setAttr -type double3 ($cLight + ".color") ($cColor[0]/255) ($cColor[1]/255) ($cColor[2]/255) ;
+	setAttr -type double3 ($cLight + ".color") ($cColor[0]/255) ($cColor[1]/255) ($cColor[2]/255);
 	setAttr ($cLight + ".intensity") $cIntensity;
 	setAttr ($cLight + ".useRayTraceShadows") 1;
-	parent $cLight $sIBLGroup ;
+	parent $cLight $sIBLGroup;
 
 	string $cPointOnSurfaceInfo = `createNode pointOnSurfaceInfo`;
 	connectAttr -f ($cFeedback[0] + "Shape.worldSpace[0]") ($cPointOnSurfaceInfo + ".inputSurface");
@@ -422,19 +437,13 @@ global proc sIBL_Maya_VRay_DLight_ConnectFeedBackToSIBLShaders(string $cFeedback
 
 	if ($connectToLighting)
 	{
-		expression -name "sIBL_Lighting_Rotate_Expression" -s ("sIBL_Lighting_VRayPlaceEnvTex.horRotation = -" + $cFeedback + ".rotateX + 90;");
+		expression -name "sIBL_Lighting_Expression" -s ("sIBL_Lighting_VRayPlaceEnvTex.horRotation = -" + $cFeedback + ".rotateX + 90;\nsetAttr sIBL_VRay_DomeLightShape.locatorScale `getAttr " + $cFeedback + ".scaleX`;");
 	}
 
 	if ($connectToReflection)
 	{
 		expression -name "sIBL_Reflection_Rotate_Expression" -s ("sIBL_Reflection_VRayPlaceEnvTex.horRotation = -" + $cFeedback + ".rotateX + 90;");
 	}
-}
-
-global proc sIBL_Maya_VRay_DLight_ActivateIndirectIllumination()
-{
-	setAttr "defaultRenderGlobals.enableDefaultLight" 0;
-	setAttr "vraySettings.giOn" 1;
 }
 
 global proc sIBL_Maya_VRay_DLight_ActivateLinearWorkflow()
@@ -456,7 +465,7 @@ global proc sIBL_Maya_VRay_DLight_CreateGround(float $feedbackRadius)
 	for( $cScaleAttribute in $cScaleAttributesList )
 		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
 
-	parent $cGround[0] $sIBLGroup ;
+	parent $cGround[0] $sIBLGroup;
 
 	rename $cGround[0] "sIBL_Ground";
 }

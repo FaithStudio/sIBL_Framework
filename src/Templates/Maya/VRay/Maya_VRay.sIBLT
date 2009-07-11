@@ -297,7 +297,7 @@ global proc sIBL_Maya_VRay_Feedback_Creation(string $cBackgroundFilePath, float 
 {
  	string $sIBLGroup = sIBL_Maya_VRay_GetSIBLGroup();
 	string $cFeedback = sIBL_Maya_VRay_FeedbackGeometry_Creation($feedbackRadius);
-	parent $cFeedback $sIBLGroup ;
+	parent $cFeedback $sIBLGroup;
 
 	string $cLambertShader = `shadingNode -asShader lambert`;
 	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
@@ -353,7 +353,7 @@ global proc string sIBL_Maya_VRay_GetLigthsTargetLocator()
 		string $sIBLGroup = sIBL_Maya_VRay_GetSIBLGroup();
 
 		$cSIBL_Lights_Target_Locator = `spaceLocator`;
-		parent $cSIBL_Lights_Target_Locator[0] $sIBLGroup ;
+		parent $cSIBL_Lights_Target_Locator[0] $sIBLGroup;
 
 		rename $cSIBL_Lights_Target_Locator[0] "sIBL_Lights_Target_Locator";
 	}
@@ -370,10 +370,10 @@ global proc sIBL_Maya_VRay_GetLight( string $cLigthType, string $cLightName, flo
 	string $cLight = `shadingNode -asLight $cLigthType`;
 
 	setAttr ($cLight + ".locatorScale") $cScale;
-	setAttr -type double3 ($cLight + ".color") ($cColor[0]/255) ($cColor[1]/255) ($cColor[2]/255) ;
+	setAttr -type double3 ($cLight + ".color") ($cColor[0]/255) ($cColor[1]/255) ($cColor[2]/255);
 	setAttr ($cLight + ".intensity") $cIntensity;
 	setAttr ($cLight + ".useRayTraceShadows") 1;
-	parent $cLight $sIBLGroup ;
+	parent $cLight $sIBLGroup;
 
 	string $cPointOnSurfaceInfo = `createNode pointOnSurfaceInfo`;
 	connectAttr -f ($cFeedback[0] + "Shape.worldSpace[0]") ($cPointOnSurfaceInfo + ".inputSurface");
@@ -456,7 +456,7 @@ global proc sIBL_Maya_VRay_CreateGround(float $feedbackRadius)
 	for( $cScaleAttribute in $cScaleAttributesList )
 		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
 
-	parent $cGround[0] $sIBLGroup ;
+	parent $cGround[0] $sIBLGroup;
 
 	rename $cGround[0] "sIBL_Ground";
 }
