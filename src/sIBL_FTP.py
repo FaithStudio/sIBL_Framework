@@ -179,6 +179,8 @@ class sIBL_FTP( object ):
 
 			self.cFTP.cwd( cWorkingDirectory )
 
+			self.setProgressMessage( "Listing Directory : '%s'." % cWorkingDirectory )
+
 			cLogger.debug( " > Current Working Directory  : '%s'.", cWorkingDirectory )
 
 			cDirectories, cFiles = self.getListing()
