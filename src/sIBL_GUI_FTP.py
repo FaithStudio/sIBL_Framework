@@ -80,7 +80,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 	'''
 
 	@sIBL_Common.sIBL_Execution_Call
-	def __init__( self, cSIBL_GUI_Instance, cHost, cPort, cLogin, cPassword, cRemoteDirectory, cLocalDirectory, cParent = None ):
+	def __init__( self, cSIBL_GUI_Instance, cHost, cPort, cLogin, cPassword, cRemoteDirectory, cLocalDirectory, cIgnoreList = None, cParent = None ):
 		'''
 		This Method Initializes The Class.
 
@@ -90,6 +90,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		@param cPassword: Connection Password. ( String )
 		@param cRemoteDirectory: Starting Remote Directory For Transfers. ( String )
 		@param cLocalDirectory: Starting Local Directory For Transfers. ( String )
+		@param cIgnoreList: Current Ignore List. ( List )
 		@param cParent: Current Parent. ( QObject )
 		'''
 
@@ -111,6 +112,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.cPort = cPort
 		self.cLogin = cLogin
 		self.cPassword = cPassword
+		self.cIgnoreList = cIgnoreList
 		self.cCommands = { "Downloads":[( cRemoteDirectory, cLocalDirectory, "Directories" )]}
 
 		self.cFTP_Thread = None
@@ -169,7 +171,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.cSIBL_GUI_Instance.cFTP_Session_Active = False
 
 		# Setting Up The UI.
-		# self.Current_File_label.setText( "" )
+		self.Current_File_label.setText( self.cFTP_Thread.cFTP.cProgressMessage[len( self.cFTP_Thread.cFTP.cProgressMessage ) - 1] )
 		self.Cancel_pushButton.setText( "Close" )
 		self.Download_progressBar.hide()
 		self.Download_progressBar.setValue( 0 )
@@ -183,7 +185,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		cLogger.debug( "> Starting FTP Worker Thread !" )
 
 		# Initializing The FTP Worker Thread
-		self.cFTP_Thread = sIBL_FTP_Worker( self.cHost, self.cPort, self.cLogin, self.cPassword, self.cCommands, self )
+		self.cFTP_Thread = sIBL_FTP_Worker( self.cHost, self.cPort, self.cLogin, self.cPassword, self.cCommands, self.cIgnoreList, self )
 
 		self.connect( self.cFTP_Thread, SIGNAL( "started()" ), self.workerThreadStarted )
 		self.connect( self.cFTP_Thread, SIGNAL( "finished()" ), self.workerThreadFinished )
@@ -248,12 +250,19 @@ class sIBL_FTP_Worker( QThread ):
 	'''
 
 	@sIBL_Common.sIBL_Execution_Call
-	def __init__( self, cHost, cPort, cLogin, cPassword, cCommands, cParent = None ):
+	def __init__( self, cHost, cPort, cLogin, cPassword, cCommands, cIgnoreList, cParent = None ):
 		'''
 		This Method Initializes The Class.
 
-		@param cSIBL_GUI_FTP: sIBL_GUI_FTP_Window. ( Object )
+		@param cHost: FTP Host. ( String )
+		@param cPort: FTP Connection Port. ( Int )
+		@param cLogin: Connection Login. ( String )
+		@param cPassword: Connection Password. ( String )
+		@param cCommands: Download Commands. ( Dictionary )
+		@param cIgnoreList: Current Ignore List. ( List )
+		@param cParent: Current Parent. ( QObject )
 		'''
+
 		cLogger.debug( "> Initializing sIBL_FTP_Worker() Class." )
 
 		QThread.__init__( self, cParent )
@@ -264,6 +273,7 @@ class sIBL_FTP_Worker( QThread ):
 		self.cLogin = cLogin
 		self.cPassword = cPassword
 		self.cCommands = cCommands
+		self.cIgnoreList = cIgnoreList
 		self.cParent = cParent
 		self.cFTP = sIBL_FTP.sIBL_FTP()
 
@@ -280,7 +290,7 @@ class sIBL_FTP_Worker( QThread ):
 					for cDownloads in self.cCommands["Downloads"]:
 						if cDownloads[2] is "Directories" :
 							cLogger.debug( "> Launching FTP Worker Directories Download Command." )
-							self.cFTP.getRemoteTree( cDownloads[0], cDownloads[1] )
+							self.cFTP.getRemoteTree( cDownloads[0], cDownloads[1], self.cIgnoreList )
 						if cDownloads[2] is "Files":
 							cLogger.debug( "> Launching FTP Worker Files Command." )
 							self.cFTP.setLocalFile( cDownloads[0], cDownloads[1] )

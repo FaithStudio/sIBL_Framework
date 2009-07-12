@@ -80,6 +80,7 @@ import sIBL_Exceptions
 import sIBL_GUI_About
 import sIBL_GUI_FTP
 import sIBL_GUI_Message
+import sIBL_GUI_QWidgets
 import sIBL_GUI_Settings
 import sIBL_GUI_Updater
 import sIBL_Parser
@@ -422,78 +423,6 @@ class WorldMap_QGraphicsView( QGraphicsView ) :
 		else:
 			QGraphicsView.keyPressEvent( self, cEvent )
 
-class Variable_QPushButton( QPushButton ) :
-
-	@sIBL_Common.sIBL_Execution_Call
-	def __init__( self, cState, cColors, cParent = None ) :
-		'''
-		This Method Initializes The Class.
-		'''
-
-		cLogger.debug( "> Initializing Variable_QPushButton() Class." )
-		QPushButton.__init__( self, cParent )
-
-		# --- Setting Class Attributes. ---
-		self.cState = cState
-
-		self.trueColor = cColors[0]
-		self.falseColor = cColors[1]
-
-		# Initialising The Button
-		self.setCheckable( True )
-		if self.cState :
-			self.setTrueState()
-		else :
-			self.setFalseState()
-
-		# Variable_QPushButton Signals / Slots.
-		self.connect( self, SIGNAL( "clicked()" ), self.Variable_QPushButton_OnClicked )
-
-	@sIBL_Common.sIBL_Execution_Call
-	def Variable_QPushButton_OnClicked( self ) :
-		'''
-		This Method Is Called When A Variable QPushButton Is Clicked.
-		'''
-
-		if self.cState == True :
-			self.setFalseState()
-		else :
-			self.setTrueState()
-
-	@sIBL_Common.sIBL_Execution_Call
-	def setTrueState( self ) :
-		'''
-		This Method Sets The Variable Button True State.
-		'''
-
-		cLogger.debug( "> Setting Variable QPushButton() To 'True' State." )
-		self.cState = True
-
-		cPalette = QPalette()
-		cPalette.setColor( QPalette.Button, self.trueColor )
-		self.setPalette( cPalette )
-
-		self.setChecked( True )
-		self.setText( "True" )
-
-
-	@sIBL_Common.sIBL_Execution_Call
-	def setFalseState( self ) :
-		'''
-		This Method Sets The Variable QPushButton True State.
-		'''
-
-		cLogger.debug( "> Setting Variable QPushButton() To 'False' State." )
-
-		self.cState = False
-
-		cPalette = QPalette()
-		cPalette.setColor( QPalette.Button, self.falseColor )
-		self.setPalette( cPalette )
-
-		self.setChecked( False )
-		self.setText( "False" )
-
 class sIBL_GUI_SplashScreen( QSplashScreen ) :
 	'''
 	This Class Is The sIBL_GUI_SplashScreen Class.
@@ -544,7 +473,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		cLogger.debug( "> Initializing sIBL_GUI() Class." )
-		cSpashScreen.setMessage( "sIBL_GUI | Setting GUI Widgets." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Setting GUI Widgets." )
 
 		# Visual Style Choice.
 		if not platform.system() == "Darwin":
@@ -594,7 +523,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.resize( 1, 1 )
 
 		# --- sIBL_GUI Preferences Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI | Restoring Settings." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Restoring Settings." )
 
 		self.setVerboseLevelComboBox()
 		self.setCollectionsPathsTableWidget()
@@ -611,7 +540,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.setCheckBoxStateFromSettings( self.Ignore_Missing_Templates_checkBox, "Settings", "IgnoreMissingTemplates" )
 
 		# --- sIBL_GUI Collection Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI | Gathering sIBL Sets." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Gathering sIBL Sets." )
 
 		# Collections Initialization.
 		self.initializeCollectionsRelationships()
@@ -621,11 +550,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.setCollectionsListWidget()
 
 		# --- sIBL_GUI GPS Map Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI | Initializing GPS Map." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initializing GPS Map." )
 		self.setGPSMap()
 
 		# --- sIBL_GUI Import Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI | Gathering Templates." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Gathering Templates." )
 
 		self.cTextEdits_List = ( self.Comment_textEdit, self.Template_Comment_textEdit )
 		self.initializeLineAndTextEditsPalette()
@@ -641,7 +570,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.setHelpTextBrowser()
 
 		# --- sIBL_GUI About Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI | Setting Version Number And About Message." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Setting Version Number And About Message." )
 		self.setAboutMessage()
 
 		# --- sIBL_GUI Signals / Slots. ---
@@ -699,7 +628,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		# Hiding Splashscreen.
 		cLogger.debug( "> Hiding SplashScreen." )
-		cSpashScreen.setMessage( "sIBL_GUI | Initialization Finished." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initialization Finished." )
 		cSpashScreen.hide()
 
 		# Wizard If Empty Collection.
@@ -1195,11 +1124,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 				cColors = ( self.greenColor, self.redColor )
 				if cAttributeValue == "1":
-					cItem = Variable_QPushButton( True, cColors )
+					cItem = sIBL_GUI_QWidgets.Variable_QPushButton( True, cColors, ( "True", "False" ) )
 					cTableWidget.setCellWidget( row, 1, cItem )
 					cItem.setChecked( True )
 				else :
-					cItem = Variable_QPushButton( False, cColors )
+					cItem = sIBL_GUI_QWidgets.Variable_QPushButton( False, cColors, ( "True", "False" ) )
 					cTableWidget.setCellWidget( row, 1, cItem )
 					cItem.setChecked( False )
 
@@ -2293,13 +2222,18 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			sIBL_Set_KeyInSettings( "Others", "CustomFileBrowser", self.Custom_File_Browser_Path_lineEdit.text() )
 
 	@sIBL_Common.sIBL_Execution_Call
-	def setSIBL_GUI_FTPWindow( self, cWindowTitle , cRemoteDirectory, cLocalDirectory ) :
+	def setSIBL_GUI_FTPWindow( self, cWindowTitle , cRemoteDirectory, cLocalDirectory, cIgnoreList = None ) :
 		'''
 		This Method Starts The sIBL_GUI FTP Window.
+
+		@param cWindowTitle: FTP Window Title ( String )
+		@param cRemoteDirectory: Remote Directory To Transfer From( String )
+		@param cLocalDirectory: Local Directory To Transfer To ( String )
+		@param cIgnoreList: Current Ignore List ( List )
 		'''
 
 		if not self.cFTP_Session_Active :
-			self.cFTP_UI = sIBL_GUI_FTP.sIBL_GUI_FTP( self, sIBL_GUI_Settings.cFTP_Host, sIBL_GUI_Settings.cFTP_Port, sIBL_GUI_Settings.cFTP_Login, sIBL_GUI_Settings.cFTP_Password, cRemoteDirectory , cLocalDirectory )
+			self.cFTP_UI = sIBL_GUI_FTP.sIBL_GUI_FTP( self, sIBL_GUI_Settings.cFTP_Host, sIBL_GUI_Settings.cFTP_Port, sIBL_GUI_Settings.cFTP_Login, sIBL_GUI_Settings.cFTP_Password, cRemoteDirectory , cLocalDirectory, cIgnoreList )
 			self.cFTP_UI.setWindowTitle( cWindowTitle )
 			self.cFTP_UI.show()
 		else :
@@ -2308,7 +2242,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def Get_Help_pushButton_OnClicked( self ) :
 		'''
-		This Method Triggers sIBL_GUI FTP For Templates Download.
+		This Method Triggers The Help Download.
+		'''
+		self.getLatestHelp()
+
+	@sIBL_Common.sIBL_Execution_Call
+	def getLatestHelp( self ):
+		'''
+		This Method Triggers sIBL_GUI FTP For Help Download.
 		'''
 
 		if hasattr( sys, "frozen" ) :
@@ -2322,7 +2263,17 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def Get_Latest_Templates_pushButton_OnClicked( self ) :
 		'''
+		This Method Triggers The Templates Download.
+		'''
+
+		self.getLatestTemplates()
+
+	@sIBL_Common.sIBL_Execution_Call
+	def getLatestTemplates( self, cIgnoreList = None ) :
+		'''
 		This Method Triggers sIBL_GUI FTP For Templates Download.
+
+		@param cIgnoreList: Current Ignore List. ( List )
 		'''
 
 		if hasattr( sys, "frozen" ) :
@@ -2330,7 +2281,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		else :
 			cLocalTemplatesPath = "./FTP/Templates/"
 
-		self.setSIBL_GUI_FTPWindow( "sIBL_GUI FTP - Online Templates Download", sIBL_GUI_Settings.cOnlineRepository + "Templates/" , cLocalTemplatesPath )
+		self.setSIBL_GUI_FTPWindow( "sIBL_GUI FTP - Online Templates Download", sIBL_GUI_Settings.cOnlineRepository + "Templates/" , cLocalTemplatesPath, cIgnoreList )
 		self.cTemplates_Changed = True
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -2903,7 +2854,7 @@ if __name__ == "__main__":
 
 		cSplashScreenPicture = QPixmap( ":/sIBL_GUI/Resources/sIBL_GUI_SpashScreen.png" )
 		cSpashScreen = sIBL_GUI_SplashScreen( cSplashScreenPicture, 0.25 )
-		cSpashScreen.setMessage( "sIBL_GUI | Initializing Interface." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initializing Interface." )
 		cSpashScreen.show()
 
 		cUI = sIBL_GUI()

@@ -72,6 +72,7 @@ import sIBL_Common_Settings
 import sIBL_Exceptions
 import sIBL_GUI_FTP
 import sIBL_GUI_Message
+import sIBL_GUI_QWidgets
 import sIBL_GUI_Settings
 import sIBL_Parser
 import sIBL_UI_Updater
@@ -110,6 +111,8 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		self.cParent = cParent
 		self.cLocalReleasesFile = cLocalReleasesFile
 		self.cReleasesInfos = cReleasesInfos
+		self.greenColor = QColor( 128, 192, 128 )
+		self.redColor = QColor( 192, 128, 128 )
 
 		# Reseting sIBL_GUI Cursor.
 		self.cSIBL_GUI.setCursor( Qt.ArrowCursor )
@@ -164,32 +167,37 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		self.Templates_tableWidget.clear()
 		self.Templates_tableWidget.setSortingEnabled( False )
 		self.Templates_tableWidget.setRowCount( len( cTemplatesInfos ) )
-		self.Templates_tableWidget.setColumnCount( 4 )
+		self.Templates_tableWidget.setColumnCount( 5 )
 		self.Templates_tableWidget.horizontalHeader().setStretchLastSection( True )
-		self.Templates_tableWidget.setHorizontalHeaderLabels( ["Local Version", "Repository Version", "Release Type", "Comment"] )
+		self.Templates_tableWidget.setHorizontalHeaderLabels( ["Local Version", "Get It!", "Repository Version", "Release Type", "Comment"] )
 
+		cColors = ( self.greenColor, self.redColor )
 		cVerticalHeaderLabels = []
 		for row, cKey in enumerate( cTemplatesInfos.keys() ) :
 			if cKey != "sIBL_GUI" :
 				cVerticalHeaderLabels.append( cKey )
 				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][0] ) )
 				cItem.setTextAlignment( Qt.AlignCenter )
-				cLogger.debug( "> Setting Item In Column '0' : ' % s'.", cItem.text() )
+				cLogger.debug( "> Setting Item In Column '0' : ' % s'.", cItem )
 				self.Templates_tableWidget.setItem( row, 0, cItem )
 
-				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][1] ) )
-				cItem.setTextAlignment( Qt.AlignCenter )
+				cItem = sIBL_GUI_QWidgets.Variable_QPushButton( True, cColors, ( "Yes", "No" ) )
 				cLogger.debug( "> Setting Item In Column '1' : ' % s'.", cItem.text() )
-				self.Templates_tableWidget.setItem( row, 1, cItem )
+				self.Templates_tableWidget.setCellWidget( row, 1, cItem )
 
-				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][2] ) )
+				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][1] ) )
 				cItem.setTextAlignment( Qt.AlignCenter )
 				cLogger.debug( "> Setting Item In Column '2' : ' % s'.", cItem.text() )
 				self.Templates_tableWidget.setItem( row, 2, cItem )
 
-				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][3] ) )
+				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][2] ) )
+				cItem.setTextAlignment( Qt.AlignCenter )
 				cLogger.debug( "> Setting Item In Column '3' : ' % s'.", cItem.text() )
 				self.Templates_tableWidget.setItem( row, 3, cItem )
+
+				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][3] ) )
+				cLogger.debug( "> Setting Item In Column '4' : ' % s'.", cItem.text() )
+				self.Templates_tableWidget.setItem( row, 4, cItem )
 
 		self.Templates_tableWidget.setVerticalHeaderLabels ( cVerticalHeaderLabels )
 		self.Templates_tableWidget.resizeColumnsToContents()
@@ -200,8 +208,13 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		This Method Launch The Templates Download.
 		'''
 
-		self.cSIBL_GUI.Get_Latest_Templates_pushButton_OnClicked()
+		cIgnoreList = []
+		for row in range( self.Templates_tableWidget.rowCount() ) :
+			if self.Templates_tableWidget.cellWidget( row, 1 ).text() == "No" :
+				cIgnoreList.append( str( self.Templates_tableWidget.verticalHeaderItem( row ).text() ) )
 
+		cLogger.debug( " > Current Ignore List : '%s'.", cIgnoreList )
+		self.cSIBL_GUI.getLatestTemplates( cIgnoreList )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Open_Repository_pushButton_OnClicked( self ):

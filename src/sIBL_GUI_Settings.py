@@ -66,7 +66,7 @@ cFTP_Password = "k1dy0un0t"
 cOnlineRepository = "/sIBL_GUI/"
 cReleasesFile = "/sIBL_GUI/Releases/sIBL_GUI_Releases.rc"
 
-cChangeLog = "http://kelsolaar.hdrlabs.com/sIBL_Framework/sIBL_GUI/Change%20Log/Change%20Log.htm"
+cChangeLog = "http://kelsolaar.hdrlabs.com/sIBL_Framework/sIBL_GUI/ChangeLog/Change%20Log.htm"
 
 cReleasesURL = "http://kelsolaar.hdrlabs.com/?dir=./sIBL_Framework/sIBL_GUI/"
 

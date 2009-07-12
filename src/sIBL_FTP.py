@@ -59,7 +59,6 @@ import ftplib
 import logging
 import os
 import platform
-import sIBL_Common
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -196,7 +195,7 @@ class sIBL_FTP( object ):
 				cLogger.debug( " > Entering : '%s'.", cSubDirectory )
 				self.recursiveWalker( cSubDirectory )
 		else :
-			self.cFTP.close()
+			return False
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getListing( self ) :
@@ -286,12 +285,13 @@ class sIBL_FTP( object ):
 			return False
 
 	@sIBL_Common.sIBL_Execution_Call
-	def getRemoteTree( self, cRemoteDirectory, cLocalDirectory ) :
+	def getRemoteTree( self, cRemoteDirectory, cLocalDirectory, cIgnoreList ) :
 		'''
 		This Method Download A Remote Tree.
 
 		@param cRemoteDirectory: Remote Tree Download. ( String )
 		@param cLocalDirectory: Local Target Directory. ( String )
+		@param cIgnoreList: Current Ignore List. ( List )
 		'''
 
 		if self.setLocalDirectory( cLocalDirectory ) and not self.closeConnectionState :
@@ -313,27 +313,32 @@ class sIBL_FTP( object ):
 
 			self.cDownloadProgress = 0
 			for cFile in self.cWalkerFilesList :
-				if not self.closeConnectionState :
-					self.setProgressMessage( "Downloading : '%s'" % os.path.basename( cFile ) )
+				cFileBaseName = os.path.basename( cFile )
+				cFileBaseName = cFileBaseName.split( "." )
+				if cFileBaseName[0] not in cIgnoreList :
+					if not self.closeConnectionState :
+						self.setProgressMessage( "Downloading : '%s'" % os.path.basename( cFile ) )
 
-					cRemoteFileDirectory = os.path.dirname( cFile )
-					cOutputDirectory = cRemoteFileDirectory.replace( cRemoteDirectory, "" )
-					if cOutputDirectory.startswith( " / " ) or cOutputDirectory.startswith( "\\" ) :
-						cOutputDirectory = cOutputDirectory[1:]
-					if platform.system() == "Windows":
-						cOutputDirectory = cOutputDirectory.replace( " / ", "\\" )
-					elif platform.system() == "Linux" or platform.system() == "Darwin":
-						cOutputDirectory = cOutputDirectory.replace( "\\", " / " )
+						cRemoteFileDirectory = os.path.dirname( cFile )
+						cOutputDirectory = cRemoteFileDirectory.replace( cRemoteDirectory, "" )
+						if cOutputDirectory.startswith( " / " ) or cOutputDirectory.startswith( "\\" ) :
+							cOutputDirectory = cOutputDirectory[1:]
+						if platform.system() == "Windows":
+							cOutputDirectory = cOutputDirectory.replace( " / ", "\\" )
+						elif platform.system() == "Linux" or platform.system() == "Darwin":
+							cOutputDirectory = cOutputDirectory.replace( "\\", " / " )
 
-					if not cOutputDirectory in cStoredLocalDirectories :
-						cStoredLocalDirectories.append( cOutputDirectory )
-						self.setLocalDirectory( os.path.join( os.path.abspath( cLocalDirectory ), cOutputDirectory ) )
+						if not cOutputDirectory in cStoredLocalDirectories :
+							cStoredLocalDirectories.append( cOutputDirectory )
+							self.setLocalDirectory( os.path.join( os.path.abspath( cLocalDirectory ), cOutputDirectory ) )
 
-					cLocalFilePath = os.path.join( os.path.abspath( cLocalDirectory ), cOutputDirectory, os.path.basename( cFile ) )
-					self.setLocalFile( cFile, cLocalFilePath )
-					self.cDownloadProgress += 1
+						cLocalFilePath = os.path.join( os.path.abspath( cLocalDirectory ), cOutputDirectory, os.path.basename( cFile ) )
+						self.setLocalFile( cFile, cLocalFilePath )
+						self.cDownloadProgress += 1
+					else:
+						return False
 				else:
-					return False
+					cLogger.debug( " > '%s' Is In Ignore List, Skipped !", cFile )
 
 			self.setProgressMessage( "Downloading Done !", cWaitTime = 1.0 )
 			self.cDownloadProgress = None
