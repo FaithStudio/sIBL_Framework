@@ -17,6 +17,11 @@ Release = 1.0.1
 Type = "Stable"
 Comment = "This Is VRay For Maya Template !"
 
+[Maya_VRay_DLight]
+Release = 1.0.0
+Type = "Stable"
+Comment = "This Is VRay For Maya Dome Light Template !"
+
 [Maya_Turtle]
 Release = 1.0.0
 Type = "Stable"
