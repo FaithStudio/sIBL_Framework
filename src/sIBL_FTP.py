@@ -108,7 +108,7 @@ class sIBL_FTP( object ):
 		'''
 
 		cLogger.debug( "> Setting Progress Message : '%s'.", cProgressMessage )
-		cLogger.info( "sIBL_FTP | '%s'", cProgressMessage )
+		cLogger.info( "sIBL_FTP | '%s'.", cProgressMessage )
 		self.cProgressMessage.append( cProgressMessage )
 		if cWaitTime :
 			sIBL_Common.sIBL_Wait( cWaitTime )
@@ -143,6 +143,8 @@ class sIBL_FTP( object ):
 				return False
 
 			return True
+		else:
+			self.closeConnection()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLogin( self, cLogin, cPassword ) :
@@ -168,6 +170,8 @@ class sIBL_FTP( object ):
 				return False
 
 			return True
+		else:
+			self.closeConnection()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def recursiveWalker( self, cWorkingDirectory ) :
@@ -196,6 +200,8 @@ class sIBL_FTP( object ):
 			for cSubDirectory in cSubDirectories:
 				cLogger.debug( " > Entering : '%s'.", cSubDirectory )
 				self.recursiveWalker( cSubDirectory )
+		else:
+			self.closeConnection()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getListing( self ) :
@@ -242,6 +248,8 @@ class sIBL_FTP( object ):
 			cLogger.debug( " > Current Files : '%s'.", cFiles.keys() )
 
 			return cDirectories, cFiles
+		else:
+			self.closeConnection()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalDirectory( self, cLocalDirectory ) :
@@ -264,6 +272,8 @@ class sIBL_FTP( object ):
 			else:
 				cLogger.debug( " > '%s' Directory Tree Already Exist, Skipping Creation !", cLocalDirectory )
 				return True
+		else:
+			self.closeConnection()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalFile( self, cRemoteFile, cLocalFilePath ) :
@@ -285,6 +295,8 @@ class sIBL_FTP( object ):
 			except Exception, cError:
 				sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setLocalFile() Method | '%s' Creation Failed !" % cLocalFilePath, True )
 				return False
+		else:
+			self.closeConnection()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getRemoteTree( self, cRemoteDirectory, cLocalDirectory, cIgnoreList ) :
@@ -305,13 +317,14 @@ class sIBL_FTP( object ):
 				self.cDownloadProgress = None
 
 				if self.closeConnectionState :
-					return
+					return self.closeConnection()
+
 				self.setProgressMessage( "Gathering Files List !", cWaitTime = 0.5 )
 
 				self.recursiveWalker( cRemoteDirectory )
 
 				if self.closeConnectionState :
-					return
+					return self.closeConnection()
 				self.setProgressMessage( "Gathering Done !", cWaitTime = 1.0 )
 
 				if cIgnoreList is not None:
@@ -328,7 +341,7 @@ class sIBL_FTP( object ):
 				if len( self.cWalkerFilesList ) != 0 :
 
 					if self.closeConnectionState :
-						return
+						return self.closeConnection()
 					self.setProgressMessage( "Starting Download !", cWaitTime = 1.0 )
 
 					cStoredLocalDirectories = []
@@ -336,7 +349,7 @@ class sIBL_FTP( object ):
 					for cFile in self.cWalkerFilesList :
 
 						if self.closeConnectionState :
-							return
+							return self.closeConnection()
 						self.setProgressMessage( "Downloading : '%s'" % os.path.basename( cFile ) )
 
 						cRemoteFileDirectory = os.path.dirname( cFile )
@@ -357,12 +370,15 @@ class sIBL_FTP( object ):
 
 						self.cDownloadProgress += 1
 
-					self.setProgressMessage( "Downloading Done !", cWaitTime = 1.0 )
 					self.cDownloadProgress = -1
+					self.setProgressMessage( "Downloading Done, Connection Closing !", cWaitTime = 2.5 )
+					return self.closeConnection()
 				else:
-					self.setProgressMessage( "Nothing To Download !", cWaitTime = 1.0 )
 					self.cDownloadProgress = -1
-
+					self.setProgressMessage( "Nothing To Download, Connection Closing !", cWaitTime = 2.5 )
+					return self.closeConnection()
+		else:
+			self.closeConnection()
 #***********************************************************************************************
 #***	Python End
 #***********************************************************************************************

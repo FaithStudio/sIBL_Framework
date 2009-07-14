@@ -171,6 +171,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.Cancel_pushButton.setText( "Close" )
 		self.Download_progressBar.hide()
 		self.Download_progressBar.setValue( 0 )
+
 		self.Current_File_label.setText( QString( self.cFTP_Thread.cFTP.cProgressMessage[len( self.cFTP_Thread.cFTP.cProgressMessage ) - 1] ) )
 
 		self.cSIBL_GUI_Instance.cFTP_Session_Active = False
@@ -301,8 +302,6 @@ class sIBL_FTP_Worker( QThread ):
 						if cDownloads[2] is "Files":
 							cLogger.debug( "> Launching FTP Worker Files Command." )
 							self.cFTP.setLocalFile( cDownloads[0], cDownloads[1] )
-
-				self.cFTP.closeConnection()
 
 #***********************************************************************************************
 #***	Python End
