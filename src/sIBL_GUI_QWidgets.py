@@ -55,10 +55,7 @@
 #***********************************************************************************************
 #***	External Imports
 #***********************************************************************************************
-import ftplib
 import logging
-import os
-import platform
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -66,7 +63,6 @@ from PyQt4.QtGui import *
 #***	Internal Imports
 #***********************************************************************************************
 import sIBL_Common
-import sIBL_Exceptions
 
 #***********************************************************************************************
 #***	Global Variables
@@ -82,6 +78,10 @@ class Variable_QPushButton( QPushButton ) :
 	def __init__( self, cState, cColors, cButtonText, cParent = None ) :
 		'''
 		This Method Initializes The Class.
+
+		@param cState: Current Button State. ( Boolean )
+		@param cColors: Button Colors. ( Tuple )
+		@param cButtonText: Button Texts. ( Tuple )
 		'''
 
 		cLogger.debug( "> Initializing Variable_QPushButton() Class." )
@@ -95,7 +95,7 @@ class Variable_QPushButton( QPushButton ) :
 		self.trueColor = cColors[0]
 		self.falseColor = cColors[1]
 
-		# Initialising The Button
+		# Initializing The Button
 		self.setCheckable( True )
 		if self.cState :
 			self.setTrueState()

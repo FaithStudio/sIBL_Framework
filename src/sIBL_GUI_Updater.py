@@ -165,6 +165,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 			self.Get_Latest_Templates_pushButton.show()
 
 		self.Templates_tableWidget.clear()
+		self.Templates_tableWidget.setEditTriggers( QAbstractItemView.NoEditTriggers )
 		self.Templates_tableWidget.setSortingEnabled( False )
 		self.Templates_tableWidget.setRowCount( len( cTemplatesInfos ) )
 		self.Templates_tableWidget.setColumnCount( 5 )

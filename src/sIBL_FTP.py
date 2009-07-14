@@ -61,6 +61,7 @@ import os
 import platform
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from copy import deepcopy
 
 #***********************************************************************************************
 #***	Internal Imports
@@ -131,16 +132,17 @@ class sIBL_FTP( object ):
 		@return: Connection State ( Boolean )
 		'''
 
-		self.setProgressMessage( "Connecting To '%s'" % cHost, cWaitTime = 0.75 )
+		if not self.closeConnectionState :
+			self.setProgressMessage( "Connecting To '%s'" % cHost, cWaitTime = 0.75 )
 
-		try :
-			self.cFTP.connect( cHost, cPort )
-		except Exception, cError:
-			sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setConnection() Method | '%s' Connection Failed !" % cHost, True )
-			self.setProgressMessage( "Connection On '%s' Failed !" % cHost )
-			return False
+			try :
+				self.cFTP.connect( cHost, cPort )
+			except Exception, cError:
+				sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setConnection() Method | '%s' Connection Failed !" % cHost, True )
+				self.setProgressMessage( "Connection On '%s' Failed !" % cHost )
+				return False
 
-		return True
+			return True
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLogin( self, cLogin, cPassword ) :
@@ -152,19 +154,20 @@ class sIBL_FTP( object ):
 		@return: Login State ( Boolean )
 		'''
 
-		cLogger.debug( " > Login : '%s'.", cLogin )
-		cLogger.debug( " > Password : '%s'.", cPassword )
+		if not self.closeConnectionState :
+			cLogger.debug( " > Login : '%s'.", cLogin )
+			cLogger.debug( " > Password : '%s'.", cPassword )
 
-		self.setProgressMessage( "Login On FTP !", cWaitTime = 0.75 )
+			self.setProgressMessage( "Login On FTP !", cWaitTime = 0.75 )
 
-		try :
-			self.cFTP.login( cLogin, cPassword )
-		except Exception, cError:
-			sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setConnection() Method | Login Failed !", True )
-			self.setProgressMessage( "Login Failed !" )
-			return False
+			try :
+				self.cFTP.login( cLogin, cPassword )
+			except Exception, cError:
+				sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setConnection() Method | Login Failed !", True )
+				self.setProgressMessage( "Login Failed !" )
+				return False
 
-		return True
+			return True
 
 	@sIBL_Common.sIBL_Execution_Call
 	def recursiveWalker( self, cWorkingDirectory ) :
@@ -175,7 +178,6 @@ class sIBL_FTP( object ):
 		'''
 
 		if not self.closeConnectionState :
-
 			self.cFTP.cwd( cWorkingDirectory )
 
 			self.setProgressMessage( "Listing Directory : '%s'." % cWorkingDirectory )
@@ -194,8 +196,6 @@ class sIBL_FTP( object ):
 			for cSubDirectory in cSubDirectories:
 				cLogger.debug( " > Entering : '%s'.", cSubDirectory )
 				self.recursiveWalker( cSubDirectory )
-		else :
-			return False
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getListing( self ) :
@@ -205,42 +205,43 @@ class sIBL_FTP( object ):
 		@return cDirectories, cFiles: Directories And Files Dictionaries Of The Current FTP Directory. ( Dictionaries )
 		'''
 
-		cDirectories, cFiles = {}, {}
-		cListing = []
-		self.cFTP.retrlines( 'LIST', cListing.append )
-		cLogger.debug( " > Current Server Listing : '%s'.", cListing )
-		for cLine in cListing:
-			cTokens = cLine.split( None, 8 )
+		if not self.closeConnectionState :
+			cDirectories, cFiles = {}, {}
+			cListing = []
+			self.cFTP.retrlines( 'LIST', cListing.append )
+			cLogger.debug( " > Current Server Listing : '%s'.", cListing )
+			for cLine in cListing:
+				cTokens = cLine.split( None, 8 )
 
-			if len( cTokens ) < 6:
-				continue
+				if len( cTokens ) < 6:
+					continue
 
-			cItemName = cTokens[8].strip()
+				cItemName = cTokens[8].strip()
 
-			if cItemName in ( '.', '..' ):
-				continue
+				if cItemName in ( '.', '..' ):
+					continue
 
-			cSymlink = None
-			i = cItemName.find( " -> " )
-			if i >= 0:
-				cSymlink = cItemName[i + 4:]
-				cItemName = cItemName[:i]
+				cSymlink = None
+				i = cItemName.find( " -> " )
+				if i >= 0:
+					cSymlink = cItemName[i + 4:]
+					cItemName = cItemName[:i]
 
-			cSize = int( cTokens[4] )
+				cSize = int( cTokens[4] )
 
-			cDate = ( cTokens[5], cTokens[6], cTokens[7] )
+				cDate = ( cTokens[5], cTokens[6], cTokens[7] )
 
-			cMode = cTokens[0]
+				cMode = cTokens[0]
 
-			if cMode[0] == 'd':
-				cDirectories[ cItemName ] = ( cSize, cMode, cDate, cSymlink )
-			else:
-				cFiles[ cItemName ] = ( cSize, cMode, cDate, cSymlink )
+				if cMode[0] == 'd':
+					cDirectories[ cItemName ] = ( cSize, cMode, cDate, cSymlink )
+				else:
+					cFiles[ cItemName ] = ( cSize, cMode, cDate, cSymlink )
 
-		cLogger.debug( " > Current Directories : '%s'.", cDirectories.keys() )
-		cLogger.debug( " > Current Files : '%s'.", cFiles.keys() )
+			cLogger.debug( " > Current Directories : '%s'.", cDirectories.keys() )
+			cLogger.debug( " > Current Files : '%s'.", cFiles.keys() )
 
-		return cDirectories, cFiles
+			return cDirectories, cFiles
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalDirectory( self, cLocalDirectory ) :
@@ -251,17 +252,18 @@ class sIBL_FTP( object ):
 		@return: Success Of The Creation ( Boolean )
 		'''
 
-		if not os.path.exists( cLocalDirectory ):
-			try:
-				cLogger.debug( " > Creating Directory Tree : '%s'.", cLocalDirectory )
-				os.makedirs( cLocalDirectory )
+		if not self.closeConnectionState :
+			if not os.path.exists( cLocalDirectory ):
+				try:
+					cLogger.debug( " > Creating Directory Tree : '%s'.", cLocalDirectory )
+					os.makedirs( cLocalDirectory )
+					return True
+				except Exception, cError:
+					sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setLocalDirectory() Method | '%s' Creation Failed !" % cLocalDirectory )
+					return False
+			else:
+				cLogger.debug( " > '%s' Directory Tree Already Exist, Skipping Creation !", cLocalDirectory )
 				return True
-			except Exception, cError:
-				sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setLocalDirectory() Method | '%s' Creation Failed !" % cLocalDirectory )
-				return False
-		else:
-			cLogger.debug( " > '%s' Directory Tree Already Exist, Skipping Creation !", cLocalDirectory )
-			return True
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalFile( self, cRemoteFile, cLocalFilePath ) :
@@ -271,18 +273,18 @@ class sIBL_FTP( object ):
 		@param cRemoteFile: Remote File To Download. ( String )
 		@param cLocalFilePath: Local Target File. ( String )
 		'''
+		if not self.closeConnectionState :
+			try:
+				cLogger.debug( " > Starting Remote File Download From '%s' To '%s' Local File.", cRemoteFile, cLocalFilePath )
+				cLocalFile = open( cLocalFilePath, "wb" )
+				self.cFTP.retrbinary( 'RETR ' + cRemoteFile, cLocalFile.write )
+				cLocalFile.close()
 
-		try:
-			cLogger.debug( " > Starting Remote File Download From '%s' To '%s' Local File. ", cRemoteFile, cLocalFilePath )
-			cLocalFile = open( cLocalFilePath, "wb" )
-			self.cFTP.retrbinary( 'RETR ' + cRemoteFile, cLocalFile.write )
-			cLocalFile.close()
+				return True
 
-			return True
-
-		except Exception, cError:
-			sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setLocalFile() Method | '%s' Creation Failed !" % cLocalFilePath, True )
-			return False
+			except Exception, cError:
+				sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setLocalFile() Method | '%s' Creation Failed !" % cLocalFilePath, True )
+				return False
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getRemoteTree( self, cRemoteDirectory, cLocalDirectory, cIgnoreList ) :
@@ -293,30 +295,48 @@ class sIBL_FTP( object ):
 		@param cLocalDirectory: Local Target Directory. ( String )
 		@param cIgnoreList: Current Ignore List. ( List )
 		'''
+		if not self.closeConnectionState :
+			if self.setLocalDirectory( cLocalDirectory ):
 
-		if self.setLocalDirectory( cLocalDirectory ) and not self.closeConnectionState :
+				cLogger.debug( " > Starting Remote Tree Download From '%s' To '%s' Local Directory.", cRemoteDirectory, cLocalDirectory )
 
-			cLogger.debug( " > Starting Remote Tree Download From '%s' To '%s' Local Directory.", cRemoteDirectory, cLocalDirectory )
+				self.cFTP.cwd( cRemoteDirectory )
+				self.cWalkerFilesList = []
+				self.cDownloadProgress = None
 
-			self.cFTP.cwd( cRemoteDirectory )
-			self.cWalkerFilesList = []
-			self.cDownloadProgress = None
+				if self.closeConnectionState :
+					return
+				self.setProgressMessage( "Gathering Files List !" )
 
-			self.setProgressMessage( "Gathering Files List !" )
+				self.recursiveWalker( cRemoteDirectory )
 
-			self.recursiveWalker( cRemoteDirectory )
+				if self.closeConnectionState :
+					return
+				self.setProgressMessage( "Gathering Done !", cWaitTime = 1.0 )
 
-			self.setProgressMessage( "Gathering Done !", cWaitTime = 1.0 )
-			self.setProgressMessage( "Starting Download !", cWaitTime = 1.0 )
+				if cIgnoreList is not None:
+					cFilesList = deepcopy( self.cWalkerFilesList )
+					for cFile in self.cWalkerFilesList :
+						cFileBaseName = os.path.basename( cFile )
+						cFileBaseName = cFileBaseName.split( "." )
+						if cFileBaseName[0] in cIgnoreList :
+							cLogger.debug( " > Popping '%s' From Download List.", cFile )
+							cFilesList.remove( cFile )
 
-			cStoredLocalDirectories = []
+					self.cWalkerFilesList = cFilesList
 
-			self.cDownloadProgress = 0
-			for cFile in self.cWalkerFilesList :
-				cFileBaseName = os.path.basename( cFile )
-				cFileBaseName = cFileBaseName.split( "." )
-				if cFileBaseName[0] not in cIgnoreList :
-					if not self.closeConnectionState :
+				if len( self.cWalkerFilesList ) != 0 :
+
+					if self.closeConnectionState :
+						return
+					self.setProgressMessage( "Starting Download !", cWaitTime = 1.0 )
+
+					cStoredLocalDirectories = []
+					self.cDownloadProgress = 0
+					for cFile in self.cWalkerFilesList :
+
+						if self.closeConnectionState :
+							return
 						self.setProgressMessage( "Downloading : '%s'" % os.path.basename( cFile ) )
 
 						cRemoteFileDirectory = os.path.dirname( cFile )
@@ -334,18 +354,14 @@ class sIBL_FTP( object ):
 
 						cLocalFilePath = os.path.join( os.path.abspath( cLocalDirectory ), cOutputDirectory, os.path.basename( cFile ) )
 						self.setLocalFile( cFile, cLocalFilePath )
+
 						self.cDownloadProgress += 1
-					else:
-						return False
+
+					self.setProgressMessage( "Downloading Done !", cWaitTime = 1.0 )
+					self.cDownloadProgress = -1
 				else:
-					cLogger.debug( " > '%s' Is In Ignore List, Skipped !", cFile )
-
-			self.setProgressMessage( "Downloading Done !", cWaitTime = 1.0 )
-			self.cDownloadProgress = None
-
-			return True
-		else:
-			return False
+					self.setProgressMessage( "Nothing To Download !", cWaitTime = 1.0 )
+					self.cDownloadProgress = -1
 
 #***********************************************************************************************
 #***	Python End
