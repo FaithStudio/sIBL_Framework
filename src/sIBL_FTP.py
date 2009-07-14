@@ -306,7 +306,7 @@ class sIBL_FTP( object ):
 
 				if self.closeConnectionState :
 					return
-				self.setProgressMessage( "Gathering Files List !" )
+				self.setProgressMessage( "Gathering Files List !", cWaitTime = 0.5 )
 
 				self.recursiveWalker( cRemoteDirectory )
 

@@ -71,7 +71,6 @@ import sIBL_Common
 import sIBL_Common_Settings
 import sIBL_Exceptions
 import sIBL_GUI_FTP
-import sIBL_GUI_Message
 import sIBL_GUI_QWidgets
 import sIBL_GUI_Settings
 import sIBL_Parser
@@ -391,7 +390,7 @@ class sIBL_Online_Update( QObject ):
 			else :
 				self.deleteLocalReleaseFile()
 				if self.showInfoMessage :
-					sIBL_GUI_Message.sIBL_GUI_Message( "Information", "Updater", "Your sIBL_GUI Release Is Up To Date !" )
+					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Information", "Updater", "Your sIBL_GUI Release Is Up To Date !" )
 				else :
 					cLogger.info( "sIBL_GUI | Your sIBL_GUI Release Is Up To Date !" )
 		else :

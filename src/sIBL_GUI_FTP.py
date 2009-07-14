@@ -64,7 +64,7 @@ from PyQt4.QtGui import *
 #***********************************************************************************************
 import sIBL_Common
 import sIBL_FTP
-import sIBL_GUI_Message
+import sIBL_GUI_QWidgets
 import sIBL_UI_FTP
 
 #***********************************************************************************************
@@ -217,7 +217,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 
 			self.startWorkerThread()
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "FTP Session Already Active !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "FTP Session Already Active !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Cancel_pushButton_OnClicked( self ):

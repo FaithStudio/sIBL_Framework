@@ -56,6 +56,7 @@
 #***	External Imports
 #***********************************************************************************************
 import logging
+import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -149,6 +150,46 @@ class Variable_QPushButton( QPushButton ) :
 
 		self.setChecked( False )
 		self.setText( self.cFalseText )
+
+@sIBL_Common.sIBL_Execution_Call
+def sIBL_GUI_Message( cMessageType, cTitle, cMessage ):
+	'''
+	This Function Provides A Fast GUI Message Box.
+	'''
+
+	cLogger.debug( "> Launching sIBL_GUI_Message()." )
+	cLogger.debug( "> Message Type : '%s'.", cMessageType )
+	cLogger.debug( "> Title : '%s'.", cTitle )
+	cLogger.debug( "> Message : '%s'.", cMessage )
+
+	cMessageBox = QMessageBox()
+	cMessageBox.setWindowTitle( "sIBL_GUI | " + cTitle )
+	cMessageBox.setText( cMessage )
+
+	if cMessageType == "Critical" :
+		cMessageBox.setIcon( QMessageBox.Critical )
+		cLogger.critical( cMessage )
+	elif cMessageType == "Error" :
+		cMessageBox.setIcon( QMessageBox.Critical )
+		cLogger.error( "'%s'.", "sIBL_GUI | " + cMessage )
+	elif cMessageType == "Warning" :
+		cMessageBox.setIcon( QMessageBox.Warning )
+		cLogger.warning( "'%s'.", "sIBL_GUI | " + cMessage )
+	elif cMessageType == "Information" :
+		cMessageBox.setIcon( QMessageBox.Information )
+		cLogger.info( "'%s'.", "sIBL_GUI | " + cMessage )
+	cMessageBox.setWindowFlags( Qt.WindowStaysOnTopHint )
+	cMessageBox.exec_()
+
+@sIBL_Common.sIBL_Execution_Call
+def sIBL_Standalone_Message( cMessageType, cCaption, cMessage ):
+	'''
+	This Function Provides A Standalone Message Box.
+	'''
+
+	from PyQt4 import QtGui
+	QtGui.QApplication( sys.argv )
+	sIBL_GUI_Message( cMessageType, cCaption, cMessage )
 
 #***********************************************************************************************
 #***	Python End

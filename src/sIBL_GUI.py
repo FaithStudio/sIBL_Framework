@@ -79,7 +79,6 @@ import sIBL_Common_Settings
 import sIBL_Exceptions
 import sIBL_GUI_About
 import sIBL_GUI_FTP
-import sIBL_GUI_Message
 import sIBL_GUI_QWidgets
 import sIBL_GUI_Settings
 import sIBL_GUI_Updater
@@ -210,6 +209,7 @@ class Marker_QGraphicsItem( QGraphicsItem ) :
 
 		@param cEvent: QEvent ( QEvent )
 		'''
+
 		pass
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -748,7 +748,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			self.WorldMap_QGraphicsView = WorldMap_QGraphicsView( self, cWorldMap_Texture_Path, 670, 320 )
 			self.GPS_Map_Page_gridLayout.addWidget( self.WorldMap_QGraphicsView )
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Critical", "Critical", cWorldMap_Texture_Path + " Not Found, Aborting Execution !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Critical", "Critical", cWorldMap_Texture_Path + " Not Found, Aborting Execution !" )
 			sIBL_Common.sIBL_Exit( 1, cLogger, ( cConsoleHandler, cFileHandler ) )
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -994,12 +994,8 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		cLogger.debug( "> Initializing : '%s'.", "self.cGlobalTemplates" )
 		self.cGlobalTemplates = self.getGlobalTemplatesExtended()
-		cLogger.debug( "> Clearing : '%s'.", "Software_comboBox, Template_comboBox" )
-		self.Software_comboBox.clear()
-		self.Template_comboBox.clear()
-		if self.cGlobalTemplates is not None :
-			self.setSoftwareComboBox()
-			self.setTemplateComboBox()
+		self.setSoftwareComboBox()
+		self.setTemplateComboBox()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getGlobalTemplates( self ) :
@@ -1091,7 +1087,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cTableWidget.hide()
 
 		cFileTemplateAttributes = cTemplateFile.getSectionAttributes( cSection )
-		cTableWidget.clear()
+		# cTableWidget.clear()
 		cTableWidget.setRowCount( len( cFileTemplateAttributes ) )
 		cTableWidget.setColumnCount( 2 )
 		cTableWidget.hideColumn( 0 )
@@ -1164,10 +1160,26 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			self.Remote_Connection_Options_frame.hide()
 
 	@sIBL_Common.sIBL_Execution_Call
+	def resetQTableWidget( self, cTableWidget ) :
+		'''
+		This Method Reset The Provided Table Widget.
+
+		@param cTableWidget: Current Table Widget ( QTableWidget )
+		'''
+
+		cLogger.debug( "> Clearing '%s' QTableWidget.", cTableWidget )
+		cTableWidget.clear()
+		cTableWidget.setRowCount( 0 )
+		cTableWidget.setColumnCount( 0 )
+
+	@sIBL_Common.sIBL_Execution_Call
 	def setTemplateOptionsAndInfosWidgets( self, *__None__ ) :
 		'''
 		This Method Sets Templates Widgets And Other Stuff.
 		'''
+
+		self.resetQTableWidget( self.Common_Attributes_tableWidget )
+		self.resetQTableWidget( self.Additional_Attributes_tableWidget )
 
 		for cTemplate in self.cGlobalTemplates :
 			try :
@@ -1205,8 +1217,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						self.setPortWidgetsVisibility( False )
 						self.Remote_Connection_groupBox.hide()
 			except :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "'" + cTemplate + "' File Seems To Be Corrupted And Will Be Ignored !" )
-
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "'" + cTemplate + "' File Seems To Be Corrupted And Will Be Ignored !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setEditedSIBLInfos( self ) :
@@ -1234,7 +1245,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			else:
 				self.Shot_Date_groupBox.hide()
 		else:
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Current sIBL File Does'nt Exist Anymore Or It's Name Changed, Please Choose Another One !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Current sIBL File Does'nt Exist Anymore Or It's Name Changed, Please Choose Another One !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 0 )
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -1391,7 +1402,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						cLogFileContent = cLogFile.getFileContent( asString = True )
 						cLogger.info( cLogFileContent[11:-1] )
 					else :
-						sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "sIBL_Framework Log File Not Found, Loader Script Output Failed !" )
+						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "sIBL_Framework Log File Not Found, Loader Script Output Failed !" )
 						return False
 
 					cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
@@ -1399,23 +1410,23 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
 
 					if cSIBL_FrameworkProcess.exitCode() == 0 :
-						sIBL_GUI_Message.sIBL_GUI_Message( "Information", "Information", "Loader Script Output Done !" )
+						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Information", "Information", "Loader Script Output Done !" )
 						return True
 					else :
-						sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Loader Script Failed !" )
+						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Loader Script Failed !" )
 						return False
 				else :
-					sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
+					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
 					self.sIBL_GUI_tabWidget.setCurrentIndex( 0 )
 					return False
 			else :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Valid Template Directory In Preferences Tab !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Valid Template Directory In Preferences Tab !" )
 				self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
 				self.Preferences_toolBox.setCurrentIndex( 0 )
 
 				return False
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select An Existing sIBL_Framework Executable !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select An Existing sIBL_Framework Executable !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
 			self.Preferences_toolBox.setCurrentIndex( 0 )
 			return False
@@ -1441,7 +1452,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cPath = os.path.abspath( str( self.Templates_Path_lineEdit.text() ) )
 			self.exploreProvidedFolder( "Opening Current Templates Folder With", cPath )
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Valid Template Directory In Preferences Tab !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Valid Template Directory In Preferences Tab !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
 			self.Preferences_toolBox.setCurrentIndex( 0 )
 
@@ -1491,7 +1502,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cEditProcess = QProcess()
 					cEditProcess.startDetached( cEditCommand )
 				else :
-					sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Custom Text Editor In Preferences Tab !" )
+					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Custom Text Editor In Preferences Tab !" )
 					self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
 					self.Preferences_toolBox.setCurrentIndex( 0 )
 
@@ -1507,7 +1518,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cEditProcess = QProcess()
 					cEditProcess.startDetached( cEditCommand )
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Valid Template Directory In Preferences Tab !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Valid Template Directory In Preferences Tab !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
 			self.Preferences_toolBox.setCurrentIndex( 0 )
 
@@ -1537,11 +1548,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						cSIBLeditProcess = QProcess()
 						cSIBLeditProcess.startDetached( "\"" + cSIBLEditPath + "\"" + " " + "\"" + cSIBLPath + "\"" )
 			else :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Choose An sIBL Edit Executable !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Choose An sIBL Edit Executable !" )
 				self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
 				self.Preferences_toolBox.setCurrentIndex( 0 )
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 0 )
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -1555,7 +1566,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cPath = os.path.dirname( cSIBLPath )
 			self.exploreProvidedFolder( "Opening Current sIBL Folder With", cPath )
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 0 )
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -1565,9 +1576,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if platform.system() == "Windows":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Your System Doesn't Have A 'TMP' Environment Variable Defined !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Your System Doesn't Have A 'TMP' Environment Variable Defined !" )
 		elif platform.system() == "Linux" or platform.system() == "Darwin":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Your System Doesn't Have A 'TMPDIR' Environment Variable Defined !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Your System Doesn't Have A 'TMPDIR' Environment Variable Defined !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def exploreProvidedFolder( self, cMessage, cFolderPath ) :
@@ -1614,7 +1625,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cBrowserProcess = QProcess()
 				cBrowserProcess.startDetached( cBrowserCommand )
 			else :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Custom Browser In Preferences Tab !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Custom Browser In Preferences Tab !" )
 				self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
 				self.Preferences_toolBox.setCurrentIndex( 0 )
 		elif platform.system() == "Darwin" :
@@ -1672,7 +1683,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 									cLogger.debug( "> Received Back From Application : '%s'", cDataBack )
 									cSocket.close()
 								except :
-									sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Remote Connection Failed On Port : " + str( self.Software_Port_spinBox.value() ) )
+									sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Remote Connection Failed On Port : " + str( self.Software_Port_spinBox.value() ) )
 									# self.sIBL_GUI_dockWidget.show()
 									# raise
 								break
@@ -1686,14 +1697,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 										cLogger.debug( "> Current Connection Command : '%s'.", cConnectionCommand )
 										cConnection.ExecuteSIBLLoaderScript( cConnectionCommand )
 									except:
-										sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Remote Connection On Win32 OLE Server '" + sIBL_Parser.sIBL_GetExtraAttributeComponents( cRemoteConnectionAttributes["Remote Connection|TargetApplication"], "Value" ) + "' Failed !" )
+										sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Remote Connection On Win32 OLE Server '" + sIBL_Parser.sIBL_GetExtraAttributeComponents( cRemoteConnectionAttributes["Remote Connection|TargetApplication"], "Value" ) + "' Failed !" )
 										# self.sIBL_GUI_dockWidget.show()
 										# raise
 									break
 								else:
-									sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Win32 OLE Server Remote Connection Is Not Supported Under Linux !" )
+									sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Win32 OLE Server Remote Connection Is Not Supported Under Linux !" )
 					else:
-						sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Target 3D Package Does'nt Support Socket Connection !" )
+						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Target 3D Package Does'nt Support Socket Connection !" )
 		else :
 			self.setTemporaryVariableErrorMessage()
 
@@ -1811,7 +1822,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if not os.path.exists( os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) ) ) and str( self.sIBL_Framework_Path_lineEdit.text() ) != "":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Invalid sIBL_Framework Executable File !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Invalid sIBL_Framework Executable File !" )
 			# Restoring Preferences.
 			cLogger.debug( "> %s", "Restoring Preferences !" )
 			self.setSIBL_FrameworkPathlineEdit()
@@ -1826,7 +1837,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if not os.path.exists( os.path.abspath( str( self.sIBLedit_Path_lineEdit.text() ) ) ) and str( self.sIBLedit_Path_lineEdit.text() ) != "":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Invalid sIBLedit Executable File !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Invalid sIBLedit Executable File !" )
 			# Restoring Preferences.
 			cLogger.debug( "> %s", "Restoring Preferences !" )
 			self.setSIBLeditPathLineEdit()
@@ -1855,7 +1866,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if not os.path.exists( os.path.abspath( str( self.Templates_Path_lineEdit.text() ) ) ) and str( self.Templates_Path_lineEdit.text() ) != "":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Invalid Templates Directory !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Invalid Templates Directory !" )
 			# Restoring Preferences.
 			cLogger.debug( "> %s", "Restoring Preferences !" )
 			self.setTemplatesPathLineEdit()
@@ -1894,7 +1905,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if not os.path.exists( os.path.abspath( str( self.Help_Files_Path_lineEdit.text() ) ) ) and str( self.Help_Files_Path_lineEdit.text() ) != "":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Invalid Help Files Path !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Invalid Help Files Path !" )
 			# Restoring Preferences.
 			cLogger.debug( "> %s", "Restoring Preferences !" )
 			self.setHelpFilesPathLineEdit()
@@ -2019,12 +2030,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						cLogger.debug( "> %s", "Saving Preferences !" )
 						self.setCollectionsPaths()
 					else :
-						sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Directory Already Exists In Global Collection !" )
+						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Chosen Directory Already Exists In Global Collection !" )
 						# Restoring Paths From Stored Preferences.
 						cLogger.debug( "> %s", "Restoring Preferences !" )
 						self.setCollectionsPathsTableWidget()
 				else :
-					sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Collection Path Is Not Valid !" )
+					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Chosen Collection Path Is Not Valid !" )
 					# Restoring Paths From Stored Preferences.
 					cLogger.debug( "> %s", "Restoring Preferences !" )
 					self.setCollectionsPathsTableWidget()
@@ -2036,7 +2047,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cLogger.debug( "> %s", "Saving Preferences !" )
 					self.setCollectionsPaths()
 				else :
-					sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Collection Name Already Exists In Global Collection !" )
+					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Chosen Collection Name Already Exists In Global Collection !" )
 					# Restoring Paths From Stored Preferences.
 					cLogger.debug( "> %s", "Restoring Preferences !" )
 					self.setCollectionsPathsTableWidget()
@@ -2073,9 +2084,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						cLogger.debug( "> %s", "Saving Preferences !" )
 						self.setCollectionsPaths()
 					else :
-						sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Directory Already Exists In Global Collection !" )
+						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Chosen Directory Already Exists In Global Collection !" )
 			else :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Collection Name Already Exists In Global Collection !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Chosen Collection Name Already Exists In Global Collection !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Edit_Collection_pushButton_OnClicked( self ) :
@@ -2085,7 +2096,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		cSelectedItems = self.Collections_Paths_tableWidget.selectedItems()
 		if len( cSelectedItems ) > 1 :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "Multiple Items Selected ! Only The First One Will Be Edited !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Multiple Items Selected ! Only The First One Will Be Edited !" )
 		if len( cSelectedItems ) != 0 :
 			cDirectory = QFileDialog.getExistingDirectory( self, self.tr( "Edit Collection Directory :" ), QDir.currentPath() )
 			if cDirectory != "" :
@@ -2103,7 +2114,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cLogger.debug( "> %s", "Saving Preferences !" )
 					self.setCollectionsPaths()
 				else :
-					sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Chosen Directory Already Exists In Global Collection !" )
+					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Chosen Directory Already Exists In Global Collection !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Add_pushButton_OnClicked( self ) :
@@ -2174,7 +2185,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if not os.path.exists( os.path.abspath( str( self.Custom_Text_Editor_Path_lineEdit.text() ) ) ) and str( self.Custom_Text_Editor_Path_lineEdit.text() ) != "":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Invalid Custom Text Editor Executable File !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Invalid Custom Text Editor Executable File !" )
 			# Restoring Preferences.
 			cLogger.debug( "> %s", "Restoring Preferences !" )
 			self.setCustomTextEditorPathLineEdit()
@@ -2189,7 +2200,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if not os.path.exists( os.path.abspath( str( self.Custom_File_Browser_Path_lineEdit.text() ) ) ) and str( self.Custom_File_Browser_Path_lineEdit.text() ) != "":
-			sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Invalid Custom File Browser Executable File !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Invalid Custom File Browser Executable File !" )
 			# Restoring Preferences.
 			cLogger.debug( "> %s", "Restoring Preferences !" )
 			self.setCustomFileBrowserPathLineEdit()
@@ -2237,7 +2248,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			self.cFTP_UI.setWindowTitle( cWindowTitle )
 			self.cFTP_UI.show()
 		else :
-			sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "FTP Session Already Active !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "FTP Session Already Active !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Get_Help_pushButton_OnClicked( self ) :
@@ -2365,42 +2376,42 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cPathsValid = True
 		if self.sIBL_Framework_Path_lineEdit.text() != "" :
 			if not os.path.exists( os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) ) ) :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Stored sIBL_Framework Path Is Invalid, Resetting Path !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Stored sIBL_Framework Path Is Invalid, Resetting Path !" )
 				cPathsValid = False
 				self.sIBL_Framework_Path_lineEdit.setText( QString( "" ) )
 				sIBL_Set_KeyInSettings( "Settings", "FrameworkPath", "" )
 
 		if self.sIBLedit_Path_lineEdit.text() != "" :
 			if not os.path.exists( os.path.abspath( str( self.sIBLedit_Path_lineEdit.text() ) ) ) :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Stored sIBLedit Path Is Invalid, Reseting Path !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Stored sIBLedit Path Is Invalid, Reseting Path !" )
 				cPathsValid = False
 				self.sIBLedit_Path_lineEdit.setText( QString( "" ) )
 				sIBL_Set_KeyInSettings( "Settings", "sIBLeditPath", "" )
 
 		if self.Help_Files_Path_lineEdit.text() != "" :
 			if not os.path.exists( os.path.abspath( str( self.Help_Files_Path_lineEdit.text() ) ) ) :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Stored Help Files Path Is Invalid, Reseting Path !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Stored Help Files Path Is Invalid, Reseting Path !" )
 				cPathsValid = False
 				self.Help_Files_Path_lineEdit.setText( QString( "" ) )
 				sIBL_Set_KeyInSettings( "Settings", "HelpFilesPath", "" )
 
 		if self.Templates_Path_lineEdit.text() != "" :
 			if not os.path.exists( os.path.abspath( str( self.Templates_Path_lineEdit.text() ) ) ) :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Stored Templates Path Is Invalid, Reseting Path !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Stored Templates Path Is Invalid, Reseting Path !" )
 				cPathsValid = False
 				self.Templates_Path_lineEdit.setText( QString( "" ) )
 				sIBL_Set_KeyInSettings( "Settings", "TemplatesPath", "" )
 
 		if self.Custom_Text_Editor_Path_lineEdit.text() != "" :
 			if not os.path.exists( os.path.abspath( str( self.Custom_Text_Editor_Path_lineEdit.text() ) ) ) :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Stored Custom Text Editor Path Is Invalid, Reseting Path !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Stored Custom Text Editor Path Is Invalid, Reseting Path !" )
 				cPathsValid = False
 				self.Custom_Text_Editor_Path_lineEdit.setText( QString( "" ) )
 				sIBL_Set_KeyInSettings( "Others", "CustomTextEditor", "" )
 
 		if self.Custom_File_Browser_Path_lineEdit.text() != "" :
 			if not os.path.exists( os.path.abspath( str( self.Custom_File_Browser_Path_lineEdit.text() ) ) ) :
-				sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Stored Custom File Browser Path Is Invalid, Reseting Path !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Stored Custom File Browser Path Is Invalid, Reseting Path !" )
 				cPathsValid = False
 				self.Custom_File_Browser_Path_lineEdit.setText( QString( "" ) )
 				sIBL_Set_KeyInSettings( "Others", "CustomFileBrowser", "" )
@@ -2409,7 +2420,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cRowPath = str( self.Collections_Paths_tableWidget.item( row, 1 ).text() )
 			if cRowPath != "" :
 				if not os.path.exists( os.path.abspath( cRowPath ) ) :
-					sIBL_GUI_Message.sIBL_GUI_Message( "Error", "Error", "Stored " + str( self.Collections_Paths_tableWidget.item( row, 0 ).text() ) + " Collection Path Is Invalid, Reseting Path !" )
+					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Stored " + str( self.Collections_Paths_tableWidget.item( row, 0 ).text() ) + " Collection Path Is Invalid, Reseting Path !" )
 					cPathsValid = False
 					self.Collections_Paths_tableWidget.item( row, 1 ).setText( QString( "" ) )
 					self.setCollectionsPaths()
@@ -2616,9 +2627,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 						cCombinedGlobalCollection[sIBL] = cExtendedSIBL
 					except :
-						sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "'" + cCollection[sIBL] + "' File Seems To Be Corrupted And Will Be Ignored !" )
+						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "'" + cCollection[sIBL] + "' File Seems To Be Corrupted And Will Be Ignored !" )
 			else:
-				sIBL_GUI_Message.sIBL_GUI_Message( "Warning", "Warning", "'" + collection + "'" + " Collection Returned No Sets !" )
+				sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "'" + collection + "'" + " Collection Returned No Sets !" )
 		cLogger.debug( "> Current Extended Collection : '%s'.", cCombinedGlobalCollection )
 
 		return cCombinedGlobalCollection
@@ -2807,7 +2818,7 @@ if __name__ == "__main__":
 		if os.path.exists( cSIBL_GUI_LogFile ) :
 			os.remove( cSIBL_GUI_LogFile )
 	except :
-		sIBL_GUI_Message.sIBL_Standalone_Message( "Error", "Error", "'%s' File Is Currently Locked By Another Process, Unpredictable Logging Behavior !" % cSIBL_GUI_LogFile )
+		sIBL_GUI_QWidgets.sIBL_Standalone_Message( "Error", "Error", "'%s' File Is Currently Locked By Another Process, Unpredictable Logging Behavior !" % cSIBL_GUI_LogFile )
 	finally:
 		# Retrieving sIBL_GUI Verbose Level From Settings File.
 		cLogger.debug( "> %s", "Initializing sIBL_GUI !" )
@@ -2835,7 +2846,7 @@ if __name__ == "__main__":
 
 		except Exception, cError:
 			sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_GUI Module | '%s'" % "Failed Accessing The Log File !", True )
-			sIBL_GUI_Message.sIBL_Standalone_Message( "Critical", "Critical", "Exception In sIBL_GUI Module | '%s'" % "Failed Accessing The Log File !" )
+			sIBL_GUI_QWidgets.sIBL_Standalone_Message( "Critical", "Critical", "Exception In sIBL_GUI Module | '%s'" % "Failed Accessing The Log File !" )
 			sIBL_Common.sIBL_Exit( 1, cLogger, ( cConsoleHandler ) )
 
 		cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
