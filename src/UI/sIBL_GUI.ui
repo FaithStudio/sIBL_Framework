@@ -185,8 +185,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>96</width>
-                <height>26</height>
+                <width>596</width>
+                <height>245</height>
                </rect>
               </property>
               <property name="statusTip" >
@@ -407,7 +407,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>126</width>
+                   <width>162</width>
                    <height>263</height>
                   </rect>
                  </property>
@@ -884,7 +884,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>130</width>
+                   <width>94</width>
                    <height>231</height>
                   </rect>
                  </property>
@@ -1623,8 +1623,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>618</width>
-             <height>315</height>
+             <width>413</width>
+             <height>134</height>
             </rect>
            </property>
            <attribute name="label" >
@@ -1947,14 +1947,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../sIBL_GUI.qrc" />
-  <include location="../sIBL_GUI.qrc" />
-  <include location="../sIBL_GUI.qrc" />
-  <include location="../sIBL_GUI.qrc" />
-  <include location="../sIBL_GUI.qrc" />
-  <include location="../sIBL_GUI.qrc" />
-  <include location="../sIBL_GUI.qrc" />
-  <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
  </resources>
