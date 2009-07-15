@@ -1482,18 +1482,21 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cTemplatePath = os.path.abspath( self.getTemplateFilePathFromComboBox().replace( "/" , "\\" ) + "\\" )
 				if str( self.Custom_Text_Editor_Path_lineEdit.text() ) != "" :
 					cLogger.info( "sIBL_GUI | Launching Custom Text Editor On : '%s'.", cTemplatePath )
-					cEditCommand = str( self.Custom_Text_Editor_Path_lineEdit.text() ) + " \"" + cTemplatePath + "\""
+					cEditCommand = "\"" + str( self.Custom_Text_Editor_Path_lineEdit.text() ) + "\"" + " \"" + cTemplatePath + "\""
 				else:
 					cLogger.info( "sIBL_GUI | Launching 'Notepad.exe' On : '%s'.", cTemplatePath )
 					cEditCommand = "notepad.exe " + " \"" + cTemplatePath + "\""
+
+				cLogger.debug( "> Current Edit Command : '%s'.", cEditCommand )
 				cEditProcess = QProcess()
 				cEditProcess.startDetached( cEditCommand )
+
 			elif platform.system() == "Linux":
 				cTemplatePath = os.path.abspath( self.getTemplateFilePathFromComboBox() )
 
 				if str( self.Custom_Text_Editor_Path_lineEdit.text() ) != "" :
 					cLogger.info( "sIBL_GUI | Launching Custom Text Editor On : '%s'.", cTemplatePath )
-					cEditCommand = str( self.Custom_Text_Editor_Path_lineEdit.text() ) + " \"" + cTemplatePath + "\""
+					cEditCommand = "\"" + str( self.Custom_Text_Editor_Path_lineEdit.text() ) + "\"" + " \"" + cTemplatePath + "\""
 				else:
 					cPathVariable = sIBL_Common.sIBL_EnvironmentVariables( "PATH" )
 					cPaths = cPathVariable.getPath()
@@ -1514,6 +1517,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 							break
 
 				if cEditCommand is not None :
+					cLogger.debug( "> Current Edit Command : '%s'.", cEditCommand )
 					cEditProcess = QProcess()
 					cEditProcess.startDetached( cEditCommand )
 				else :
@@ -1525,13 +1529,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cTemplatePath = os.path.abspath( self.getTemplateFilePathFromComboBox() )
 				if str( self.Custom_Text_Editor_Path_lineEdit.text() ) != "" :
 					cLogger.info( "sIBL_GUI | Launching Custom Text Editor On : '%s'.", cTemplatePath )
-					cEditCommand = str( self.Custom_Text_Editor_Path_lineEdit.text() ) + " \"" + cTemplatePath + "\""
+					cEditCommand = "\"" + str( self.Custom_Text_Editor_Path_lineEdit.text() ) + "\"" + " \"" + cTemplatePath + "\""
 				else:
 					cLogger.info( "sIBL_GUI | Launching 'TextEdit' On : '%s'.", cTemplatePath )
 					cEditCommand = "/Applications/TextEdit.app/Contents/MacOS/TextEdit " + " \"" + cTemplatePath + "\""
-				if cEditCommand is not None :
-					cEditProcess = QProcess()
-					cEditProcess.startDetached( cEditCommand )
+
+				cLogger.debug( "> Current Edit Command : '%s'.", cEditCommand )
+				cEditProcess = QProcess()
+				cEditProcess.startDetached( cEditCommand )
 		else :
 			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select A Valid Template Directory In Preferences Tab !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 2 )
@@ -1608,10 +1613,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cFolderPath = cFolderPath.replace( "/", "\\" )
 			if str( self.Custom_File_Browser_Path_lineEdit.text() ) != "" :
 				cLogger.info( "sIBL_GUI | " + cMessage + " Custom File Browser : '%s'.", cFolderPath )
-				cExploreCommand = str( self.Custom_File_Browser_Path_lineEdit.text() ) + " \"" + cFolderPath + "\""
+				cExploreCommand = "\"" + str( self.Custom_File_Browser_Path_lineEdit.text() ) + "\"" + " \"" + cFolderPath + "\""
 			else:
 				cLogger.info( "sIBL_GUI | " + cMessage + " 'explorer.exe' : '%s'.", cFolderPath )
 				cExploreCommand = "explorer.exe " + " \"" + cFolderPath + "\""
+
+			cLogger.debug( "> Current Explore Command : '%s'.", cExploreCommand )
 			cExplorerProcess = QProcess()
 			cExplorerProcess.startDetached( cExploreCommand )
 		elif platform.system() == "Linux":
@@ -1630,13 +1637,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						for cPath in cPathsTokens:
 							if os.path.exists( os.path.join( cPath, cBrowser ) ) :
 								cLogger.info( "sIBL_GUI | " + cMessage + " '%s' : '%s'.", cBrowser, cFolderPath )
-								cBrowserCommand = os.path.join( cPath, cBrowser ) + " " + cFolderPath
+								cBrowserCommand = "\"" + os.path.join( cPath, cBrowser ) + "\"" + " " + cFolderPath
 								cBrowserFound = True
 								break
 					else :
 						break
 
 			if cBrowserCommand is not None :
+				cLogger.debug( "> Current Explore Command : '%s'.", cExploreCommand )
 				cBrowserProcess = QProcess()
 				cBrowserProcess.startDetached( cBrowserCommand )
 			else :
@@ -1646,14 +1654,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		elif platform.system() == "Darwin" :
 			if str( self.Custom_File_Browser_Path_lineEdit.text() ) != "" :
 				cLogger.info( "sIBL_GUI | " + cMessage + " Custom File Browser : '%s'.", cFolderPath )
-				cBrowserCommand = str( self.Custom_File_Browser_Path_lineEdit.text() ) + " " + cFolderPath
+				cBrowserCommand = "\"" + str( self.Custom_File_Browser_Path_lineEdit.text() ) + "\"" + " " + cFolderPath
 			else:
 				cLogger.info( "sIBL_GUI | " + cMessage + " 'Finder' : '%s'.", cFolderPath )
 				cBrowserCommand = "open " + " \"" + cFolderPath + "\""
 
-			if cBrowserCommand is not None :
-				cBrowserProcess = QProcess()
-				cBrowserProcess.startDetached( cBrowserCommand )
+			cLogger.debug( "> Current Explore Command : '%s'.", cExploreCommand )
+			cBrowserProcess = QProcess()
+			cBrowserProcess.startDetached( cBrowserCommand )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Open_Output_Folder_pushButton_OnClicked( self ) :
