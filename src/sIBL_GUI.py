@@ -58,6 +58,7 @@
 import logging
 import os
 import platform
+import re
 import socket
 import sys
 import time
@@ -543,11 +544,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Gathering sIBL Sets." )
 
 		# Collections Initialization.
-		self.initializeCollectionsRelationships()
-
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initializing Thumbnails." )
 		self.Collections_listWidget.setSpacing( 4 )
 		self.Collections_listWidget.setIconSize( QSize( 128, 128 ) )
-		self.setCollectionsListWidget()
+
+		self.initializeCollectionsRelationships()
 
 		# --- sIBL_GUI GPS Map Initialization. ---
 		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initializing GPS Map." )
@@ -964,7 +965,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cToolTip = QString( "<p><b>" + cSIBLAttributes["sIBL Name"] + "</b></p>" + "<p>" + "Author : " + cSIBLAttributes["Author"] + "<br>" + "Location : " + cSIBLAttributes["Location"] + "<br>" + cShotDateString + "<br>" + "Comment : " + cSIBLAttributes["Comment"] + "</p>" )
 
 			cItem.setToolTip( cToolTip )
-			cIcon = QIcon( cSIBLAttributes["Icon Path"] )
+
+			if re.search( "\.[jJ][pP][gG]", cSIBLAttributes["Icon Path"] ) or re.search( "\.[jJ][pP][eE][gG]", cSIBLAttributes["Icon Path"] ) or re.search( "\.[pP][nN][gG]", cSIBLAttributes["Icon Path"] ) :
+				cIcon = QIcon( QPixmap( cSIBLAttributes["Icon Path"] ) )
+			elif re.search( "\.[tT][gG][aA]", cSIBLAttributes["Icon Path"] ) or re.search( "\.[tT][iI][fF]", cSIBLAttributes["Icon Path"] ) or re.search( "\.[tT][iI][fF][fF]", cSIBLAttributes["Icon Path"] ) :
+				cIcon = QIcon( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" )
+			else :
+				cIcon = QIcon( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" )
+
 			cItem.setIcon( cIcon )
 			cLogger.debug( "> Adding '%s' To 'self.Collections_listWidget'.", cSIBLAttributes["sIBL Name"] )
 			self.Collections_listWidget.addItem( cItem )
@@ -1230,7 +1238,14 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			# Special Case Where The sIBL Has Changed Of Name During An Edit In sIBLedit.
 			cLogger.debug( "> Setting sIBL Infos Widgets : '%s'.", "sIBL_Set_groupBox, Preview_label, Comment_label, sIBL_Location_Set_label, sIBL_Author_Set_label" )
 			self.sIBL_Set_groupBox.setTitle( QString( cSIBL["sIBL Name"] ) )
-			self.Preview_label.setPixmap( QPixmap( cSIBL["Icon Path"] ) )
+
+			if re.search( "\.[jJ][pP][gG]", cSIBL["Icon Path"] ) or re.search( "\.[jJ][pP][eE][gG]", cSIBL["Icon Path"] ) or re.search( "\.[pP][nN][gG]", cSIBL["Icon Path"] ) :
+				self.Preview_label.setPixmap( QPixmap( cSIBL["Icon Path"] ) )
+			elif re.search( "\.[tT][gG][aA]", cSIBL["Icon Path"] ) or re.search( "\.[tT][iI][fF]", cSIBL["Icon Path"] ) or re.search( "\.[tT][iI][fF][fF]", cSIBL["Icon Path"] ) :
+				self.Preview_label.setPixmap( QPixmap( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" ) )
+			else :
+				cIcon = QIcon( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" )
+
 			self.Comment_textEdit.setText( QString( cSIBL["Comment"] ) )
 			self.sIBL_Location_Set_label.setText( QString( cSIBL["Location"] ) )
 			self.sIBL_Author_Set_label.setText( QString( cSIBL["Author"] ) )
