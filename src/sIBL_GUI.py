@@ -55,7 +55,6 @@
 #***********************************************************************************************
 #***	External Imports
 #***********************************************************************************************
-import Image
 import logging
 import os
 import platform
@@ -971,6 +970,8 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cIcon = QIcon( QPixmap( cSIBLAttributes["Icon Path"] ) )
 			elif re.search( "\.[tT][gG][aA]", cSIBLAttributes["Icon Path"] ) or re.search( "\.[tT][iI][fF]", cSIBLAttributes["Icon Path"] ) or re.search( "\.[tT][iI][fF][fF]", cSIBLAttributes["Icon Path"] ) :
 				cIcon = QIcon( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" )
+			else :
+				cIcon = QIcon( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" )
 
 			cItem.setIcon( cIcon )
 			cLogger.debug( "> Adding '%s' To 'self.Collections_listWidget'.", cSIBLAttributes["sIBL Name"] )
@@ -1242,6 +1243,8 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				self.Preview_label.setPixmap( QPixmap( cSIBL["Icon Path"] ) )
 			elif re.search( "\.[tT][gG][aA]", cSIBL["Icon Path"] ) or re.search( "\.[tT][iI][fF]", cSIBL["Icon Path"] ) or re.search( "\.[tT][iI][fF][fF]", cSIBL["Icon Path"] ) :
 				self.Preview_label.setPixmap( QPixmap( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" ) )
+			else :
+				cIcon = QIcon( ":/sIBL_GUI/Resources/Thumbnails_Format_Not_Supported_Yet.png" )
 
 			self.Comment_textEdit.setText( QString( cSIBL["Comment"] ) )
 			self.sIBL_Location_Set_label.setText( QString( cSIBL["Location"] ) )
