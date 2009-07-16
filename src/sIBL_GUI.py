@@ -1621,6 +1621,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cLogger.debug( "> Current Explore Command : '%s'.", cExploreCommand )
 			cExplorerProcess = QProcess()
 			cExplorerProcess.startDetached( cExploreCommand )
+
 		elif platform.system() == "Linux":
 			if str( self.Custom_File_Browser_Path_lineEdit.text() ) != "" :
 				cBrowserCommand = str( self.Custom_File_Browser_Path_lineEdit.text() ) + " " + cFolderPath
@@ -1644,7 +1645,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						break
 
 			if cBrowserCommand is not None :
-				cLogger.debug( "> Current Explore Command : '%s'.", cExploreCommand )
+				cLogger.debug( "> Current Browser Command : '%s'.", cBrowserCommand )
 				cBrowserProcess = QProcess()
 				cBrowserProcess.startDetached( cBrowserCommand )
 			else :
@@ -1659,7 +1660,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cLogger.info( "sIBL_GUI | " + cMessage + " 'Finder' : '%s'.", cFolderPath )
 				cBrowserCommand = "open " + " \"" + cFolderPath + "\""
 
-			cLogger.debug( "> Current Explore Command : '%s'.", cExploreCommand )
+			cLogger.debug( "> Current Browser Command : '%s'.", cBrowserCommand )
 			cBrowserProcess = QProcess()
 			cBrowserProcess.startDetached( cBrowserCommand )
 
