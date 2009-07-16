@@ -113,9 +113,6 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		self.greenColor = QColor( 128, 192, 128 )
 		self.redColor = QColor( 192, 128, 128 )
 
-		# Reseting sIBL_GUI Cursor.
-		self.cSIBL_GUI.setCursor( Qt.ArrowCursor )
-
 		# Setting Up The UI.
 		self.sIBL_GUI_groupBox.hide()
 		self.Open_Repository_pushButton.hide()
@@ -389,6 +386,10 @@ class sIBL_Online_Update( QObject ):
 				self.cUI.show()
 			else :
 				self.deleteLocalReleaseFile()
+
+				# Reseting sIBL_GUI Cursor.
+				self.cSIBL_GUI.setCursor( Qt.ArrowCursor )
+
 				if self.showInfoMessage :
 					sIBL_GUI_QWidgets.sIBL_GUI_Message( "Information", "Updater", "Your sIBL_GUI Release Is Up To Date !" )
 				else :
