@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.0.0 | String | Template Release
-Date = @Date | 11 July 2009 | String | Date
+Release = @Release | 1.0.1 | String | Template Release
+Date = @Date | 16 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -11,6 +11,7 @@ Comment = @Comment | This is Maya 2K VRay Dome Light Template. | String | Commen
 
 [sIBL File Attributes]
 Background|BGfile = @BGfile
+Background|BGheight = @BGheight
 Enviroment|EVfile = @EVfile
 Enviroment|EVmulti = @EVmulti
 Enviroment|EVgamma = @EVgamma
@@ -53,6 +54,7 @@ DefaultPort = @DefaultPort | 2048 | Integer | Default Port
 // Template Last Modified : @Date
 // sIBL_Framework
 string $cBackgroundFilePath = "@BGfile";
+int $cBackgroundWidth = @BGheight*2;
 string $cLightingFilePath = "@EVfile";
 float $lightingMultiplier = @EVmulti;
 float $lightingGamma = @EVgamma;
@@ -78,6 +80,7 @@ int $hideLights = @hideLights;
 int $activateLinearWorkflow = @activateLinearWorkflow;
 
 sIBL_Maya_VRay_DLight_Setup($cBackgroundFilePath,
+		$cBackgroundWidth,
 		$cLightingFilePath,
 		$lightingMultiplier,
 		$lightingGamma,
@@ -103,6 +106,7 @@ sIBL_Maya_VRay_DLight_Setup($cBackgroundFilePath,
 		$activateLinearWorkflow);
 
 global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
+			int $cBackgroundWidth,
 			string $cLightingFilePath,
 			float $lightingMultiplier,
 			float $lightingGamma,
@@ -140,7 +144,15 @@ global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
 
 	if ($createFeedBack)
 	{
-		sIBL_Maya_VRay_DLight_Feedback_Creation($cBackgroundFilePath, $feedbackRadius);
+		if($cBackgroundWidth > 8000)
+			{
+				confirmDialog -title "sIBL_GUI | Information" -message ( "The Background Image Is Too Large To Be Displayed On The Visual Feedback.\nCurrent Environment Image Width : " +  $cBackgroundWidth + " Pixels.\nThe Visual Feedback Will Use The Reflection Image Instead." )  -button "Ok" -defaultButton "Ok";
+				sIBL_Maya_VRay_DLight_Feedback_Creation($cReflectionFilePath, $feedbackRadius);
+			}
+			else
+			{
+				sIBL_Maya_VRay_DLight_Feedback_Creation($cBackgroundFilePath, $feedbackRadius);
+			}
 	}
 
 	if (sIBL_Maya_VRay_DLight_ObjectExists( "sIBL_Feedback", "sIBL_GUI | No Feedback Found, Aborting !\n"))
