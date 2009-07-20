@@ -150,7 +150,7 @@ global proc sIBL_Maya_VRay_Setup(string $cBackgroundFilePath,
 	{
 		if($cBackgroundWidth > 8000)
 		{
-			confirmDialog -title "sIBL_GUI | Information" -message ( "The Environment Image Is Too Large To Be Displayed On The Visual Feedback.\nCurrent Environment Image Width : " +  $cBackgroundWidth + " Pixels.\nThe Visual Feedback Will Use The Reflection Image Instead." )  -button "Ok" -defaultButton "Ok";
+			confirmDialog -title "sIBL_GUI | Information" -message ( "The Background Image Is Too Large To Be Displayed On The Visual Feedback.\nCurrent Environment Image Width : " +  $cBackgroundWidth + " Pixels.\nThe Visual Feedback Will Use The Reflection Image Instead." )  -button "Ok" -defaultButton "Ok";
 			sIBL_Maya_VRay_Feedback_Creation($cReflectionFilePath, $feedbackRadius);
 		}
 		else
