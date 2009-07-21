@@ -62,7 +62,7 @@ import re
 import socket
 import sys
 import time
-if platform.system() == "Windows":
+if platform.system() == "Windows" or platform.system() == "Microsoft":
 	import win32com.client
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -1478,7 +1478,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if self.cGlobalTemplates is not None :
-			if platform.system() == "Windows":
+			if platform.system() == "Windows" or platform.system() == "Microsoft":
 				cTemplatePath = os.path.abspath( self.getTemplateFilePathFromComboBox().replace( "/" , "\\" ) + "\\" )
 				if str( self.Custom_Text_Editor_Path_lineEdit.text() ) != "" :
 					cLogger.info( "sIBL_GUI | Launching Custom Text Editor On : '%s'.", cTemplatePath )
@@ -1563,7 +1563,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			cSIBLPath = self.getSIBLPath()
 			if self.sIBLedit_Path_lineEdit.text() != "" :
 				cSIBLEditPath = os.path.abspath( str( self.sIBLedit_Path_lineEdit.text() ) )
-				if platform.system() == "Windows" or platform.system() == "Linux":
+				if platform.system() == "Windows" or platform.system() == "Microsoft" or platform.system() == "Linux":
 						cLogger.info( "sIBL_GUI | Editing Current sIBL, Launching : '%s'.", cSIBLEditPath + " " + cSIBLPath )
 						cSIBLeditProcess = QProcess()
 						cSIBLeditProcess.startDetached( "\"" + cSIBLEditPath + "\"" + " " + "\"" + cSIBLPath + "\"" )
@@ -1595,7 +1595,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Defines Temporary Variable Error Messages.
 		'''
 
-		if platform.system() == "Windows":
+		if platform.system() == "Windows" or platform.system() == "Microsoft":
 			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Your System Doesn't Have A 'TMP' Environment Variable Defined !" )
 		elif platform.system() == "Linux" or platform.system() == "Darwin":
 			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Your System Doesn't Have A 'TMPDIR' Environment Variable Defined !" )
@@ -1609,7 +1609,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		@param cFolderPath: Folder Path To Be Browser ( String )
 		'''
 
-		if platform.system() == "Windows":
+		if platform.system() == "Windows" or platform.system() == "Microsoft":
 			cFolderPath = cFolderPath.replace( "/", "\\" )
 			if str( self.Custom_File_Browser_Path_lineEdit.text() ) != "" :
 				cLogger.info( "sIBL_GUI | " + cMessage + " Custom File Browser : '%s'.", cFolderPath )
@@ -1713,7 +1713,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 								break
 
 							elif cConnectionType == "Win32" :
-								if platform.system() == "Windows":
+								if platform.system() == "Windows" or platform.system() == "Microsoft":
 									try :
 										cConnection = win32com.client.Dispatch( sIBL_Parser.sIBL_GetExtraAttributeComponents( cRemoteConnectionAttributes["Remote Connection|TargetApplication"], "Value" ) )
 										cConnection._FlagAsMethod( "ExecuteSIBLLoaderScript" )
@@ -2761,7 +2761,7 @@ def sIBL_Set_DefaultSettingsFile( cFileName ) :
 	cSettings = QSettings( cFileName, QSettings.IniFormat )
 
 	cSettings.beginGroup( "Settings" )
-	if platform.system() == "Windows":
+	if platform.system() == "Windows" or platform.system() == "Microsoft":
 		cSettings.setValue( "FrameworkPath", QVariant( "sIBL_Framework.exe" ) )
 	elif platform.system() == "Linux":
 		cSettings.setValue( "FrameworkPath", QVariant( "sIBL_Framework" ) )
