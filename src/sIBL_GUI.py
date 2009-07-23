@@ -1706,8 +1706,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 									cDataBack = cSocket.recv( 8192 )
 									cLogger.debug( "> Received Back From Application : '%s'", cDataBack )
 									cSocket.close()
-								except :
+								except Exception, cError:
 									sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Remote Connection Failed On Port : " + str( self.Software_Port_spinBox.value() ) )
+									sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Remote Connection Failed On Port : " + str( self.Software_Port_spinBox.value() ), True )
 									# self.sIBL_GUI_dockWidget.show()
 									# raise
 								break
@@ -1722,6 +1723,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 										cConnection.ExecuteSIBLLoaderScript( cConnectionCommand )
 									except:
 										sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Remote Connection On Win32 OLE Server '" + sIBL_Parser.sIBL_GetExtraAttributeComponents( cRemoteConnectionAttributes["Remote Connection|TargetApplication"], "Value" ) + "' Failed !" )
+										sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Remote Connection Failed On Port : " + str( self.Software_Port_spinBox.value() ), True )
 										# self.sIBL_GUI_dockWidget.show()
 										# raise
 									break
@@ -2524,7 +2526,10 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		if self.cHelpFilesList is not {} or self.cHelpFilesList is not None :
 			cManualPath = os.path.abspath( self.cHelpFilesList[str( self.Help_Files_comboBox.currentText() )] )
 			cLogger.debug( "> Loading Help Manual : '%s'.", cManualPath )
-			cManualFileUrl = QUrl.fromLocalFile( QString( cManualPath ) )
+			if platform.system() == "Windows" or platform.system() == "Microsoft" and cManualPath.startswith( "\\\\" ):
+				cManualFileUrl = QUrl( QString( "file:\\" + cManualPath[2:] ) )
+			else:
+				cManualFileUrl = QUrl.fromLocalFile( QString( cManualPath ) )
 			self.Help_webView.load( cManualFileUrl )
 
 	#***************************************************************************************
