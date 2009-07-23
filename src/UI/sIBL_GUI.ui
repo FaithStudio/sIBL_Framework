@@ -1380,8 +1380,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>618</width>
-             <height>287</height>
+             <width>206</width>
+             <height>164</height>
             </rect>
            </property>
            <attribute name="label" >
@@ -1496,8 +1496,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>618</width>
-             <height>287</height>
+             <width>413</width>
+             <height>134</height>
             </rect>
            </property>
            <attribute name="label" >
@@ -1635,6 +1635,14 @@
            </layout>
           </widget>
           <widget class="QWidget" name="Others_Options_page" >
+           <property name="geometry" >
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>573</width>
+             <height>84</height>
+            </rect>
+           </property>
            <attribute name="label" >
             <string>Others Options</string>
            </attribute>
@@ -1852,8 +1860,28 @@
        <attribute name="title" >
         <string>About</string>
        </attribute>
-       <layout class="QGridLayout" name="About_gridLayout" >
-        <item row="2" column="1" >
+       <layout class="QGridLayout" name="About_tab_gridLayout" >
+        <item row="0" column="0" >
+         <spacer name="Top_verticalSpacer" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="About_label" >
+          <property name="openExternalLinks" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" >
          <spacer name="Bottom_verticalSpacer" >
           <property name="orientation" >
            <enum>Qt::Vertical</enum>
@@ -1866,27 +1894,10 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="1" >
-         <spacer name="Top_verticalSpacer" >
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0" >
-           <size>
-            <width>17</width>
-            <height>268</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="0" colspan="3" >
-         <widget class="QLabel" name="About_label" >
-          <property name="openExternalLinks" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
        </layout>
+       <zorder>About_label</zorder>
+       <zorder>Top_verticalSpacer</zorder>
+       <zorder>Bottom_verticalSpacer</zorder>
       </widget>
      </widget>
     </item>
@@ -1955,6 +1966,8 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../sIBL_GUI.qrc" />
+  <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
   <include location="../sIBL_GUI.qrc" />
  </resources>
