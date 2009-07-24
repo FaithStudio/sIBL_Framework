@@ -224,7 +224,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		else :
 			cBranch = "Stable/"
 
-		if platform.system() == "Windows":
+		if platform.system() == "Windows" or platform.system() == "Microsoft":
 			cReleaseURL = sIBL_GUI_Settings.cReleasesURL + cBranch + "Windows"
 		elif platform.system() == "Linux":
 			cReleaseURL = sIBL_GUI_Settings.cReleasesURL + cBranch + "Linux"

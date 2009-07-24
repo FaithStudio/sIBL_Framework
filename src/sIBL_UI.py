@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './UI/sIBL_GUI.ui'
 #
-# Created: Thu Jul 16 09:48:34 2009
+# Created: Thu Jul 23 14:14:21 2009
 #      by: PyQt4 UI code generator 4.4.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -580,7 +580,7 @@ class Ui_sIBL_GUI(object):
                 self.Overall_Paths_Settings_page_gridLayout.addItem(spacerItem4, 3, 0, 1, 1)
                 self.Preferences_toolBox.addItem(self.Overall_Paths_Settings_page, "")
                 self.Collection_Management_page = QtGui.QWidget()
-                self.Collection_Management_page.setGeometry(QtCore.QRect(0, 0, 618, 287))
+                self.Collection_Management_page.setGeometry(QtCore.QRect(0, 0, 206, 164))
                 self.Collection_Management_page.setObjectName("Collection_Management_page")
                 self.Collection_Management_page_gridLayout = QtGui.QGridLayout(self.Collection_Management_page)
                 self.Collection_Management_page_gridLayout.setObjectName("Collection_Management_page_gridLayout")
@@ -619,7 +619,7 @@ class Ui_sIBL_GUI(object):
                 self.Collection_Management_page_gridLayout.addWidget(self.Collections_Paths_groupBox, 0, 0, 1, 1)
                 self.Preferences_toolBox.addItem(self.Collection_Management_page, "")
                 self.Online_Update_page = QtGui.QWidget()
-                self.Online_Update_page.setGeometry(QtCore.QRect(0, 0, 618, 287))
+                self.Online_Update_page.setGeometry(QtCore.QRect(0, 0, 413, 134))
                 self.Online_Update_page.setObjectName("Online_Update_page")
                 self.Online_Update_page_gridLayout = QtGui.QGridLayout(self.Online_Update_page)
                 self.Online_Update_page_gridLayout.setContentsMargins(-1, 0, -1, 0)
@@ -665,6 +665,7 @@ class Ui_sIBL_GUI(object):
                 self.Online_Update_page_gridLayout.addWidget(self.Online_Repository_groupBox, 0, 0, 1, 1)
                 self.Preferences_toolBox.addItem(self.Online_Update_page, "")
                 self.Others_Options_page = QtGui.QWidget()
+                self.Others_Options_page.setGeometry(QtCore.QRect(0, 0, 573, 84))
                 self.Others_Options_page.setObjectName("Others_Options_page")
                 self.Others_Options_page_gridLayout = QtGui.QGridLayout(self.Others_Options_page)
                 self.Others_Options_page_gridLayout.setContentsMargins(-1, 0, -1, 0)
@@ -749,16 +750,16 @@ class Ui_sIBL_GUI(object):
                 self.sIBL_GUI_tabWidget.addTab(self.Help_tab, "")
                 self.About_tab = QtGui.QWidget()
                 self.About_tab.setObjectName("About_tab")
-                self.About_gridLayout = QtGui.QGridLayout(self.About_tab)
-                self.About_gridLayout.setObjectName("About_gridLayout")
+                self.About_tab_gridLayout = QtGui.QGridLayout(self.About_tab)
+                self.About_tab_gridLayout.setObjectName("About_tab_gridLayout")
                 spacerItem12 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-                self.About_gridLayout.addItem(spacerItem12, 2, 1, 1, 1)
-                spacerItem13 = QtGui.QSpacerItem(17, 268, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-                self.About_gridLayout.addItem(spacerItem13, 0, 1, 1, 1)
+                self.About_tab_gridLayout.addItem(spacerItem12, 0, 0, 1, 1)
                 self.About_label = QtGui.QLabel(self.About_tab)
                 self.About_label.setOpenExternalLinks(True)
                 self.About_label.setObjectName("About_label")
-                self.About_gridLayout.addWidget(self.About_label, 1, 0, 1, 3)
+                self.About_tab_gridLayout.addWidget(self.About_label, 1, 0, 1, 1)
+                spacerItem13 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+                self.About_tab_gridLayout.addItem(spacerItem13, 2, 0, 1, 1)
                 self.sIBL_GUI_tabWidget.addTab(self.About_tab, "")
                 self.sIBL_GUI_centralwidget_gridLayout.addWidget(self.sIBL_GUI_tabWidget, 1, 0, 1, 1)
                 sIBL_GUI.setCentralWidget(self.sIBL_GUI_centralwidget)
@@ -941,5 +942,7 @@ class Ui_sIBL_GUI(object):
                 self.Log_groupBox.setTitle(QtGui.QApplication.translate("sIBL_GUI", "sIBL_GUI", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyQt4 import QtWebKit
+import sIBL_GUI_rc
+import sIBL_GUI_rc
 import sIBL_GUI_rc
 import sIBL_GUI_rc
