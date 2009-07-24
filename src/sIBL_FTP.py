@@ -356,7 +356,7 @@ class sIBL_FTP( object ):
 						cOutputDirectory = cRemoteFileDirectory.replace( cRemoteDirectory, "" )
 						if cOutputDirectory.startswith( " / " ) or cOutputDirectory.startswith( "\\" ) :
 							cOutputDirectory = cOutputDirectory[1:]
-						if platform.system() == "Windows":
+						if platform.system() == "Windows" or platform.system() == "Microsoft":
 							cOutputDirectory = cOutputDirectory.replace( " / ", "\\" )
 						elif platform.system() == "Linux" or platform.system() == "Darwin":
 							cOutputDirectory = cOutputDirectory.replace( "\\", " / " )

@@ -206,7 +206,7 @@ def sIBL_GetTemporarySystemPath():
 	@return: Current Platform Temporary Directory Path ( String )
 	'''
 
-	if platform.system() == "Windows":
+	if platform.system() == "Windows" or platform.system() == "Microsoft":
 		cEnvVariable = sIBL_EnvironmentVariables( "TMP" )
 		cVariablesList = cEnvVariable.getPath()
 		if "TMP" in cVariablesList.keys():
