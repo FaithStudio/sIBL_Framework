@@ -2526,7 +2526,6 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		if self.cHelpFilesList is not {} or self.cHelpFilesList is not None :
 			cManualPath = os.path.abspath( self.cHelpFilesList[str( self.Help_Files_comboBox.currentText() )] )
 			cLogger.debug( "> Loading Help Manual : '%s'.", cManualPath )
-			print cManualPath
 			if ( platform.system() == "Windows" or platform.system() == "Microsoft" ) and cManualPath.startswith( "\\\\" ):
 				cManualFileUrl = QUrl( QString( "file:\\" + cManualPath[2:] ) )
 			else:
