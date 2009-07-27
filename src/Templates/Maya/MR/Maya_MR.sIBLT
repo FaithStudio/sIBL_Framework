@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.5.2 | String | Template Release
-Date = @Date | 16 July 2009 | String | Date
+Release = @Release | 1.5.3 | String | Template Release
+Date = @Date | 25 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -42,6 +42,7 @@ hideLights = @hideLights | 1 | Boolean | Hide Lights
 physicalSun = @physicalSun | 1 | Boolean | Physical Sun
 activateFinalGather = @activateFinalGather | 1 | Boolean | Activate Final Gather
 activateTonemapping = @activateTonemapping | 1 | Boolean | Activate Tonemapping
+photographicTonemapper = @photographicTonemapper | 0 | Boolean | Use Photographic Tonemapper
 showCamerasDialog = @showCamerasDialog | 0 | Boolean | Cameras Selection Dialog
 
 [Remote Connection]
@@ -85,6 +86,7 @@ int $hideLights = @hideLights;
 int $physicalSun = @physicalSun;
 int $activateFinalGather = @activateFinalGather;
 int $activateTonemapping = @activateTonemapping;
+int $photographicTonemapper = @photographicTonemapper;
 int $showCamerasDialog = @showCamerasDialog;
 
 sIBL_Maya_MR_Setup($cBackgroundFilePath,
@@ -115,6 +117,7 @@ sIBL_Maya_MR_Setup($cBackgroundFilePath,
 		$physicalSun,
 		$activateFinalGather,
 		$activateTonemapping,
+		$photographicTonemapper,
 		$showCamerasDialog);
 
 global proc sIBL_Maya_MR_Setup(string $cBackgroundFilePath,
@@ -145,6 +148,7 @@ global proc sIBL_Maya_MR_Setup(string $cBackgroundFilePath,
 			int $physicalSun,
 			int $activateFinalGather,
 			int $activateTonemapping,
+			int $photographicTonemapper,
 			int $showCamerasDialog)
 {
 	print("sIBL_GUI | Starting sIBL File Import !\n");
@@ -226,7 +230,7 @@ global proc sIBL_Maya_MR_Setup(string $cBackgroundFilePath,
 				sIBL_Maya_MR_ActivateFinalGather();
 
 			if ($activateTonemapping)
-				sIBL_Maya_MR_ActivateTonemapping($camerasList, $createBackground);
+				sIBL_Maya_MR_ActivateTonemapping($camerasList, $createBackground, $photographicTonemapper);
 
 			print("sIBL_GUI | sIBL File Import Finished !\n");
 		}
@@ -354,6 +358,9 @@ global proc sIBL_Maya_MR_Environment_Deletion()
 
 	// sIBL mia_exposure_simple Shaders Deletion.
 	sIBL_Maya_MR_DeleteType("mia_exposure_simple", "sIBL*");
+	
+	// sIBL mia_exposure_photographic Shaders Deletion.
+	sIBL_Maya_MR_DeleteType("mia_exposure_photographic", "sIBL*");
 
 	// sIBL mia_physicalsun Shaders Deletion.
 	sIBL_Maya_MR_DeleteType("mia_physicalsun", "sIBL*");
@@ -599,10 +606,20 @@ global proc sIBL_Maya_MR_ActivateFinalGather()
 	setAttr "miDefaultOptions.finalGather" 1;
 }
 
-global proc sIBL_Maya_MR_ActivateTonemapping(string $camerasList[], int $createBackground)
+global proc sIBL_Maya_MR_ActivateTonemapping(string $camerasList[], int $createBackground, int $photographicTonemapper)
 {
-	string $cTonemapper = `createNode "mia_exposure_simple"`;
-
+	string $cTonemapper;
+	if ($photographicTonemapper)
+	{
+		$cTonemapper = `createNode "mia_exposure_photographic"`;
+		setAttr ($cTonemapper + ".film_iso") 0;
+		setAttr ($cTonemapper + ".burn_highlights") 0.25;
+	}
+	else
+	{
+		$cTonemapper = `createNode "mia_exposure_simple"`;
+	}
+	
 	for($cCamera in $camerasList)
 	{
 		connectAttr -f ($cTonemapper + ".message") ($cCamera + ".miLensShader");
