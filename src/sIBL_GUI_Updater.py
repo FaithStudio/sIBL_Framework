@@ -205,20 +205,28 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		This Method Launch The Templates Download.
 		'''
 		
-		cTemplatesList = self.cSIBL_GUI.cGlobalTemplates.keys()		
-		cIgnoreList = deepcopy( cTemplatesList )
+		cTemplatesList = deepcopy( self.cSIBL_GUI.cGlobalTemplates.keys() )		
 
 		cDownloadList = []
+
 		for row in range( self.Templates_tableWidget.rowCount() ) :
-			if self.Templates_tableWidget.cellWidget( row, 1 ).text() == "Yes" :
-				cDownloadList.append( str( self.Templates_tableWidget.verticalHeaderItem( row ).text() ) )
-				
-		for cTemplate in cTemplatesList :
-			if cTemplate in cDownloadList:
-				cIgnoreList.remove( cTemplate )
-				
-		cLogger.debug( " > Current Ignore List : '%s'.", cIgnoreList )
-		self.cSIBL_GUI.getLatestTemplates( cIgnoreList )
+			cRemoteTemplate = str( self.Templates_tableWidget.verticalHeaderItem( row ).text() )
+			if cRemoteTemplate not in cTemplatesList:
+				cTemplatesList.append( cRemoteTemplate )
+			if self.Templates_tableWidget.cellWidget( row, 1 ).text() == "Yes":
+				cDownloadList.append( cRemoteTemplate )
+		
+		if len( cDownloadList ) != 0:
+			cIgnoreList = deepcopy( cTemplatesList )
+	
+			for cTemplate in cTemplatesList :
+				if cTemplate in cDownloadList:
+					cIgnoreList.remove( cTemplate )
+	
+			cLogger.debug( "> Current Ignore List : '%s'.", cIgnoreList )
+			self.cSIBL_GUI.getLatestTemplates( cIgnoreList )
+		else:
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Updater", "No Templates Selected For Download !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Open_Repository_pushButton_OnClicked( self ):
@@ -389,6 +397,7 @@ class sIBL_Online_Update( QObject ):
 
 			if cUpdaterStartState :
 				cLogger.debug( "> Starting Online Updater." )
+				self.cSIBL_GUI.setCursor( Qt.ArrowCursor )
 				self.cUI = sIBL_GUI_Updater( self.cSIBL_GUI, cReleasesInfos, self.cLocalReleasesFile, self )
 				self.cUI.show()
 			else :

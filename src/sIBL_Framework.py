@@ -171,7 +171,6 @@ def sIBL_Framework( sIBLFile, cTemplateFile, cOutputFile, cOverrideKeys ):
 	else :
 		cDynamicLightsString = cDynamicLightsString[:-1]
 
-	print cDynamicLightsString
 	cSIBLSectionsAttributes[sIBL_Parser.sIBL_CompoundNamespace( "Lights", "DynamicLights" )] = cDynamicLightsString
 
 	# Get Template File Sections.

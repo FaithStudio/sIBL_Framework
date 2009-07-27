@@ -2541,7 +2541,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Sets The About Message.
 		'''
 
-		cLogger.debug( "> Setting About Tab Message : '%s'.", sIBL_GUI_About.cSIBL_GUI_AboutMessage )
+		cLogger.debug( "> Setting About Tab Message !" )
 		self.About_label.setText( sIBL_GUI_About.cSIBL_GUI_AboutMessage )
 
 	#***************************************************************************************
