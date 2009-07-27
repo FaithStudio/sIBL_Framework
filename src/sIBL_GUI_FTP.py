@@ -202,7 +202,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 
 		cLogger.debug( "> Stopping FTP Worker Thread !" )
 
-		self.cFTP_Thread.cFTP.closeConnectionState = True
+		self.cFTP_Thread.cFTP.closeFTPConnection = True
 
 		self.cFTP_Thread.exit()
 		self.cFTP_Thread.wait()
@@ -226,13 +226,14 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		This Method Stops The Download And Triggers The Connection Close.
 		'''
 
-		cLogger.info( "sIBL_GUI_FTP | Stopping sIBL_GUI FTP !" )
-
 		if self.cFTP_Thread is not None :
 			self.stopWorkerThread()
 
 		if str( self.Cancel_pushButton.text() ) == "Close" :
+			cLogger.info( "sIBL_GUI_FTP | Closing sIBL_GUI FTP !" )
 			self.close()
+		else :
+			cLogger.info( "sIBL_GUI_FTP | Stopping sIBL_GUI FTP !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def updateFtpProgress( self ):
