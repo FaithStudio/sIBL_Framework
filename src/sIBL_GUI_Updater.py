@@ -226,7 +226,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 			cLogger.debug( "> Current Ignore List : '%s'.", cIgnoreList )
 			self.cSIBL_GUI.getLatestTemplates( cIgnoreList )
 		else:
-			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Updater", "No Templates Selected for Download !" )
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Updater", "No Templates Selected For Download !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Open_Repository_pushButton_OnClicked( self ):
