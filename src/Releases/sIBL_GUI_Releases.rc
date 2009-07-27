@@ -1,5 +1,5 @@
 [sIBL_GUI]
-Release = 2.0.7
+Release = 2.0.8
 Type = "Stable"
 
 [XSI_MR]
@@ -8,7 +8,7 @@ Type = "Stable"
 Comment = "This Is XSI Mental Ray Template !"
 
 [Maya_MR]
-Release = 1.5.2
+Release = 1.5.3
 Type = "Stable"
 Comment = "This Is Maya Mental Ray Template !"
 

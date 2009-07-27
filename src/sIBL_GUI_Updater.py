@@ -204,12 +204,19 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		'''
 		This Method Launch The Templates Download.
 		'''
+		
+		cTemplatesList = self.cSIBL_GUI.cGlobalTemplates.keys()		
+		cIgnoreList = deepcopy( cTemplatesList )
 
-		cIgnoreList = []
+		cDownloadList = []
 		for row in range( self.Templates_tableWidget.rowCount() ) :
-			if self.Templates_tableWidget.cellWidget( row, 1 ).text() == "No" :
-				cIgnoreList.append( str( self.Templates_tableWidget.verticalHeaderItem( row ).text() ) )
-
+			if self.Templates_tableWidget.cellWidget( row, 1 ).text() == "Yes" :
+				cDownloadList.append( str( self.Templates_tableWidget.verticalHeaderItem( row ).text() ) )
+				
+		for cTemplate in cTemplatesList :
+			if cTemplate in cDownloadList:
+				cIgnoreList.remove( cTemplate )
+				
 		cLogger.debug( " > Current Ignore List : '%s'.", cIgnoreList )
 		self.cSIBL_GUI.getLatestTemplates( cIgnoreList )
 
