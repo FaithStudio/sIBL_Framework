@@ -8,7 +8,7 @@ Type = "Stable"
 Comment = "This Is XSI Mental Ray Template !"
 
 [Maya_MR]
-Release = 1.6.0
+Release = 1.6.1
 Type = "Nightly"
 Comment = "This Is Maya Mental Ray Template !"
 
