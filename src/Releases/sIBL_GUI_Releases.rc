@@ -1,29 +1,29 @@
 [sIBL_GUI]
-Release = 2.0.7
+Release = 2.0.8
 Type = "Stable"
 
 [XSI_MR]
-Release = 1.4.1
+Release = 1.4.2
 Type = "Stable"
 Comment = "This Is XSI Mental Ray Template !"
 
 [Maya_MR]
-Release = 1.5.3
-Type = "Stable"
+Release = 1.6.0
+Type = "Nightly"
 Comment = "This Is Maya Mental Ray Template !"
 
 [Maya_VRay]
-Release = 1.0.2
+Release = 1.0.3
 Type = "Stable"
 Comment = "This Is VRay For Maya Template !"
 
 [Maya_VRay_DLight]
-Release = 1.0.1
+Release = 1.0.2
 Type = "Stable"
 Comment = "This Is VRay For Maya Dome Light Template !"
 
 [Maya_Turtle]
-Release = 1.0.1
+Release = 1.0.2
 Type = "Stable"
 Comment = "This Is Maya Turtle Template !"
 
