@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.4.2 | String | Template Release
-Date = @Date | 31 July 2009 | String | Date
+Release = @Release | 1.4.3 | String | Template Release
+Date = @Date | 1 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -1058,9 +1058,9 @@ function sIBL_XSI_Ground_Creation(feedbackRadius)
 	sIBLGroup.AddChild(cGround)
 
 	var cGlobalKinematics = cGround.Kinematics.Global.Parameters;
-	cGlobalKinematics("sclx").value = feedbackRadius/2;
-	cGlobalKinematics("scly").value = feedbackRadius/2;
-	cGlobalKinematics("sclz").value = feedbackRadius/2;
+	cGlobalKinematics("sclx").value = feedbackRadius/8;
+	cGlobalKinematics("scly").value = feedbackRadius/8;
+	cGlobalKinematics("sclz").value = feedbackRadius/8;
 
 	ResetTransform(cGround, siCtr, siSRT, siXYZ);
 }
