@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.0.1 | String | Template Release
-Date = @Date | 16 July 2009 | String | Date
+Release = @Release | 1.0.2 | String | Template Release
+Date = @Date | 31 July 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -467,15 +467,15 @@ global proc sIBL_Maya_VRay_DLight_ActivateLinearWorkflow()
 global proc sIBL_Maya_VRay_DLight_CreateGround(float $feedbackRadius)
 {
 	string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
-	string $cGround[] = `nurbsPlane`;
+	string $cGround[] = `polyPlane -sx 15 -sy 15`;
 	delete -ch;
 
-	setAttr ($cGround[0] + ".rotateZ") 90;
-	makeIdentity -apply true -t 0 -r 0 -s 1 -n 0 $cGround[0];
+	setAttr ($cGround[0] + ".overrideEnabled") 1;
+	setAttr ($cGround[0] + ".overrideShading") 0;
 
 	string $cScaleAttributesList[] = {"scaleX", "scaleY", "scaleZ"};
 	for( $cScaleAttribute in $cScaleAttributesList )
-		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius*2);
+		setAttr ($cGround[0] + "." + $cScaleAttribute) ($feedbackRadius/4);
 
 	parent $cGround[0] $sIBLGroup;
 
