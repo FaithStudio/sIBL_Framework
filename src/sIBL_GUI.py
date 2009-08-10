@@ -2290,7 +2290,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if hasattr( sys, "frozen" ) :
-			cLocalTemplatesPath = os.path.abspath( str( self.Templates_Path_lineEdit.text() ) )
+			cLocalTemplatesPath = os.path.abspath( str( self.Help_Files_Path_lineEdit.text() ) )
 		else :
 			cLocalTemplatesPath = "./FTP/Help/"
 
