@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.6.1 | String | Template Release
-Date = @Date | 31 July 2009 | String | Date
+Release = @Release | 1.6.6 | String | Template Release
+Date = @Date | 7 August 2009 | String | Date
 Author = @Author | KS / Brainspoon | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -374,6 +374,9 @@ global proc sIBL_Maya_MR_Environment_Deletion()
 	
 	// sIBL mib_color_alpha Nodes Deletion.
 	sIBL_Maya_MR_DeleteType("mib_color_alpha", "sIBL*");
+	
+	// sIBL displayLayer Nodes Deletion.
+	sIBL_Maya_MR_DeleteType("displayLayer", "sIBL*");
 }
 
 global proc sIBL_Maya_MR_CreateEnvironmentShadersBranch(string $cRaySwitch, string $connectionEntries[], string $cFilePath, string $cPrefix, int $useOverride)
@@ -487,17 +490,40 @@ global proc string sIBL_Maya_MR_FeedbackGeometry_Creation(float $feedbackRadius)
 
 	string $cLocksList[] = { "tx", "ty", "tz", "ry", "rz" };
 	for( $cLock in $cLocksList )
-		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);
+		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);	
 	
-	string $cTogglersList[] = { "Background", "Reflection", "Lighting" };
+	// Adding Attributes For Various Toggling And CC Controls.
+	addAttr -ln "renderTogglers" -nn "[ Render Togglers ]" -at "enum" -en "Smart IBL" $cFeedback[0];
+	setAttr -e-keyable true ($cFeedback[0] + "." + "renderTogglers" );
+	setAttr -lock true ($cFeedback[0] + "." + "renderTogglers" );
+
+	string $cComponentsList[] = { "Background", "Reflection", "Lighting" };
 	
-	// Adding Attribute For Various Toggling.
-	for( $cToggler in $cTogglersList )
+	for( $cComponent in $cComponentsList )
 	{	
-		addAttr -ln ( "toggle" + $cToggler )  -at bool  $cFeedback[0];
-		setAttr -e-keyable true ($cFeedback[0] + ( ".toggle" + $cToggler ) );
-		setAttr ($cFeedback[0] + ( ".toggle" + $cToggler ) ) true;
+		addAttr -ln ( "toggle" + $cComponent )  -nn ( $cComponent ) -at bool  $cFeedback[0];
+		setAttr -e-keyable true ($cFeedback[0] + ( ".toggle" + $cComponent ) );
+		setAttr ($cFeedback[0] + ( ".toggle" + $cComponent ) ) true;
 	}
+	
+	string $cControlsList[] = { "Gamma", "Gain" };
+
+	for( $cComponent in $cComponentsList )
+	{	
+		addAttr -ln ("cc" + $cComponent) -nn ( "[ " + $cComponent + " CC ]" ) -at "enum" -en "Smart IBL" $cFeedback[0];
+		setAttr -e-keyable true ($cFeedback[0] + "." + ("cc" + $cComponent) );
+		setAttr -lock true ($cFeedback[0] + "." + ("cc" + $cComponent) );
+		
+		for( $cControl in $cControlsList )
+		{
+			string $cLowerCaseComponent = `tolower $cComponent`;
+			addAttr -ln ( $cLowerCaseComponent + $cControl )  -nn $cControl -at double  $cFeedback[0];
+			setAttr -e-keyable true ($cFeedback[0] + "." + ( $cLowerCaseComponent + $cControl ) );
+			setAttr ($cFeedback[0] + "." + ( $cLowerCaseComponent + $cControl ) ) true;
+		}
+	}
+
+	sIBL_Maya_MR_AddToDisplayLayer("sIBL_FeedBack_Layer",$cFeedback[0]);
 
 	return $cFeedback[0];
 }
@@ -557,6 +583,9 @@ global proc string sIBL_Maya_MR_GetLigthsTargetLocator()
 	}
 
 	$cSIBL_Lights_Target_Locator = `ls -fl "sIBL_Lights_Target_Locator"`;
+	
+	sIBL_Maya_MR_AddToDisplayLayer("sIBL_Lighting_Layer", $cSIBL_Lights_Target_Locator[0]);
+
 	return $cSIBL_Lights_Target_Locator[0];
 }
 
@@ -599,6 +628,8 @@ global proc sIBL_Maya_MR_GetLight( string $cLigthType, int $physicalSun, string 
 	select -tgl $cLight;
 	string $cConstraint[] = `aimConstraint -offset 0 0 0 -weight 1 -aimVector 0 0 -1 -upVector 0 1 0 -worldUpType "vector" -worldUpVector 0 1 0`;
 
+	sIBL_Maya_MR_AddToDisplayLayer("sIBL_Lighting_Layer", $cLight);
+
 	rename $cLight $cLightName;
 	rename $cPointOnSurfaceInfo ($cLightName + "_PointOnSurfaceInfo");
 	rename $cConstraint[0] ($cLightName + "_AimConstraint");
@@ -624,27 +655,38 @@ global proc sIBL_Maya_MR_DynamicLights_Creation(string $compactedDynamicLights, 
 	}
 }
 
+global proc sIBL_Maya_MR_BridgeFeedbackControlsAndShaders( string $cComponentsList[], string $cTarget )
+{
+		connectAttr -f ( "sIBL_Feedback.toggle" + $cTarget )  ( "sIBL_" + $cTarget + "_condition.firstTerm") ;
+		string $cLowerCaseTarget = `tolower $cTarget`;
+
+		for( $cComponent in $cComponentsList)
+		{			
+			string $cLowerCaseComponent = `tolower $cComponent`;
+			connectAttr -f ( "sIBL_Feedback." + $cLowerCaseTarget + $cComponent )  ("sIBL_" + $cTarget + "_mip_gamma_gain." + $cLowerCaseComponent);
+		}
+}
+
 global proc sIBL_Maya_MR_ConnectFeedBackToSIBLShaders(string $cFeedback, int $connectToBackground, int $connectToLighting, int $connectToReflection)
 {
+	string $cComponentsList[] = {"Gamma", "Gain"};
+
 	if ($connectToBackground)
 	{
 		expression -name "sIBL_Background_Rotate_Expression" -s ("sIBL_Background_mib_lookup_spherical.rotate = deg_to_rad(" + $cFeedback + ".rotateX/2);");
-		// Connecting The Background Toggler.
-		connectAttr -f sIBL_Feedback.toggleBackground  sIBL_Background_condition.firstTerm;
+		sIBL_Maya_MR_BridgeFeedbackControlsAndShaders($cComponentsList, "Background");
 	}
 
 	if ($connectToLighting)
 	{
 		expression -name "sIBL_Lighting_Rotate_Expression" -s ("sIBL_Lighting_mib_lookup_spherical.rotate = deg_to_rad(" + $cFeedback + ".rotateX/2);");
-		// Connecting The Lighting Toggler.
-		connectAttr -f sIBL_Feedback.toggleLighting  sIBL_Lighting_condition.firstTerm;
+		sIBL_Maya_MR_BridgeFeedbackControlsAndShaders($cComponentsList, "Lighting");
 	}
 
 	if ($connectToReflection)
 	{
 		expression -name "sIBL_Reflection_Rotate_Expression" -s ("sIBL_Reflection_mib_lookup_spherical.rotate = deg_to_rad(" + $cFeedback + ".rotateX/2);");
-		// Connecting The Lighting Toggler.
-		connectAttr -f sIBL_Feedback.toggleReflection  sIBL_Reflection_condition.firstTerm;
+		sIBL_Maya_MR_BridgeFeedbackControlsAndShaders($cComponentsList, "Reflection");
 	}
 }
 
@@ -687,7 +729,7 @@ global proc sIBL_Maya_MR_ActivateLinearWorkflow(string $camerasList[], int $crea
 		
 		// Adjust Background Color Space Because Of The Tonemapper
 		if ($createBackground)
-		setAttr "sIBL_Background_mip_gamma_gain.gamma" 0.454545;
+			setAttr  "sIBL_Feedback.backgroundGamma" 0.454545;
 	}
 
 	rename $cTonemapper ("sIBL_" + `nodeType $cTonemapper`);
@@ -733,7 +775,9 @@ global proc sIBL_Maya_MR_CreateGround(float $feedbackRadius, int $shadowCatcher)
 		else
 			warning("sIBL_GUI | No Background Detected, Shadow Catcher Will Not Be Set !\n");
 	}
-
+	
+	sIBL_Maya_MR_AddToDisplayLayer("sIBL_Ground_Layer", $cGround[0]);
+	
 	rename $cGround[0] "sIBL_Ground";		
 }
 
@@ -787,4 +831,12 @@ global proc string sIBL_Maya_MR_GetObject(string $cObject)
 {
 	string $cList[] = `ls -fl $cObject`;
 	return $cList[0];
+}
+
+global proc sIBL_Maya_MR_AddToDisplayLayer(string $cLayerName, string $cObject)
+{
+	string $cLayer = sIBL_Maya_MR_GetObject($cLayerName);
+	if( $cLayer == "" )
+		$cLayer = `createDisplayLayer -name $cLayerName`;
+	editDisplayLayerMembers -noRecurse $cLayer $cObject;
 }

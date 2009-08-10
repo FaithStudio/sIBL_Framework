@@ -8,22 +8,22 @@
                 background-color: rgb(180, 180, 180);
                 color: rgb(24, 24, 24);
             }
-
+            
             A:link {
                 text-decoration: none;
                 color: rgb(16, 64, 128);
             }
-
+            
             A:visited {
                 text-decoration: none;
                 color: rgb(16, 64, 128);
             }
-
+            
             A:active {
                 text-decoration: none;
                 color: rgb(16, 64, 128);
             }
-
+            
             A:hover {
                 text-decoration: underline;
                 color: rgb(16, 64, 128);
@@ -63,42 +63,77 @@
             <ul>
                 <li>
                     <span style="font-size: 14pt; font-weight: 700">Common Attributes</span>
-					<p>
-                        <b>Create Lights :</b> Create the sIBL Dynamics Lights.
+                    <p>
+                        <b>Create Lights :</b>
+                        Create the sIBL Dynamics Lights.
                     </p>
                     <p>
-                        <b>Create Background :</b> Create the Background Environment Branch ( Using the High Resolution LDR file of the current IBL Set ).
+                        <b>Create Background :</b>
+                        Create the Background Environment Branch ( Using the High Resolution LDR file of the current IBL Set ).
                     </p>
                     <p>
-                        <b>Create Reflection :</b> Create the Reflection Environment Branch ( Using the Reflection HDR file of the current IBL Set ).
+                        <b>Create Reflection :</b>
+                        Create the Reflection Environment Branch ( Using the Reflection HDR file of the current IBL Set ).
                     </p>
                     <p>
-                        <b>Create Lighting :</b> Create the Lighting Environment Branch ( Using the Lighting HDR file of the current IBL Set ).
+                        <b>Create Lighting :</b>
+                        Create the Lighting Environment Branch ( Using the Lighting HDR file of the current IBL Set ).
                     </p>
                     <p>
-                        <b>Create Sun :</b> Create the light used as Sun.
+                        <b>Create Sun :</b>
+                        Create the light used as Sun.
                     </p>
                 </li>
                 <li>
                     <span style="font-size: 14pt; font-weight: 700">Additional Attributes</span>
-					<p>
-                        <b>Create Ground :</b> A <i>Plane</i> is added to the <i>Scene</i>.
+                    <p>
+                        <b>Create Ground :</b>
+                        A <i>Plane</i>
+                        is added to the <i>Scene</i>.
                     </p>
-					<p>
-                        <b>Hide Lights :</b> Hides all current <i>Scene</i> lights.
+                    <p>
+                        <b>Hide Lights :</b>
+                        Hides all current <i>Scene</i>
+                        lights.
                     </p>
-					<p>
-                        <b>Activate Linear Workflow :</b> Set the <i>Output Gamma</i> to <i>2.2</i>.
+                    <p>
+                        <b>Activate Linear Workflow :</b>
+                        Set the <i>Output Gamma</i>
+                        to <i>2.2</i>.
                     </p>
-					<p>
-                        <b>Create FeedBack :</b> Make the Feedback visible and attach to it the current IBL LDR Background image so there is a visual feedback in the <i>Viewport</i>.
+                    <p>
+                        <b>Create FeedBack :</b>
+                        Make the Feedback visible and attach to it the current IBL LDR Background image so there is a visual feedback in the <i>Viewport</i>.
                     </p>
-					<p>
-                        <b>Activate Indirect Illumination :</b> <i>Indirect Illumination</i> is activated in the current <i>Scene</i>.
+                    <p>
+                        <b>Activate Indirect Illumination :</b>
+                        <i>Indirect Illumination</i>
+                        is activated in the current <i>Scene</i>.
                     </p>
-					<p>
-                        <b>Feedback Radius :</b> Sets the Feedback radius in Maya units.
+                    <p>
+                        <b>Feedback Radius :</b>
+                        Sets the Feedback radius in Maya units.
                     </p>
+                </li>
+                <li>
+                    <span style="font-size: 14pt; font-weight: 700">Scene Components</span>
+                    <p>
+                        <b>sIBL_FeedBack :</b>
+                        There are several Controls Attributes on the <i>sIBL_FeedBack</i>
+                        Sphere available in the <i>Channel Box</i>.
+                    </p>
+                    <ul>
+                        <li>
+                            <b>Render Togglers :</b>
+                            Activate / Deactivate the different Smart IBL Components.
+                        </li>
+                        <li>
+                            <b>* CC :</b>
+                            Gamma / Gain Controls of the different Smart IBL Components.
+                        </li>
+                    </ul>
+                    <br/>
+                    <img src="Resources/sIBL_Feedback_Attributes.jpg">
                 </li>
             </ul>
         </p>
@@ -107,7 +142,7 @@
             <br/>
             <a href="http://www.hdrlabs.com/cgi-bin/forum/YaBB.pl?num=1223936394/2#2">sIBL_GUI For Maya Change Log</a>
         </p>
-       <p align="justify">
+        <p align="justify">
             <span style="font-size: 18pt; font-weight: 700">About</span>
             <br/>
             sIBL_GUI And sIBL_Framework by Thomas Mansencal - 2008 / 2009
