@@ -173,14 +173,15 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		for row, cKey in enumerate( cTemplatesInfos.keys() ) :
 			if cKey != "sIBL_GUI" :
 				cVerticalHeaderLabels.append( cKey )
+				
+				cItem = sIBL_GUI_QWidgets.Variable_QPushButton( True, cColors, ( "Yes", "No" ) )
+				cLogger.debug( "> Setting Item In Column '1' : ' % s'.", cItem.text() )
+				self.Templates_tableWidget.setCellWidget( row, 0, cItem )
+
 				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][0] ) )
 				cItem.setTextAlignment( Qt.AlignCenter )
 				cLogger.debug( "> Setting Item In Column '0' : ' % s'.", cItem )
-				self.Templates_tableWidget.setItem( row, 0, cItem )
-
-				cItem = sIBL_GUI_QWidgets.Variable_QPushButton( True, cColors, ( "Yes", "No" ) )
-				cLogger.debug( "> Setting Item In Column '1' : ' % s'.", cItem.text() )
-				self.Templates_tableWidget.setCellWidget( row, 1, cItem )
+				self.Templates_tableWidget.setItem( row, 1, cItem )
 
 				cItem = QTableWidgetItem( QString( cTemplatesInfos[cKey][1] ) )
 				cItem.setTextAlignment( Qt.AlignCenter )
@@ -213,7 +214,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 			cRemoteTemplate = str( self.Templates_tableWidget.verticalHeaderItem( row ).text() )
 			if cRemoteTemplate not in cTemplatesList:
 				cTemplatesList.append( cRemoteTemplate )
-			if self.Templates_tableWidget.cellWidget( row, 1 ).text() == "Yes":
+			if self.Templates_tableWidget.cellWidget( row, 0 ).text() == "Yes":
 				cDownloadList.append( cRemoteTemplate )
 		
 		if len( cDownloadList ) != 0:
