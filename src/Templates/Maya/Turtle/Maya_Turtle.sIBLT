@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.1.0 | String | Template Release
-Date = @Date | 11 August 2009 | String | Date
+Release = @Release | 1.1.1 | String | Template Release
+Date = @Date | 12 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -141,6 +141,8 @@ global proc sIBL_Maya_Turtle_Setup(string $cBackgroundFilePath,
 
 	sIBL_Maya_Turtle_Environment_Deletion();
 
+	sIBL_Maya_Turtle_CreateMainLocator();
+
 	if ($hideLights)
 		sIBL_Maya_Turtle_HideLights();
 
@@ -242,6 +244,58 @@ global proc sIBL_Maya_Turtle_Environment_Deletion()
 	
 	// sIBL displayLayer Nodes Deletion.
 	sIBL_Maya_Turtle_DeleteType("displayLayer", "sIBL*");
+}
+
+global proc sIBL_Maya_Turtle_CreateMainLocator()
+{
+	string $sIBLGroup = sIBL_Maya_Turtle_GetSIBLGroup();
+	string $cSIBLLocator = `createNode annotationShape`;
+	
+	setAttr ($cSIBLLocator + ".displayArrow") 0;
+	setAttr -lock true -keyable false ($cSIBLLocator + ".displayArrow");
+	setAttr -type "string" ($cSIBLLocator + ".text") "[ Smart IBL Controls ]";
+	
+	string $cSIBLLocatorTransform = sIBL_Maya_Turtle_GetTransform($cSIBLLocator);
+	
+	// Adding Attributes For Various Toggling And CC Controls.
+	addAttr -ln "renderTogglers" -nn "[ Render Togglers ]" -at "enum" -en "Smart IBL" $cSIBLLocatorTransform;
+	setAttr -e-keyable true ($cSIBLLocatorTransform + "." + "renderTogglers" );
+	setAttr -lock true ($cSIBLLocatorTransform + "." + "renderTogglers" );
+
+	string $cComponentsList[] = { "Background", "Reflection", "Lighting" };
+	
+	for( $cComponent in $cComponentsList )
+	{	
+		addAttr -ln ( "toggle" + $cComponent )  -nn ( $cComponent ) -at bool  $cSIBLLocatorTransform;
+		setAttr -e-keyable true ($cSIBLLocatorTransform + ( ".toggle" + $cComponent ) );
+		setAttr ($cSIBLLocatorTransform + ( ".toggle" + $cComponent ) ) true;
+	}
+	
+	string $cControlsList[] = { "Gamma", "Gain" };
+
+	for( $cComponent in $cComponentsList )
+	{	
+		addAttr -ln ("cc" + $cComponent) -nn ( "[ " + $cComponent + " CC ]" ) -at "enum" -en "Smart IBL" $cSIBLLocatorTransform;
+		setAttr -e-keyable true ($cSIBLLocatorTransform + "." + ("cc" + $cComponent) );
+		setAttr -lock true ($cSIBLLocatorTransform + "." + ("cc" + $cComponent) );
+		
+		for( $cControl in $cControlsList )
+		{
+			string $cLowerCaseComponent = `tolower $cComponent`;
+			addAttr -ln ( $cLowerCaseComponent + $cControl )  -nn $cControl -at double  $cSIBLLocatorTransform;
+			setAttr -e-keyable true ($cSIBLLocatorTransform + "." + ( $cLowerCaseComponent + $cControl ) );
+			setAttr ($cSIBLLocatorTransform + "." + ( $cLowerCaseComponent + $cControl ) ) true;
+		}
+	}
+
+	setAttr ( $cSIBLLocatorTransform + ".ty" ) 5;
+	string $cLocksList[] = { "rx", "ry", "rz", "sx", "sy", "sz" };
+	for( $cLock in $cLocksList )
+		setAttr -lock true -keyable false ($cSIBLLocatorTransform + "." + $cLock);
+
+	parent $cSIBLLocatorTransform $sIBLGroup;
+	
+	rename ( "sIBL" + $cSIBLLocatorTransform) "sIBL_Controls";
 }
 
 global proc sIBL_Maya_Turtle_Create_Environment_Sphere_Branch(float $feedbackRadius, string $cPrefix, string $cFilePath, float $cGamma, int $useOverride)
@@ -411,37 +465,6 @@ global proc string sIBL_Maya_Turtle_FeedbackGeometry_Creation(float $feedbackRad
 	for( $cLock in $cLocksList )
 		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);
 
-	// Adding Attributes For Various Toggling And CC Controls.
-	addAttr -ln "renderTogglers" -nn "[ Render Togglers ]" -at "enum" -en "Smart IBL" $cFeedback[0];
-	setAttr -e-keyable true ($cFeedback[0] + "." + "renderTogglers" );
-	setAttr -lock true ($cFeedback[0] + "." + "renderTogglers" );
-
-	string $cComponentsList[] = { "Background", "Reflection", "Lighting" };
-	
-	for( $cComponent in $cComponentsList )
-	{	
-		addAttr -ln ( "toggle" + $cComponent )  -nn ( $cComponent ) -at bool  $cFeedback[0];
-		setAttr -e-keyable true ($cFeedback[0] + ( ".toggle" + $cComponent ) );
-		setAttr ($cFeedback[0] + ( ".toggle" + $cComponent ) ) true;
-	}
-	
-	string $cControlsList[] = { "Gamma", "Gain" };
-
-	for( $cComponent in $cComponentsList )
-	{	
-		addAttr -ln ("cc" + $cComponent) -nn ( "[ " + $cComponent + " CC ]" ) -at "enum" -en "Smart IBL" $cFeedback[0];
-		setAttr -e-keyable true ($cFeedback[0] + "." + ("cc" + $cComponent) );
-		setAttr -lock true ($cFeedback[0] + "." + ("cc" + $cComponent) );
-		
-		for( $cControl in $cControlsList )
-		{
-			string $cLowerCaseComponent = `tolower $cComponent`;
-			addAttr -ln ( $cLowerCaseComponent + $cControl )  -nn $cControl -at double  $cFeedback[0];
-			setAttr -e-keyable true ($cFeedback[0] + "." + ( $cLowerCaseComponent + $cControl ) );
-			setAttr ($cFeedback[0] + "." + ( $cLowerCaseComponent + $cControl ) ) true;
-		}
-	}
-
 	sIBL_Maya_Turtle_AddToDisplayLayer("sIBL_FeedBack_Layer",$cFeedback[0]);
 
 	return $cFeedback[0];
@@ -563,19 +586,19 @@ global proc sIBL_Maya_Turtle_DynamicLights_Creation(string $compactedDynamicLigh
 
 global proc sIBL_Maya_Turtle_BridgeFeedbackControlsAndShaders( string $cTarget )
 {
-		connectAttr -f ( "sIBL_Feedback.toggle" + $cTarget )  ( "sIBL_" + $cTarget + "_condition.firstTerm") ;
+		connectAttr -f ( "sIBL_Controls.toggle" + $cTarget )  ( "sIBL_" + $cTarget + "_condition.firstTerm") ;
 		string $cLowerCaseTarget = `tolower $cTarget`;
 		
 		string $gammaSubComponentsList[] = {"X", "Y", "Z"};
 		for ($gammaSubComponent in $gammaSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Feedback." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
+			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
 		}
 		
 		string $gainSubComponentsList[] = {"R", "G", "B"};
 		for ($gainSubComponent in $gainSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Feedback." + $cLowerCaseTarget + "Gain")("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
+			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gain") ("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
 		}
 }
 

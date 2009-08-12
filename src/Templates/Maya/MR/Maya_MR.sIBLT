@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.6.6 | String | Template Release
-Date = @Date | 7 August 2009 | String | Date
+Release = @Release | 1.6.7 | String | Template Release
+Date = @Date | 12 August 2009 | String | Date
 Author = @Author | KS / Brainspoon | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -187,6 +187,8 @@ global proc sIBL_Maya_MR_Setup(string $cBackgroundFilePath,
 		sIBL_Maya_MR_ActivateMentalRay();
 
 		sIBL_Maya_MR_Environment_Deletion();
+		
+		sIBL_Maya_MR_CreateMainLocator();
 
 		if ($hideLights)
 			sIBL_Maya_MR_HideLights();
@@ -379,6 +381,58 @@ global proc sIBL_Maya_MR_Environment_Deletion()
 	sIBL_Maya_MR_DeleteType("displayLayer", "sIBL*");
 }
 
+global proc sIBL_Maya_MR_CreateMainLocator()
+{
+	string $sIBLGroup = sIBL_Maya_MR_GetSIBLGroup();
+	string $cSIBLLocator = `createNode annotationShape`;
+	
+	setAttr ($cSIBLLocator + ".displayArrow") 0;
+	setAttr -lock true -keyable false ($cSIBLLocator + ".displayArrow");
+	setAttr -type "string" ($cSIBLLocator + ".text") "[ Smart IBL Controls ]";
+	
+	string $cSIBLLocatorTransform = sIBL_Maya_MR_GetTransform($cSIBLLocator);
+	
+	// Adding Attributes For Various Toggling And CC Controls.
+	addAttr -ln "renderTogglers" -nn "[ Render Togglers ]" -at "enum" -en "Smart IBL" $cSIBLLocatorTransform;
+	setAttr -e-keyable true ($cSIBLLocatorTransform + "." + "renderTogglers" );
+	setAttr -lock true ($cSIBLLocatorTransform + "." + "renderTogglers" );
+
+	string $cComponentsList[] = { "Background", "Reflection", "Lighting" };
+	
+	for( $cComponent in $cComponentsList )
+	{	
+		addAttr -ln ( "toggle" + $cComponent )  -nn ( $cComponent ) -at bool  $cSIBLLocatorTransform;
+		setAttr -e-keyable true ($cSIBLLocatorTransform + ( ".toggle" + $cComponent ) );
+		setAttr ($cSIBLLocatorTransform + ( ".toggle" + $cComponent ) ) true;
+	}
+	
+	string $cControlsList[] = { "Gamma", "Gain" };
+
+	for( $cComponent in $cComponentsList )
+	{	
+		addAttr -ln ("cc" + $cComponent) -nn ( "[ " + $cComponent + " CC ]" ) -at "enum" -en "Smart IBL" $cSIBLLocatorTransform;
+		setAttr -e-keyable true ($cSIBLLocatorTransform + "." + ("cc" + $cComponent) );
+		setAttr -lock true ($cSIBLLocatorTransform + "." + ("cc" + $cComponent) );
+		
+		for( $cControl in $cControlsList )
+		{
+			string $cLowerCaseComponent = `tolower $cComponent`;
+			addAttr -ln ( $cLowerCaseComponent + $cControl )  -nn $cControl -at double  $cSIBLLocatorTransform;
+			setAttr -e-keyable true ($cSIBLLocatorTransform + "." + ( $cLowerCaseComponent + $cControl ) );
+			setAttr ($cSIBLLocatorTransform + "." + ( $cLowerCaseComponent + $cControl ) ) true;
+		}
+	}
+
+	setAttr ( $cSIBLLocatorTransform + ".ty" ) 5;
+	string $cLocksList[] = { "rx", "ry", "rz", "sx", "sy", "sz" };
+	for( $cLock in $cLocksList )
+		setAttr -lock true -keyable false ($cSIBLLocatorTransform + "." + $cLock);
+
+	parent $cSIBLLocatorTransform $sIBLGroup;
+	
+	rename ( "sIBL" + $cSIBLLocatorTransform) "sIBL_Controls";
+}
+
 global proc sIBL_Maya_MR_CreateEnvironmentShadersBranch(string $cRaySwitch, string $connectionEntries[], string $cFilePath, string $cPrefix, int $useOverride)
 {
 	string $cGammaGain = `createNode mip_gamma_gain`;
@@ -491,37 +545,6 @@ global proc string sIBL_Maya_MR_FeedbackGeometry_Creation(float $feedbackRadius)
 	string $cLocksList[] = { "tx", "ty", "tz", "ry", "rz" };
 	for( $cLock in $cLocksList )
 		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);	
-	
-	// Adding Attributes For Various Toggling And CC Controls.
-	addAttr -ln "renderTogglers" -nn "[ Render Togglers ]" -at "enum" -en "Smart IBL" $cFeedback[0];
-	setAttr -e-keyable true ($cFeedback[0] + "." + "renderTogglers" );
-	setAttr -lock true ($cFeedback[0] + "." + "renderTogglers" );
-
-	string $cComponentsList[] = { "Background", "Reflection", "Lighting" };
-	
-	for( $cComponent in $cComponentsList )
-	{	
-		addAttr -ln ( "toggle" + $cComponent )  -nn ( $cComponent ) -at bool  $cFeedback[0];
-		setAttr -e-keyable true ($cFeedback[0] + ( ".toggle" + $cComponent ) );
-		setAttr ($cFeedback[0] + ( ".toggle" + $cComponent ) ) true;
-	}
-	
-	string $cControlsList[] = { "Gamma", "Gain" };
-
-	for( $cComponent in $cComponentsList )
-	{	
-		addAttr -ln ("cc" + $cComponent) -nn ( "[ " + $cComponent + " CC ]" ) -at "enum" -en "Smart IBL" $cFeedback[0];
-		setAttr -e-keyable true ($cFeedback[0] + "." + ("cc" + $cComponent) );
-		setAttr -lock true ($cFeedback[0] + "." + ("cc" + $cComponent) );
-		
-		for( $cControl in $cControlsList )
-		{
-			string $cLowerCaseComponent = `tolower $cComponent`;
-			addAttr -ln ( $cLowerCaseComponent + $cControl )  -nn $cControl -at double  $cFeedback[0];
-			setAttr -e-keyable true ($cFeedback[0] + "." + ( $cLowerCaseComponent + $cControl ) );
-			setAttr ($cFeedback[0] + "." + ( $cLowerCaseComponent + $cControl ) ) true;
-		}
-	}
 
 	sIBL_Maya_MR_AddToDisplayLayer("sIBL_FeedBack_Layer",$cFeedback[0]);
 
@@ -657,13 +680,13 @@ global proc sIBL_Maya_MR_DynamicLights_Creation(string $compactedDynamicLights, 
 
 global proc sIBL_Maya_MR_BridgeFeedbackControlsAndShaders( string $cComponentsList[], string $cTarget )
 {
-		connectAttr -f ( "sIBL_Feedback.toggle" + $cTarget )  ( "sIBL_" + $cTarget + "_condition.firstTerm") ;
+		connectAttr -f ( "sIBL_Controls.toggle" + $cTarget )  ( "sIBL_" + $cTarget + "_condition.firstTerm") ;
 		string $cLowerCaseTarget = `tolower $cTarget`;
 
 		for( $cComponent in $cComponentsList)
 		{			
 			string $cLowerCaseComponent = `tolower $cComponent`;
-			connectAttr -f ( "sIBL_Feedback." + $cLowerCaseTarget + $cComponent )  ("sIBL_" + $cTarget + "_mip_gamma_gain." + $cLowerCaseComponent);
+			connectAttr -f ( "sIBL_Controls." + $cLowerCaseTarget + $cComponent )  ("sIBL_" + $cTarget + "_mip_gamma_gain." + $cLowerCaseComponent);
 		}
 }
 
@@ -729,7 +752,7 @@ global proc sIBL_Maya_MR_ActivateLinearWorkflow(string $camerasList[], int $crea
 		
 		// Adjust Background Color Space Because Of The Tonemapper
 		if ($createBackground)
-			setAttr  "sIBL_Feedback.backgroundGamma" 0.454545;
+			setAttr  "sIBL_Controls.backgroundGamma" 0.454545;
 	}
 
 	rename $cTonemapper ("sIBL_" + `nodeType $cTonemapper`);

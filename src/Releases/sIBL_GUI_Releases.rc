@@ -8,22 +8,22 @@ Type = "Stable"
 Comment = "This Is XSI Mental Ray Template !"
 
 [Maya_MR]
-Release = 1.6.6
+Release = 1.6.7
 Type = "Stable"
 Comment = "This Is Maya Mental Ray Template !"
 
 [Maya_VRay]
-Release = 1.1.0
+Release = 1.1.1
 Type = "Stable"
 Comment = "This Is VRay For Maya Template !"
 
 [Maya_VRay_DLight]
-Release = 1.1.0
+Release = 1.1.1
 Type = "Stable"
 Comment = "This Is VRay For Maya Dome Light Template !"
 
 [Maya_Turtle]
-Release = 1.1.0
+Release = 1.1.1
 Type = "Stable"
 Comment = "This Is Maya Turtle Template !"
 
