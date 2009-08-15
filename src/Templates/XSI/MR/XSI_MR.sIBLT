@@ -1112,6 +1112,30 @@ function sIBL_XSI_MR_ObjectExists( cObject, cErrorMessage )
 	}
 }
 
+function sIBL_XSI_AddToDisplayLayer( cLayerName, cObject)
+{
+    var cSceneLayers = ActiveProject.ActiveScene.Layers;
+    var cLayerExists = false;
+    
+    for (var i = 0; i < cSceneLayers.Count; i++)
+    {
+        if(cSceneLayers(i).name == cLayerName)
+        {
+            cLayerExists = true;
+            break;
+        }
+    }
+    
+    if( !cLayerExists )
+    {
+        CreateLayer(null, cLayerName, cObject);
+    }
+    else
+    {   
+        MoveToLayer("Layers." + cLayerName, cObject);
+    }
+}
+
 function sIBL_XSI_MR_ScriptEditorVerbose(verboseState)
 {
 	Application.Preferences.SetPreferenceValue("scripting.cmdlog", verboseState);
