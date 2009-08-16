@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.4.3 | String | Template Release
-Date = @Date | 13 August 2009 | String | Date
+Release = @Release | 1.5.0 | String | Template Release
+Date = @Date | 16 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -153,6 +153,9 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 {
 	try
 	{
+		// Storing Active Layer. 
+		var cLayer = ActiveProject.ActiveScene.ActiveLayer;
+
 		var cSelectedPassesList = [];
 
 		if (showPassesDialog)
@@ -323,6 +326,8 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 
 					cProgressBar.Visible = false;
 				}
+				
+				SetCurrentLayer(cLayer);
 
 				sIBL_XSI_MR_ScriptEditorVerbose(true);
 				sIBL_XSI_MR_AutoInspectState(true);
@@ -334,6 +339,9 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 			}
 			else
 			{
+				// Restoring Active Layer. 
+				SetCurrentLayer(cLayer);
+
 				sIBL_XSI_MR_ScriptEditorVerbose(true);
 				sIBL_XSI_MR_AutoInspectState(true);
 
@@ -475,8 +483,11 @@ function sIBL_XSI_MR_Update_EnvironmentDeletion(overrideTweaks, createBackground
 
 		if (overrideTweaks)
 		{
-			if(!createGround)
+			if (!createGround) 
+			{
 				DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{5FC0CCAE-3DC8-11D0-9449-00AA006D3165}", "sIBL_Ground", true));
+				DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{479F2E10-3900-11D1-B0B3-00A024C79287}", "sIBL_Ground_Layer", true));
+			}
 		}
 	}
 	catch (e)
@@ -504,17 +515,27 @@ function sIBL_XSI_MR_EnvironmentDeletion()
 		// sIBL Environment Shaders Deletion.
 		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{AD97C8B1-E1AE-4E3B-ABF5-1754616A6B63}", "sIBL", false));
 
+		// sIBL Color Math Basic Shaders Deletion.
+		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{6EE27300-A1E2-11D3-AE51-00A0C96E63E1}", "sIBL", false));
+
+		// sIBL Color Correction Shaders Deletion.
+		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{46B8C429-80C4-11D2-8088-00A0C906835D}", "sIBL", false));
+	
 		// sIBL Color Boolean Switch Shaders Deletion.
 		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{85C16046-BCFA-11D1-90E9-0000F804EB21}", "sIBL", false));
 
 		// sIBL Feedback Materials Deletion.
 		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{4C4F7500-51EF-11D0-854E-00A02417D029}", "sIBL", false));
 
-		// sIBL Feedback Shaders Deletion.
+		// sIBL Feedback Constant Shaders Deletion.
 		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{5B003A9D-868A-11D4-9330-00E0293D48C6}", "sIBL", false));
 		
 		// sIBL Ground mip_Matte_Shadow Deletion.
 		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{C08B33D2-52EB-4820-BA30-AAC7F75325F0}", "sIBL", false));
+		
+		// sIBL Display Layers Deletion.
+		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{479F2E10-3900-11D1-B0B3-00A024C79287}", "sIBL", false));
+	
 	}
 	catch (e)
 	{
@@ -526,15 +547,24 @@ function sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cInputShader, cImageSo
 	var cEnvironmentShader = CreateShaderFromPreset("Shaders/Environment/Environment.Preset", cPass, "");
 	SIConnectShaderToCnxPoint(cImageSource, cEnvironmentShader.tex, false);
 	
+	var cColorMathBasicShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Math/Color_Math_Basic.Preset", cPass, "");
+	cColorMathBasicShader.Parameters("op").value = 2;
+	SIConnectShaderToCnxPoint(cEnvironmentShader, cColorMathBasicShader + ".input1", false);
+	
+	var cCCShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Image_Processing/Color_correction.Preset", cPass, "");
+	SIConnectShaderToCnxPoint(cColorMathBasicShader, cCCShader + ".input", false);
+
 	var cColorBooleanSwitchShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Switch/Color_Boolean_Switch.Preset", cPass, "");
-	SIConnectShaderToCnxPoint(cEnvironmentShader, cColorBooleanSwitchShader + ".input1", false);
+	SIConnectShaderToCnxPoint(cCCShader, cColorBooleanSwitchShader + ".input1", false);
 	
 	for (var i = 0; i < connectionPorts.length; i++)
 	{
 		SIConnectShaderToCnxPoint(cColorBooleanSwitchShader, cInputShader + "." + connectionPorts[i], false);
 	}
 	
-	cColorBooleanSwitchShader.Parameters("name").value = cName + "_Switch";
+	cColorMathBasicShader.Parameters("name").value = cName + "_Color_Math_Basic";
+	cCCShader.Parameters("name").value = cName + "_Color_Correction";
+	cColorBooleanSwitchShader.Parameters("name").value = cName + "_Color_Boolean_Switch";
 	cEnvironmentShader.Parameters("name").value = cName + "_Environment";
 }
 
@@ -723,6 +753,41 @@ function sIBL_XSI_MR_EnvironmentShadersCreation(createBackground, createLighting
 	cRaytype.Parameters("name").value = "sIBL_Raytype";
 }
 
+function sIBL_XSI_MR_GetControls( cSIBLGroup )
+{
+		var cSIBL_GUI_Controls = cSIBLGroup.AddCustomProperty("Smart_IBL", false );
+
+		// Render Togglers Parameters.
+		cSIBL_GUI_Controls.AddParameter3("Background_Toggle", siBool, true);
+		cSIBL_GUI_Controls.AddParameter3("Reflection_Toggle", siBool, true);
+		cSIBL_GUI_Controls.AddParameter3("Lighting_Toggle", siBool, true);
+		
+		var cSlotsList = ["Background", "Reflection", "Lighting"];
+		var cComponentsList = ["Gamma", "Gain"];
+
+		for (var i = 0; i < cSlotsList.length; i++)
+		{
+			for (var j = 0; j < cComponentsList.length; j++)
+				cSIBL_GUI_Controls.AddParameter3(cSlotsList[i] + "_" + cComponentsList[j], siFloat, 1, 0, 10);
+		}
+		
+		var cSIBL_GUI_Controls_Layout = cSIBL_GUI_Controls.PPGLayout;
+		
+		cSIBL_GUI_Controls_Layout.AddGroup("Render Togglers");
+			cSIBL_GUI_Controls_Layout.AddItem("Background_Toggle", "Background");
+			cSIBL_GUI_Controls_Layout.AddItem("Reflection_Toggle", "Reflection");
+			cSIBL_GUI_Controls_Layout.AddItem("Lighting_Toggle", "Lighting");
+		cSIBL_GUI_Controls_Layout.EndGroup();
+		
+		for (var i = 0; i < cSlotsList.length; i++)
+		{
+			cSIBL_GUI_Controls_Layout.AddGroup(cSlotsList[i] + " Color Correction");
+			for (var j = 0; j < cComponentsList.length; j++)
+				cSIBL_GUI_Controls_Layout.AddItem(cSlotsList[i] + "_" + cComponentsList[j], cComponentsList[j]);
+			cSIBL_GUI_Controls_Layout.EndGroup();
+		}
+}
+
 function sIBL_XSI_MR_GetSIBLGroup()
 {
 	var sceneSIBLGroup = Application.ActiveSceneRoot.FindChild("sIBL");
@@ -732,22 +797,24 @@ function sIBL_XSI_MR_GetSIBLGroup()
 		var cNull = ActiveSceneRoot.AddPrimitive("Null", "helperNull");
 		var sceneSIBLGroup = Application.CreateTransformGroup("sIBL", "B:" + cNull);
 
-		var lockList = ["sclx", "scly", "sclz", "rotx", "roty", "rotz", "posx", "posy", "posz"];
+		var locksList = ["sclx", "scly", "sclz", "rotx", "roty", "rotz", "posx", "posy", "posz"];
 		var cGlobalKinematics = sceneSIBLGroup.Kinematics.Global.Parameters;
 
-		for (var i = 0; i < lockList.length; i++)
+		for (var i = 0; i < locksList.length; i++)
 		{
-			cGlobalKinematics(lockList[i]).SetLock(siLockLevelManipulation);
+			cGlobalKinematics(locksList[i]).SetLock(siLockLevelManipulation);
 		}
 
 		cLocalKinematics = sceneSIBLGroup.Kinematics.Local.Parameters;
 
-		for (var i = 0; i < lockList.length; i++)
+		for (var i = 0; i < locksList.length; i++)
 		{
-			cLocalKinematics(lockList[i]).SetLock(siLockLevelManipulation);
+			cLocalKinematics(locksList[i]).SetLock(siLockLevelManipulation);
 		}
 
 		DeleteObj(cNull);
+	
+		sIBL_XSI_MR_GetControls( sceneSIBLGroup )
 	}
 
 	return sceneSIBLGroup
@@ -772,18 +839,20 @@ function sIBL_XSI_MR_FeedbackGeometryCreation(feedbackRadius, createFeedBack)
 
 	ApplyTopoOp("Inverse", cFeedback, 3, siImmediateOperation);
 
-	var lockList = ["rotx", "rotz", "posx", "posy", "posz"];
-	for (var i = 0; i < lockList.length; i++)
+	var locksList = ["rotx", "rotz", "posx", "posy", "posz"];
+	for (var i = 0; i < locksList.length; i++)
 	{
-		cGlobalKinematics(lockList[i]).SetLock(siLockLevelManipulation);
+		cGlobalKinematics(locksList[i]).SetLock(siLockLevelManipulation);
 	}
 
 	cLocalKinematics = cFeedback.Kinematics.Local.Parameters;
 
-	for (var i = 0; i < lockList.length; i++)
+	for (var i = 0; i < locksList.length; i++)
 	{
-		cLocalKinematics(lockList[i]).SetLock(siLockLevelManipulation);
+		cLocalKinematics(locksList[i]).SetLock(siLockLevelManipulation);
 	}
+
+	sIBL_XSI_MR_AddToDisplayLayer("sIBL_FeedBack_Layer", cFeedback);
 
 	return cFeedback;
 }
@@ -982,6 +1051,10 @@ function sIBL_XSI_MR_GetLight( cParent, cConstraintParent, cLightType, cLightNam
 			cConstraint.Parameters("dirz").Value = -1;
 		}
 	}
+	
+	sIBL_XSI_MR_AddToDisplayLayer("sIBL_Lighting_Layer", cLightTarget);
+
+	sIBL_XSI_MR_AddToDisplayLayer("sIBL_Lighting_Layer", cLight);
 }
 
 function sIBL_XSI_MR_SunCreation(sunU, sunV, sunColor, sunMultiplier, feedbackRadius)
@@ -1009,23 +1082,17 @@ function sIBL_XSI_MR_ConnectFeedBackToSIBLShaders( cFeedback, connectToBackgroun
 
 	if (connectToBackground)
 	{
-		//AddExpr(cPass + ".sIBL_Background_Environment.transform.StaticKineState.orix", "-" + cFeedback + ".kine.global.rotx", true);
 		AddExpr(cPass + ".sIBL_Background_Environment.transform.StaticKineState.oriy", "-" + cFeedback + ".kine.global.roty" + " + 225", true);
-		//AddExpr(cPass + ".sIBL_Background_Environment.transform.StaticKineState.oriz", "-" + cFeedback + ".kine.global.rotz" + "*2", true);
 	}
 
 	if (connectToLighting)
 	{
-		//AddExpr(cPass + ".sIBL_Lighting_Environment.transform.StaticKineState.orix", "-" + cFeedback + ".kine.global.rotx", true);
 		AddExpr(cPass + ".sIBL_Lighting_Environment.transform.StaticKineState.oriy", "-" + cFeedback + ".kine.global.roty" + " + 225", true);
-		//AddExpr(cPass + ".sIBL_Lighting_Environment.transform.StaticKineState.oriz", "-" + cFeedback + ".kine.global.rotz" + "*2", true);
 	}
 
 	if (connectToReflection)
 	{
-		//AddExpr(cPass + ".sIBL_Reflection_Environment.transform.StaticKineState.orix", "-" + cFeedback + ".kine.global.rotx", true);
 		AddExpr(cPass + ".sIBL_Reflection_Environment.transform.StaticKineState.oriy", "-" + cFeedback + ".kine.global.roty" + " + 225", true);
-		//AddExpr(cPass + ".sIBL_Reflection_Environment.transform.StaticKineState.oriz", "-" + cFeedback + ".kine.global.rotz" + "*2", true);
 	}
 }
 
@@ -1096,6 +1163,8 @@ function sIBL_XSI_MR_GroundCreation(feedbackRadius, shadowCatcher)
 
 		AssignMaterial(cGroundMaterial + "," + cGround);
 	}
+	
+	sIBL_XSI_MR_AddToDisplayLayer("sIBL_Ground_Layer", cGround);
 }
 
 function sIBL_XSI_MR_ObjectExists( cObject, cErrorMessage )
@@ -1112,7 +1181,7 @@ function sIBL_XSI_MR_ObjectExists( cObject, cErrorMessage )
 	}
 }
 
-function sIBL_XSI_AddToDisplayLayer( cLayerName, cObject)
+function sIBL_XSI_MR_AddToDisplayLayer( cLayerName, cObject)
 {
     var cSceneLayers = ActiveProject.ActiveScene.Layers;
     var cLayerExists = false;
