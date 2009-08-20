@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.1.1 | String | Template Release
-Date = @Date | 12 August 2009 | String | Date
+Release = @Release | 1.1.2 | String | Template Release
+Date = @Date | 20 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -189,7 +189,7 @@ global proc sIBL_Maya_Turtle_Setup(string $cBackgroundFilePath,
 			sIBL_Maya_Turtle_activateGlobalIllumination();
 
 		if ($activateLinearWorkflow)
-			sIBL_Maya_Turtle_ActivateLinearWorkflow();
+			sIBL_Maya_Turtle_ActivateLinearWorkflow($createBackground);
 
 		print("sIBL_GUI | sIBL File Import Finished !\n");
 		}
@@ -298,7 +298,7 @@ global proc sIBL_Maya_Turtle_CreateMainLocator()
 	rename ( "sIBL" + $cSIBLLocatorTransform) "sIBL_Controls";
 }
 
-global proc sIBL_Maya_Turtle_Create_Environment_Sphere_Branch(float $feedbackRadius, string $cPrefix, string $cFilePath, float $cGamma, int $useOverride)
+global proc sIBL_Maya_Turtle_Create_Environment_Sphere_Branch(float $feedbackRadius, string $cPrefix, string $cFilePath, int $useOverride)
 {
 	string $sIBLGroup = sIBL_Maya_Turtle_GetSIBLGroup();
 
@@ -328,12 +328,8 @@ global proc sIBL_Maya_Turtle_Create_Environment_Sphere_Branch(float $feedbackRad
 	sets -renderable true -noSurfaceShader true -empty -name $cShadingEngine;
 	connectAttr -f ($cSurfaceShader + ".outColor") ($cShadingEngine + ".surfaceShader");
 
-	string $cGammaNode = `createNode gammaCorrect`;
-	string $cGammaNodeAttributesList[] = {"gammaX", "gammaY", "gammaZ"};
-	for( $cGammaAttribute in $cGammaNodeAttributesList )
-		setAttr ($cGammaNode + "." + $cGammaAttribute) $cGamma;
-
 	string $cFile = `createNode file`;	
+	string $cGammaNode = `createNode gammaCorrect`;
 	
 	if($useOverride)
 	{
@@ -393,7 +389,7 @@ global proc sIBL_Maya_Turtle_Environment_Creation(int $createBackground, int $cr
 {
 	if ($createBackground)
 	{
-		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 50, "sIBL_Background", $cBackgroundFilePath, 1/2.2, 1);
+		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 50, "sIBL_Background", $cBackgroundFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Background_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -403,7 +399,7 @@ global proc sIBL_Maya_Turtle_Environment_Creation(int $createBackground, int $cr
 
 	if ($createLighting)
 	{
-		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 55, "sIBL_Lighting", $cLightingFilePath, 1, 1);
+		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 55, "sIBL_Lighting", $cLightingFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Lighting_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrSmoothGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -413,7 +409,7 @@ global proc sIBL_Maya_Turtle_Environment_Creation(int $createBackground, int $cr
 
 	if ($createReflection)
 	{
-		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 60, "sIBL_Reflection", $cReflectionFilePath, 1, 1);
+		sIBL_Maya_Turtle_Create_Environment_Sphere_Branch($feedbackRadius - 60, "sIBL_Reflection", $cReflectionFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Reflection_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -630,9 +626,12 @@ global proc sIBL_Maya_Turtle_activateGlobalIllumination()
 	setAttr "TurtleRenderOptions.enableGI" 1;
 }
 
-global proc sIBL_Maya_Turtle_ActivateLinearWorkflow()
+global proc sIBL_Maya_Turtle_ActivateLinearWorkflow(int $createBackground)
 {
 	setAttr TurtleRenderOptions.outputCorrection 1;
+	
+	if ($createBackground)
+		setAttr  "sIBL_Controls.backgroundGamma" 0.454545;
 }
 
 global proc sIBL_Maya_Turtle_CreateGround(float $feedbackRadius)

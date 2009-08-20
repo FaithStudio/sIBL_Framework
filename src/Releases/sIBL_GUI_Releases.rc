@@ -23,7 +23,7 @@ Type = "Stable"
 Comment = "This Is VRay For Maya Dome Light Template !"
 
 [Maya_Turtle]
-Release = 1.1.1
+Release = 1.1.2
 Type = "Stable"
 Comment = "This Is Maya Turtle Template !"
 
