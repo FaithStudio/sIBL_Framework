@@ -1,5 +1,5 @@
 [Template]
-Release = @Release | 0.9 | String | Template Release
+Release = @Release | 0.9.0 | String | Template Release
 Date = @Date | 24 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
