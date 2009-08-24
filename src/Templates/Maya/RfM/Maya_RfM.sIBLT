@@ -139,25 +139,25 @@ global proc sIBL_Maya_RfM_Setup(string $cBackgroundFilePath,
 
 	sIBL_Maya_RfM_ActivateRfM();
 
-	sIBL_Maya_RfM_Environment_Deletion();
+	sIBL_Maya_RfM_EnvironmentDeletion();
 
-	sIBL_Maya_RfM_CreateMainLocator();
+	sIBL_Maya_RfM_GetMainLocator();
 
 	if ($hideLights)
 		sIBL_Maya_RfM_HideLights();
 
-	sIBL_Maya_RfM_Environment_Creation($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath, $feedbackRadius);
+	sIBL_Maya_RfM_GetEnvironment($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath, $feedbackRadius);
 
 	if ($createFeedBack)
 	{
 		if($cBackgroundWidth > 8192)
 		{
 			confirmDialog -title "sIBL_GUI | Information" -message ( "The Background Image Is Too Large To Be Displayed On The Visual Feedback.\nCurrent Environment Image Width : " +  $cBackgroundWidth + " Pixels.\nThe Visual Feedback Will Use The Reflection Image Instead." )  -button "Ok" -defaultButton "Ok";
-			sIBL_Maya_RfM_Feedback_Creation($cReflectionFilePath, $feedbackRadius);
+			sIBL_Maya_RfM_GetFeedback($cReflectionFilePath, $feedbackRadius);
 		}
 		else
 		{
-			sIBL_Maya_RfM_Feedback_Creation($cBackgroundFilePath, $feedbackRadius);
+			sIBL_Maya_RfM_GetFeedback($cBackgroundFilePath, $feedbackRadius);
 		}
 	}
 
@@ -167,7 +167,7 @@ global proc sIBL_Maya_RfM_Setup(string $cBackgroundFilePath,
 		{
 			if ($createSun)
 			{
-				sIBL_Maya_RfM_Sun_Creation($sunU, $sunV, $sunColor, $sunMultiplier, $feedbackRadius );
+				sIBL_Maya_RfM_GetSun($sunU, $sunV, $sunColor, $sunMultiplier, $feedbackRadius );
 			}
 		}
 
@@ -175,7 +175,7 @@ global proc sIBL_Maya_RfM_Setup(string $cBackgroundFilePath,
 		{
 			if ($createLights)
 			{
-				sIBL_Maya_RfM_DynamicLights_Creation($dynamicLights, $feedbackRadius);
+				sIBL_Maya_RfM_GetDynamicLights($dynamicLights, $feedbackRadius);
 			}
 		}
 
@@ -183,10 +183,10 @@ global proc sIBL_Maya_RfM_Setup(string $cBackgroundFilePath,
 		sIBL_Maya_RfM_ConnectFeedBackToSIBLShaders($cFeedback, $createBackground, $createLighting, $createReflection);
 
 		if($createGround)
-			sIBL_Maya_RfM_CreateGround($feedbackRadius);
+			sIBL_Maya_RfM_GetGround($feedbackRadius);
 
 		if ($activateGlobalIllumination)
-			sIBL_Maya_RfM_activateGlobalIllumination();
+			sIBL_Maya_RfM_ActivateGlobalIllumination();
 
 		if ($activateLinearWorkflow)
 			sIBL_Maya_RfM_ActivateLinearWorkflow($createBackground);
@@ -209,7 +209,7 @@ global proc sIBL_Maya_RfM_DeleteType( string $cType, string $cFilter)
 			delete($cTypesList);
 }
 
-global proc sIBL_Maya_RfM_Environment_Deletion()
+global proc sIBL_Maya_RfM_EnvironmentDeletion()
 {
 	// sIBL Transform Group Deletion.
 	string $sceneSIBLGroup[] = `ls -fl "sIBL"`;
@@ -246,7 +246,7 @@ global proc sIBL_Maya_RfM_Environment_Deletion()
 	sIBL_Maya_RfM_DeleteType("displayLayer", "sIBL*");
 }
 
-global proc sIBL_Maya_RfM_CreateMainLocator()
+global proc sIBL_Maya_RfM_GetMainLocator()
 {
 	string $sIBLGroup = sIBL_Maya_RfM_GetSIBLGroup();
 	string $cSIBLLocator = `createNode annotationShape`;
@@ -298,7 +298,7 @@ global proc sIBL_Maya_RfM_CreateMainLocator()
 	rename ( "sIBL" + $cSIBLLocatorTransform) "sIBL_Controls";
 }
 
-global proc sIBL_Maya_RfM_Create_Environment_Sphere_Branch(float $feedbackRadius, string $cPrefix, string $cFilePath, int $useOverride)
+global proc sIBL_Maya_RfM_GetEnvironmentLightBranch(float $feedbackRadius, string $cPrefix, string $cFilePath, int $useOverride)
 {
 	string $sIBLGroup = sIBL_Maya_RfM_GetSIBLGroup();
 
@@ -385,11 +385,11 @@ global proc sIBL_Maya_RfM_Create_Environment_Sphere_Branch(float $feedbackRadius
 	rename $cPlace2DTexture ($cPrefix + "_" + `nodeType $cPlace2DTexture`);
 }
 
-global proc sIBL_Maya_RfM_Environment_Creation(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath, float $feedbackRadius)
+global proc sIBL_Maya_RfM_GetEnvironment(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath, float $feedbackRadius)
 {
 	if ($createBackground)
 	{
-		sIBL_Maya_RfM_Create_Environment_Sphere_Branch($feedbackRadius - 50, "sIBL_Background", $cBackgroundFilePath, 1);
+		sIBL_Maya_RfM_GetEnvironmentLightBranch($feedbackRadius - 50, "sIBL_Background", $cBackgroundFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_RfM_GetShapes("sIBL_Background_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -399,7 +399,7 @@ global proc sIBL_Maya_RfM_Environment_Creation(int $createBackground, int $creat
 
 	if ($createLighting)
 	{
-		sIBL_Maya_RfM_Create_Environment_Sphere_Branch($feedbackRadius - 55, "sIBL_Lighting", $cLightingFilePath, 1);
+		sIBL_Maya_RfM_GetEnvironmentLightBranch($feedbackRadius - 55, "sIBL_Lighting", $cLightingFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_RfM_GetShapes("sIBL_Lighting_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrSmoothGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -409,7 +409,7 @@ global proc sIBL_Maya_RfM_Environment_Creation(int $createBackground, int $creat
 
 	if ($createReflection)
 	{
-		sIBL_Maya_RfM_Create_Environment_Sphere_Branch($feedbackRadius - 60, "sIBL_Reflection", $cReflectionFilePath, 1);
+		sIBL_Maya_RfM_GetEnvironmentLightBranch($feedbackRadius - 60, "sIBL_Reflection", $cReflectionFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_RfM_GetShapes("sIBL_Reflection_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -433,7 +433,7 @@ global proc string sIBL_Maya_RfM_GetSIBLGroup()
 	return $cSIBLGroup[0];
 }
 
-global proc string sIBL_Maya_RfM_FeedbackGeometry_Creation(float $feedbackRadius)
+global proc string sIBL_Maya_RfM_GetFeedbackGeometry(float $feedbackRadius)
 {
  	string $cFeedback[] = `sphere -name "sIBL_Feedback"`;
 	rebuildSurface -ch 1 -rpo 1 -rt 0 -end 1 -kr 0 -kcp 0 -kc 0 -su 4 -du 3 -sv 8 -dv 3 -tol 0.01 -fr 0  -dir 2 $cFeedback;
@@ -466,10 +466,10 @@ global proc string sIBL_Maya_RfM_FeedbackGeometry_Creation(float $feedbackRadius
 	return $cFeedback[0];
 }
 
-global proc sIBL_Maya_RfM_Feedback_Creation(string $cBackgroundFilePath, float $feedbackRadius)
+global proc sIBL_Maya_RfM_GetFeedback(string $cBackgroundFilePath, float $feedbackRadius)
 {
  	string $sIBLGroup = sIBL_Maya_RfM_GetSIBLGroup();
-	string $cFeedback = sIBL_Maya_RfM_FeedbackGeometry_Creation($feedbackRadius);
+	string $cFeedback = sIBL_Maya_RfM_GetFeedbackGeometry($feedbackRadius);
 	parent $cFeedback $sIBLGroup;
 
 	string $cLambertShader = `shadingNode -asShader lambert`;
@@ -560,12 +560,12 @@ global proc sIBL_Maya_RfM_GetLight( string $cLigthType, string $cLightName, floa
 	rename $cConstraint[0] ($cLightName + "_AimConstraint");
 }
 
-global proc sIBL_Maya_RfM_Sun_Creation(float $sunU, float $sunV, float $sunColor[], float $sunMultiplier, float $feedbackRadius )
+global proc sIBL_Maya_RfM_GetSun(float $sunU, float $sunV, float $sunColor[], float $sunMultiplier, float $feedbackRadius )
 {
 	sIBL_Maya_RfM_GetLight("directionalLight", "sIBL_Sun", ($feedbackRadius / 10), $sunColor, $sunMultiplier, $sunU, $sunV);
 }
 
-global proc sIBL_Maya_RfM_DynamicLights_Creation(string $compactedDynamicLights, float $feedbackRadius)
+global proc sIBL_Maya_RfM_GetDynamicLights(string $compactedDynamicLights, float $feedbackRadius)
 {
 	string $sIBLGroup = sIBL_Maya_RfM_GetSIBLGroup();
 	string $cFeedback[] = `ls -fl "sIBL_Feedback"`;
@@ -619,7 +619,7 @@ global proc sIBL_Maya_RfM_ConnectFeedBackToSIBLShaders(string $cFeedback, int $c
 	}
 }
 
-global proc sIBL_Maya_RfM_activateGlobalIllumination()
+global proc sIBL_Maya_RfM_ActivateGlobalIllumination()
 {
 
 	setAttr "defaultRenderGlobals.enableDefaultLight" 0;
@@ -634,7 +634,7 @@ global proc sIBL_Maya_RfM_ActivateLinearWorkflow(int $createBackground)
 		setAttr  "sIBL_Controls.backgroundGamma" 0.454545;
 }
 
-global proc sIBL_Maya_RfM_CreateGround(float $feedbackRadius)
+global proc sIBL_Maya_RfM_GetGround(float $feedbackRadius)
 {
 	string $sIBLGroup = sIBL_Maya_RfM_GetSIBLGroup();
 	string $cGround[] = `polyPlane -sx 15 -sy 15`;
@@ -661,7 +661,6 @@ global proc sIBL_Maya_RfM_ActivateRfM()
 		loadPlugin("RenderMan_for_Maya");
 	}
 	setAttr defaultRenderGlobals.currentRenderer -type "string" "renderMan";
-	ilrCreateRenderOptionsNode();
 }
 
 global proc string[] sIBL_Maya_RfM_GetShapes(string $xform)

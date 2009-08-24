@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.5.1 | String | Template Release
-Date = @Date | 16 August 2009 | String | Date
+Release = @Release | 1.5.2 | String | Template Release
+Date = @Date | 24 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -271,11 +271,11 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 					cProgressBar.Increment();
 
 					// Environment Shaders Creation.
-					sIBL_XSI_MR_EnvironmentShadersCreation(createBackground, createLighting, createReflection, cBackgroundFilePath, cLightingFilePath, cReflectionFilePath, cSelectedPassesList);
+					sIBL_XSI_MR_GetEnvironmentShaders(createBackground, createLighting, createReflection, cBackgroundFilePath, cLightingFilePath, cReflectionFilePath, cSelectedPassesList);
 					cProgressBar.Increment();
 
 					// Feedback Creation.
-					sIBL_XSI_MR_FeedbackCreation(feedbackRadius, createBackground, createFeedBack);
+					sIBL_XSI_MR_GetFeedback(feedbackRadius, createBackground, createFeedBack);
 					cProgressBar.Increment();
 
 					// Sun Creation
@@ -285,7 +285,7 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 						{
 							if (sIBL_XSI_MR_ObjectExists("sIBL_Feedback", "sIBL_GUI | No Feedback Found, Skipping Sun Creation !"))
 							{
-								sIBL_XSI_MR_SunCreation(sunU, sunV, sunColor, sunMultiplier, feedbackRadius);
+								sIBL_XSI_MR_GetSun(sunU, sunV, sunColor, sunMultiplier, feedbackRadius);
 							}
 						}
 					}
@@ -296,7 +296,7 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 					{
 						if (createLights)
 						{
-							sIBL_XSI_MR_DynamicLightsCreation(dynamicLights, feedbackRadius);
+							sIBL_XSI_MR_GetDynamicLights(dynamicLights, feedbackRadius);
 						}
 					}
 					cProgressBar.Increment();
@@ -311,7 +311,7 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 
 					// Ground Creation
 					if (createGround)
-						sIBL_XSI_MR_GroundCreation(feedbackRadius, shadowCatcher);
+						sIBL_XSI_MR_GetGround(feedbackRadius, shadowCatcher);
 					cProgressBar.Increment();
 
 					// Final Gather Activation
@@ -542,7 +542,7 @@ function sIBL_XSI_MR_EnvironmentDeletion()
 	}
 }
 
-function sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cInputShader, cImageSource, connectionPorts, cName)
+function sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cInputShader, cImageSource, connectionPorts, cName)
 {
 	var cEnvironmentShader = CreateShaderFromPreset("Shaders/Environment/Environment.Preset", cPass, "");
 	SIConnectShaderToCnxPoint(cImageSource, cEnvironmentShader.tex, false);
@@ -599,7 +599,7 @@ function sIBL_XSI_MR_Update_EnvironmentShaders(createBackground, createLighting,
 			var cBackgroundEnvironmentShader = sIBL_XSI_MR_GetMatchingObjectsByClassID("{AD97C8B1-E1AE-4E3B-ABF5-1754616A6B63}", "sIBL_Background_Environment", true);
 			if(cBackgroundEnvironmentShader == 0)
 			{
-				sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cRaytype, cBackgroundSource, cPorts, "sIBL_Background");
+				sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cRaytype, cBackgroundSource, cPorts, "sIBL_Background");
 			}
 		}
 		else
@@ -628,7 +628,7 @@ function sIBL_XSI_MR_Update_EnvironmentShaders(createBackground, createLighting,
 			var cLightingEnvironmentShader = sIBL_XSI_MR_GetMatchingObjectsByClassID("{AD97C8B1-E1AE-4E3B-ABF5-1754616A6B63}", "sIBL_Lighting_Environment", true);
 			if(cLightingEnvironmentShader == 0)
 			{
-				sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cRaytype, cLightingSource, cPorts, "sIBL_Lighting");
+				sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cRaytype, cLightingSource, cPorts, "sIBL_Lighting");
 			}
 		}
 		else
@@ -660,7 +660,7 @@ function sIBL_XSI_MR_Update_EnvironmentShaders(createBackground, createLighting,
 			var cReflectionEnvironmentShader = sIBL_XSI_MR_GetMatchingObjectsByClassID("{AD97C8B1-E1AE-4E3B-ABF5-1754616A6B63}", "sIBL_Reflection_Environment", true);
 			if(cReflectionEnvironmentShader == 0)
 			{
-				sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cRaytype, cReflectionSource, cPorts, "sIBL_Reflection");
+				sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cRaytype, cReflectionSource, cPorts, "sIBL_Reflection");
 			}
 		}
 		else
@@ -688,7 +688,7 @@ function sIBL_XSI_MR_Update_EnvironmentShaders(createBackground, createLighting,
 	}
 }
 
-function sIBL_XSI_MR_EnvironmentShadersCreation(createBackground, createLighting, createReflection, cBackgroundFilePath, cLightingFilePath, cReflectionFilePath, cSelectedPassesList)
+function sIBL_XSI_MR_GetEnvironmentShaders(createBackground, createLighting, createReflection, cBackgroundFilePath, cLightingFilePath, cReflectionFilePath, cSelectedPassesList)
 {
 	var cPass = cSelectedPassesList[0];
 
@@ -706,7 +706,7 @@ function sIBL_XSI_MR_EnvironmentShadersCreation(createBackground, createLighting
 	if (createBackground)
 	{
 		var cBackgroundSource = Application.CreateImageClip2(cBackgroundFilePath, "sIBL_Background_Clip");
-		sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cRaytype, cBackgroundSource, cPorts, "sIBL_Background");
+		sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cRaytype, cBackgroundSource, cPorts, "sIBL_Background");
 	}
 	else
 	{
@@ -718,7 +718,7 @@ function sIBL_XSI_MR_EnvironmentShadersCreation(createBackground, createLighting
 	if (createLighting)
 	{
 		var cLightingSource = Application.CreateImageClip2(cLightingFilePath, "sIBL_Lighting_Clip");
-		sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cRaytype, cLightingSource, cPorts, "sIBL_Lighting");
+		sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cRaytype, cLightingSource, cPorts, "sIBL_Lighting");
 	}
 	else
 	{
@@ -733,7 +733,7 @@ function sIBL_XSI_MR_EnvironmentShadersCreation(createBackground, createLighting
 	if (createReflection)
 	{
 		var cReflectionSource = Application.CreateImageClip2(cReflectionFilePath, "sIBL_Reflection_Clip");
-		sIBL_XSI_MR_CreateEnvironmentShaderBranch(cPass, cRaytype, cReflectionSource, cPorts, "sIBL_Reflection");
+		sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cRaytype, cReflectionSource, cPorts, "sIBL_Reflection");
 	}
 	else
 	{
@@ -820,7 +820,7 @@ function sIBL_XSI_MR_GetSIBLGroup()
 	return sceneSIBLGroup
 }
 
-function sIBL_XSI_MR_FeedbackGeometryCreation(feedbackRadius, createFeedBack)
+function sIBL_XSI_MR_GetFeedbackGeometry(feedbackRadius, createFeedBack)
 {
 	var cFeedback = ActiveSceneRoot.AddGeometry("Sphere", "NurbsSurface", "sIBL_Feedback");
 	cFeedback.properties("visibility").Parameters("rendvis").value = 0;
@@ -863,7 +863,7 @@ function sIBL_XSI_MR_Update_Feedback(feedbackRadius, createBackground, createFee
 
 	if (cFeedback == 0 && overrideTweaks)
 	{
-		sIBL_XSI_MR_FeedbackCreation(feedbackRadius, createBackground, createFeedBack);
+		sIBL_XSI_MR_GetFeedback(feedbackRadius, createBackground, createFeedBack);
 	}
 	else
 	{
@@ -890,10 +890,10 @@ function sIBL_XSI_MR_Update_Feedback(feedbackRadius, createBackground, createFee
 	}
 }
 
-function sIBL_XSI_MR_FeedbackCreation(feedbackRadius, createBackground, createFeedBack)
+function sIBL_XSI_MR_GetFeedback(feedbackRadius, createBackground, createFeedBack)
 {
 	var sIBLGroup = sIBL_XSI_MR_GetSIBLGroup();
-	var cFeedback = sIBL_XSI_MR_FeedbackGeometryCreation(feedbackRadius, createFeedBack);
+	var cFeedback = sIBL_XSI_MR_GetFeedbackGeometry(feedbackRadius, createFeedBack);
 
 	sIBLGroup.AddChild(cFeedback);
 
@@ -943,7 +943,7 @@ function sIBL_XSI_MR_Update_Sun(sunU, sunV, sunColor, sunMultiplier, feedbackRad
     {
         if (sIBL_XSI_MR_ObjectExists("sIBL_Feedback", "sIBL_GUI | No Feedback Found, Skipping Sun Creation !"))
         {
-            sIBL_XSI_MR_SunCreation(sunU, sunV, sunColor, sunMultiplier, feedbackRadius);
+            sIBL_XSI_MR_GetSun(sunU, sunV, sunColor, sunMultiplier, feedbackRadius);
         }
     }
     else
@@ -968,7 +968,7 @@ function sIBL_XSI_MR_Update_DynamicsLights(dynamicLights, feedbackRadius)
     {
     		if (sIBL_XSI_MR_ObjectExists("sIBL_Feedback", "sIBL_GUI | No Feedback Found, Skipping Dynamic Lights Creation !"))
     		{
-    			sIBL_XSI_MR_DynamicLightsCreation(dynamicLights, feedbackRadius);
+    			sIBL_XSI_MR_GetDynamicLights(dynamicLights, feedbackRadius);
     		}
     }
     else
@@ -1056,7 +1056,7 @@ function sIBL_XSI_MR_GetLight( cParent, cConstraintParent, cLightType, cLightNam
 	sIBL_XSI_MR_AddToDisplayLayer("sIBL_Lighting_Layer", cLight);
 }
 
-function sIBL_XSI_MR_SunCreation(sunU, sunV, sunColor, sunMultiplier, feedbackRadius)
+function sIBL_XSI_MR_GetSun(sunU, sunV, sunColor, sunMultiplier, feedbackRadius)
 {
 	var sIBLGroup = sIBL_XSI_MR_GetSIBLGroup();
 	var cFeedback = Application.ActiveSceneRoot.FindChild("sIBL_Feedback");
@@ -1064,7 +1064,7 @@ function sIBL_XSI_MR_SunCreation(sunU, sunV, sunColor, sunMultiplier, feedbackRa
 	sIBL_XSI_MR_GetLight( sIBLGroup, cFeedback, "Infinite", "sIBL_Sun", feedbackRadius/10, physicalSun, sunMultiplier, sunColor, sunU, sunV )
 }
 
-function sIBL_XSI_MR_DynamicLightsCreation(dynamicLights, feedbackRadius)
+function sIBL_XSI_MR_GetDynamicLights(dynamicLights, feedbackRadius)
 {
 	var sIBLGroup = sIBL_XSI_MR_GetSIBLGroup();
 	var cFeedback = Application.ActiveSceneRoot.FindChild("sIBL_Feedback");
@@ -1145,11 +1145,11 @@ function sIBL_XSI_MR_Update_Ground(feedbackRadius, shadowCatcher, overrideTweaks
 	var cGround = sIBL_XSI_MR_GetMatchingObjectsByClassID("{5FC0CCAE-3DC8-11D0-9449-00AA006D3165}", "sIBL_Ground", true);
 	if (cGround == 0 && overrideTweaks)
 	{
-		sIBL_XSI_MR_GroundCreation(feedbackRadius, shadowCatcher);
+		sIBL_XSI_MR_GetGround(feedbackRadius, shadowCatcher);
 	}
 }
 
-function sIBL_XSI_MR_GroundCreation(feedbackRadius, shadowCatcher)
+function sIBL_XSI_MR_GetGround(feedbackRadius, shadowCatcher)
 {
 	var sIBLGroup = sIBL_XSI_MR_GetSIBLGroup();
 
