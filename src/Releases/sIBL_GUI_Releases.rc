@@ -8,24 +8,29 @@ Type = "Nightly"
 Comment = "This Is XSI Mental Ray Template !"
 
 [Maya_MR]
-Release = 1.6.7
+Release = 1.6.8
 Type = "Stable"
 Comment = "This Is Maya Mental Ray Template !"
 
 [Maya_VRay]
-Release = 1.1.1
+Release = 1.1.2
 Type = "Stable"
 Comment = "This Is VRay For Maya Template !"
 
 [Maya_VRay_DLight]
-Release = 1.1.1
+Release = 1.1.2
 Type = "Stable"
 Comment = "This Is VRay For Maya Dome Light Template !"
 
 [Maya_Turtle]
-Release = 1.1.2
+Release = 1.1.3
 Type = "Stable"
 Comment = "This Is Maya Turtle Template !"
+
+[Maya_RfM]
+Release = 0.5
+Type = "Nightly"
+Comment = "This Is Renderman For Maya Template !"
 
 [3dsMax_MR]
 Release = 0.9.5

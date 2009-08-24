@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.1.1 | String | Template Release
-Date = @Date | 12 August 2009 | String | Date
+Release = @Release | 1.1.2 | String | Template Release
+Date = @Date | 24 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -150,7 +150,7 @@ global proc sIBL_Maya_VRay_Setup(string $cBackgroundFilePath,
 
 	if ($createFeedBack)
 	{
-		if($cBackgroundWidth > 8000)
+		if($cBackgroundWidth > 8192)
 		{
 			confirmDialog -title "sIBL_GUI | Information" -message ( "The Background Image Is Too Large To Be Displayed On The Visual Feedback.\nCurrent Environment Image Width : " +  $cBackgroundWidth + " Pixels.\nThe Visual Feedback Will Use The Reflection Image Instead." )  -button "Ok" -defaultButton "Ok";
 			sIBL_Maya_VRay_Feedback_Creation($cReflectionFilePath, $feedbackRadius);
