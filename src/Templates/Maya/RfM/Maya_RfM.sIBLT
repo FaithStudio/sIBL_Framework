@@ -656,20 +656,12 @@ global proc sIBL_Maya_RfM_CreateGround(float $feedbackRadius)
 
 global proc sIBL_Maya_RfM_ActivateRfM()
 {
-	string $cMayaVersion[];
-	string $cAbout = `about -v`;
-	int $cTokensNumber = tokenize($cAbout, " ", $cMayaVersion);
-
-	if( $cTokensNumber != 0 )
+	if (`pluginInfo -q -loaded "RenderMan_for_Maya"` == 0)
 	{
-		string $cRfMPlugin = "RfMForMaya" + $cMayaVersion[0];
-		if (`pluginInfo -q -loaded $cRfMPlugin` == 0)
-		{
-			loadPlugin($cRfMPlugin);
-		}
-		setAttr defaultRenderGlobals.currentRenderer -type "string" "turtle";
-		ilrCreateRenderOptionsNode();
+		loadPlugin("RenderMan_for_Maya");
 	}
+	setAttr defaultRenderGlobals.currentRenderer -type "string" "renderMan";
+	ilrCreateRenderOptionsNode();
 }
 
 global proc string[] sIBL_Maya_RfM_GetShapes(string $xform)
