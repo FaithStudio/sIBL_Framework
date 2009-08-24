@@ -3,34 +3,34 @@ Release = 2.0.8
 Type = "Stable"
 
 [XSI_MR]
-Release = 1.5.1
-Type = "Nightly"
-Comment = "This Is XSI Mental Ray Template !"
+Release = 1.5.2
+Type = "Stable"
+Comment = "This Is XSI Mental Ray Template ! ( Code Refactoring )"
 
 [Maya_MR]
 Release = 1.6.8
 Type = "Stable"
-Comment = "This Is Maya Mental Ray Template !"
+Comment = "This Is Maya Mental Ray Template ! ( Code Refactoring )"
 
 [Maya_VRay]
 Release = 1.1.2
 Type = "Stable"
-Comment = "This Is VRay For Maya Template !"
+Comment = "This Is VRay For Maya Template ! ( Code Refactoring )"
 
 [Maya_VRay_DLight]
 Release = 1.1.2
 Type = "Stable"
-Comment = "This Is VRay For Maya Dome Light Template !"
+Comment = "This Is VRay For Maya Dome Light Template ! ( Code Refactoring )"
 
 [Maya_Turtle]
 Release = 1.1.3
 Type = "Stable"
-Comment = "This Is Maya Turtle Template !"
+Comment = "This Is Maya Turtle Template ! ( Code Refactoring / Cleanup )"
 
 [Maya_RfM]
-Release = 0.5
+Release = 0.9
 Type = "Nightly"
-Comment = "This Is Renderman For Maya Template !"
+Comment = "This Is Renderman For Maya Template ! ( First Beta Release )"
 
 [3dsMax_MR]
 Release = 0.9.5

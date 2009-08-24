@@ -531,13 +531,13 @@ global proc sIBL_Maya_VRay_BridgeFeedbackControlsAndShaders( string $cTarget )
 		string $gammaSubComponentsList[] = {"X", "Y", "Z"};
 		for ($gammaSubComponent in $gammaSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
+			connectAttr -f ("sIBL_Controls." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
 		}
 		
 		string $gainSubComponentsList[] = {"R", "G", "B"};
 		for ($gainSubComponent in $gainSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gain") ("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
+			connectAttr -f ("sIBL_Controls." + $cLowerCaseTarget + "Gain") ("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
 		}
 }
 

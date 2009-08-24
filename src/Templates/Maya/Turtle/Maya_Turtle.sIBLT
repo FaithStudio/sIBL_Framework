@@ -227,9 +227,6 @@ global proc sIBL_Maya_Turtle_EnvironmentDeletion()
 	// sIBL lambert Shaders Deletion.
 	sIBL_Maya_Turtle_DeleteType("lambert", "sIBL*");
 
-	// sIBL GammaCorrect Deletion.
-	sIBL_Maya_Turtle_DeleteType("gammaCorrect", "sIBL*");
-
 	// sIBL Surface Shaders Deletion.
 	sIBL_Maya_Turtle_DeleteType("surfaceShader", "sIBL*");
 	
@@ -298,7 +295,7 @@ global proc sIBL_Maya_Turtle_GetMainLocator()
 	rename ( "sIBL" + $cSIBLLocatorTransform) "sIBL_Controls";
 }
 
-global proc sIBL_Maya_Turtle_GetEnvironmentSphereBranch(float $feedbackRadius, string $cPrefix, string $cFilePath, int $useOverride)
+global proc sIBL_Maya_Turtle_GetEnvironmentSphereBranch(float $cRadius, string $cPrefix, string $cFilePath, int $useOverride)
 {
 	string $sIBLGroup = sIBL_Maya_Turtle_GetSIBLGroup();
 
@@ -309,9 +306,7 @@ global proc sIBL_Maya_Turtle_GetEnvironmentSphereBranch(float $feedbackRadius, s
 	select -r $cEnvironmentSphereShapes[0];
 	ilrAttributesOnSelection("ilrRenderStatsAttributes", 1);
 
-	setAttr ($cEnvironmentSphereShapes[0] + ".overrideEnabled") 1;
-	setAttr ($cEnvironmentSphereShapes[0] + ".overrideDisplayType") 1;
-	setAttr ($cEnvironmentSphereShapes[0] + ".overrideLevelOfDetail") 1;
+	setAttr ($cEnvironmentSphereShapes[0] + ".template") 1;
 
 	delete -ch;
 
@@ -321,7 +316,7 @@ global proc sIBL_Maya_Turtle_GetEnvironmentSphereBranch(float $feedbackRadius, s
 
 	string $cScaleAttributesList[] = {"scaleX", "scaleY", "scaleZ"};
 	for( $cScaleAttribute in $cScaleAttributesList )
-		setAttr ($cEnvironmentSphere[0] + "." + $cScaleAttribute) $feedbackRadius;
+		setAttr ($cEnvironmentSphere[0] + "." + $cScaleAttribute) $cRadius;
 
 	string $cSurfaceShader = `shadingNode -asShader surfaceShader`;
 	string $cShadingEngine = `sets -renderable true -noSurfaceShader true -empty`;
@@ -389,7 +384,7 @@ global proc sIBL_Maya_Turtle_GetEnvironment(int $createBackground, int $createLi
 {
 	if ($createBackground)
 	{
-		sIBL_Maya_Turtle_GetEnvironmentSphereBranch($feedbackRadius - 50, "sIBL_Background", $cBackgroundFilePath, 1);
+		sIBL_Maya_Turtle_GetEnvironmentSphereBranch(($feedbackRadius - ( $feedbackRadius * 5 / 100 )) , "sIBL_Background", $cBackgroundFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Background_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -399,7 +394,7 @@ global proc sIBL_Maya_Turtle_GetEnvironment(int $createBackground, int $createLi
 
 	if ($createLighting)
 	{
-		sIBL_Maya_Turtle_GetEnvironmentSphereBranch($feedbackRadius - 55, "sIBL_Lighting", $cLightingFilePath, 1);
+		sIBL_Maya_Turtle_GetEnvironmentSphereBranch(($feedbackRadius - ( $feedbackRadius * 7.5 / 100 )), "sIBL_Lighting", $cLightingFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Lighting_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "visibleInReflections", "visibleInRefractions", "opposite", "ilrSmoothGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -409,7 +404,7 @@ global proc sIBL_Maya_Turtle_GetEnvironment(int $createBackground, int $createLi
 
 	if ($createReflection)
 	{
-		sIBL_Maya_Turtle_GetEnvironmentSphereBranch($feedbackRadius - 60, "sIBL_Reflection", $cReflectionFilePath, 1);
+		sIBL_Maya_Turtle_GetEnvironmentSphereBranch(($feedbackRadius - ( $feedbackRadius * 10 / 100 )), "sIBL_Reflection", $cReflectionFilePath, 1);
 
 		string $cEnvironmentSphereShapes[] = sIBL_Maya_Turtle_GetShapes("sIBL_Reflection_Environment_Sphere");
 		string $cRenderStats[] = { "castsShadows", "receiveShadows", "motionBlur", "primaryVisibility", "smoothShading", "opposite", "ilrVisibleInFG", "ilrSmoothGI", "ilrCastGI", "ilrReceiveGI", "ilrReceiveOcclusion", "ilrCastOcclusion", "ilrSelfOcclusion" };
@@ -588,13 +583,13 @@ global proc sIBL_Maya_Turtle_BridgeFeedbackControlsAndShaders( string $cTarget )
 		string $gammaSubComponentsList[] = {"X", "Y", "Z"};
 		for ($gammaSubComponent in $gammaSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
+			connectAttr -f ("sIBL_Controls." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
 		}
 		
 		string $gainSubComponentsList[] = {"R", "G", "B"};
 		for ($gainSubComponent in $gainSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gain") ("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
+			connectAttr -f ("sIBL_Controls." + $cLowerCaseTarget + "Gain") ("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
 		}
 }
 
@@ -602,19 +597,19 @@ global proc sIBL_Maya_Turtle_ConnectFeedBackToSIBLShaders(string $cFeedback, int
 {
 	if ($connectToBackground)
 	{
-		expression -name "sIBL_Background_Expression" -s ("sIBL_Background_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Background_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX;\nsIBL_Background_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY;\nsIBL_Background_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ;");
+		expression -name "sIBL_Background_Expression" -s ("sIBL_Background_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Background_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX-" + $cFeedback + ".scaleX*5/100;\nsIBL_Background_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY-" + $cFeedback + ".scaleY*5/100;\nsIBL_Background_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ-" + $cFeedback + ".scaleZ*5/100;");
 		sIBL_Maya_Turtle_BridgeFeedbackControlsAndShaders("Background");
 	}
 
 	if ($connectToLighting)
 	{
-		expression -name "sIBL_Lighting_Expression" -s ("sIBL_Lighting_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Lighting_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX;\nsIBL_Lighting_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY;\nsIBL_Lighting_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ;");
+		expression -name "sIBL_Lighting_Expression" -s ("sIBL_Lighting_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Lighting_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX-" + $cFeedback + ".scaleX*7.5/100;\nsIBL_Lighting_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY-" + $cFeedback + ".scaleY*7.5/100;\nsIBL_Lighting_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ-" + $cFeedback + ".scaleZ*7.5/100;");
 		sIBL_Maya_Turtle_BridgeFeedbackControlsAndShaders("Lighting");
 	}
 
 	if ($connectToReflection)
 	{
-		expression -name "sIBL_Reflection_Expression" -s ("sIBL_Reflection_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Reflection_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX;\nsIBL_Reflection_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY;\nsIBL_Reflection_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ;");
+		expression -name "sIBL_Reflection_Expression" -s ("sIBL_Reflection_Environment_Sphere.rotateX = " + $cFeedback + ".rotateX;\nsIBL_Reflection_Environment_Sphere.scaleX = " + $cFeedback + ".scaleX-" + $cFeedback + ".scaleX*10/100;\nsIBL_Reflection_Environment_Sphere.scaleY = " + $cFeedback + ".scaleY-" + $cFeedback + ".scaleY*10/100;\nsIBL_Reflection_Environment_Sphere.scaleZ = " + $cFeedback + ".scaleZ-" + $cFeedback + ".scaleZ*10/100;");
 		sIBL_Maya_Turtle_BridgeFeedbackControlsAndShaders("Reflection");
 	}
 }
@@ -669,6 +664,9 @@ global proc sIBL_Maya_Turtle_ActivateTurtle()
 		}
 		setAttr defaultRenderGlobals.currentRenderer -type "string" "turtle";
 		ilrCreateRenderOptionsNode();
+		
+		setAttr "TurtleRenderOptions.aaMinSampleRate" 0;
+		setAttr "TurtleRenderOptions.aaMaxSampleRate" 2;
 	}
 }
 
