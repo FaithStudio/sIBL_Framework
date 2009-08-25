@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 0.9.0 | String | Template Release
-Date = @Date | 24 August 2009 | String | Date
+Release = @Release | 1.0.0 | String | Template Release
+Date = @Date | 25 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -431,12 +431,14 @@ global proc sIBL_Maya_RfM_GetEnvironment(int $createBackground, int $createLight
 	{
 		sIBL_Maya_RfM_GetEnvironmentLightBranch($feedbackRadius*2 - ( $feedbackRadius * 7.5 / 100 ), "sIBL_Lighting", $cLightingFilePath);
 		setAttr "sIBL_Lighting_EnvironmentLigthtShape.rman__EnvEmitSpecular" 0;
+		rmanSetAttr("sIBL_Lighting_EnvironmentLigthtShape","rman__EnvGIScheme","occlusion");
 	}
 
 	if ($createReflection)
 	{
 		sIBL_Maya_RfM_GetEnvironmentLightBranch($feedbackRadius*2 - ( $feedbackRadius * 10 / 100 ), "sIBL_Reflection", $cReflectionFilePath);
 		setAttr "sIBL_Reflection_EnvironmentLigthtShape.rman__EnvEmitDiffuse" 0;
+		rmanSetAttr("sIBL_Reflection_EnvironmentLigthtShape","rman__EnvGIScheme","none");
 	}
 }
 

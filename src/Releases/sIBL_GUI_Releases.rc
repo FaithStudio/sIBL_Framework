@@ -28,9 +28,9 @@ Type = "Stable"
 Comment = "This Is Maya Turtle Template ! ( Code Refactoring / Cleanup )"
 
 [Maya_RfM]
-Release = 0.9.0
-Type = "Nightly"
-Comment = "This Is Renderman For Maya Template ! ( First Beta Release )"
+Release = 1.0.0
+Type = "Stable"
+Comment = "This Is Renderman For Maya Template !"
 
 [3dsMax_MR]
 Release = 0.9.5
