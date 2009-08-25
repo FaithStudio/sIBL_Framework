@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.5.2 | String | Template Release
-Date = @Date | 24 August 2009 | String | Date
+Release = @Release | 1.5.3 | String | Template Release
+Date = @Date | 26 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -321,7 +321,7 @@ function sIBL_XSI_MR_Setup(cBackgroundFilePath,
 
 					// Linear Workflow Activation
 					if (activateColorManagement)
-						sIBL_XSI_MR_ActivateColorManagement(createBackground);
+						sIBL_XSI_MR_ActivateColorManagement(createBackground, cSelectedPassesList);
 					cProgressBar.Increment();
 
 					cProgressBar.Visible = false;
@@ -1127,13 +1127,19 @@ function sIBL_XSI_MR_ActivateFinalGather(cSelectedPassesList)
 	}
 }
 
-function sIBL_XSI_MR_ActivateColorManagement(createBackground)
+function sIBL_XSI_MR_ActivateColorManagement(createBackground, cSelectedPassesList)
 {
 	Application.Preferences.SetPreferenceValue("Display.color_management_source", 0);
 	Application.Preferences.SetPreferenceValue("Display.color_management_render_region", true);
 	Application.Preferences.SetPreferenceValue("Display.color_management_render_preview", true);
 	Application.Preferences.SetPreferenceValue("Display.color_management_shader_balls", true);
 	Application.Preferences.SetPreferenceValue("Display.color_management_ui_colors", true);
+	
+	for (var i = 0; i < cSelectedPassesList.length; i++)
+	{
+		var cPass = Dictionary.GetObject(cSelectedPassesList[i]);
+		cPass.Parameters("UseDisplayGammaCorrection").value = true;
+	}
 
 	// Adjust Background Color Space Because Of The Color Management.
 	if (createBackground)
