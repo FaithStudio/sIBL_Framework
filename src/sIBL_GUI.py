@@ -596,6 +596,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.connect( self.Output_Loader_Script_pushButton, SIGNAL( "clicked()" ), self.Output_Loader_Script_pushButton_OnClicked )
 		self.connect( self.Open_Output_Folder_pushButton, SIGNAL( "clicked()" ), self.Open_Output_Folder_pushButton_OnClicked )
 		self.connect( self.Send_To_Software_pushButton, SIGNAL( "clicked()" ), self.Send_To_Software_pushButton_OnClicked )
+		self.connect( self.Background_comboBox, SIGNAL( "activated(int)" ), self.setReWireWidgetFramesVisibility )
+		self.connect( self.Lighting_comboBox, SIGNAL( "activated(int)" ), self.setReWireWidgetFramesVisibility )
+		self.connect( self.Reflection_comboBox, SIGNAL( "activated(int)" ), self.setReWireWidgetFramesVisibility )
+		self.connect( self.Background_Path_toolButton, SIGNAL( "clicked()" ), self.Background_Path_toolButton_OnClicked )
+		self.connect( self.Lighting_Path_toolButton, SIGNAL( "clicked()" ), self.Lighting_Path_toolButton_OnClicked )
+		self.connect( self.Reflection_Path_toolButton, SIGNAL( "clicked()" ), self.Reflection_Path_toolButton_OnClicked )
 
 		self.connect( self.Help_Files_comboBox, SIGNAL( "activated(int)" ), self.setHelpTextBrowser )
 
@@ -1607,6 +1613,60 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 0 )
 
+	@sIBL_Common.sIBL_Execution_Call
+	def setReWireWidgetFramesVisibility( self, *__None__ ):
+		'''
+		This Method Shows / Hides ReWire Widget Frames.
+		'''
+
+		cReWireFramesList = ( self.Background_frame, self.Lighting_frame, self.Reflection_frame )
+		cReWireComboBoxList = ( self.Background_comboBox, self.Lighting_comboBox, self.Reflection_comboBox )
+
+		for i in range( len( cReWireComboBoxList ) ):
+			if cReWireComboBoxList[i].currentText() == "Custom Image" :
+				cLogger.debug( "> Showing ReWire Frame '%s'.", cReWireFramesList[i] )
+				cReWireFramesList[i].show()
+			else:
+				cLogger.debug( "> Hiding ReWire Frame '%s'.", cReWireFramesList[i] )
+				cReWireFramesList[i].hide()
+				
+	@sIBL_Common.sIBL_Execution_Call
+	def  setReWireCustomPath( self, cComponent ):
+		
+		cCustomFile = QFileDialog.getOpenFileName( self, self.tr( "Custom %s File :", cComponent ), QDir.currentPath() )
+		cLogger.debug( "> Chosen Custom %s : '%s'.", cComponent, cCustomFile )
+		if cCustomFile != "":
+			if cComponent == "Background":
+				self.Background_Path_lineEdit.setText( QString( cCustomFile ) )
+			elif cComponent == "Lighting":
+				self.Lighting_Path_lineEdit.setText( QString( cCustomFile ) )
+			elif cComponent == "Reflection":
+				self.Reflection_Path_lineEdit.setText( QString( cCustomFile ) )
+				
+	@sIBL_Common.sIBL_Execution_Call
+	def Background_Path_toolButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Background ToolButton Is Clicked.
+		'''
+		
+		self.setReWireCustomPath( "Background" )
+
+	@sIBL_Common.sIBL_Execution_Call
+	def Lighting_Path_toolButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Lighting ToolButton Is Clicked.
+		'''
+		
+		self.setReWireCustomPath( "Lighting" )
+	
+	@sIBL_Common.sIBL_Execution_Call
+	def Reflection_Path_toolButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Reflection ToolButton Is Clicked.
+		'''
+		
+		self.setReWireCustomPath( "Reflection" )
+	
 	@sIBL_Common.sIBL_Execution_Call
 	def setTemporaryVariableErrorMessage( self ) :
 		'''
@@ -2660,7 +2720,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						cExtendedSIBL["Author"] = cSIBLFileHeaderAttributes["Header|Author"]
 						cExtendedSIBL["Location"] = cSIBLFileHeaderAttributes["Header|Location"]
 						cExtendedSIBL["Comment"] = cSIBLFileHeaderAttributes["Header|Comment"]
-
+						
+						cExtendedSIBL["Background Image"] = cSIBLFile.getAttributeValue( "Background", "BGfile" )
+						cExtendedSIBL["Lighting Image"] = cSIBLFile.getAttributeValue( "Enviroment", "EVfile" )
+						cExtendedSIBL["Reflection Image"] = cSIBLFile.getAttributeValue( "Reflection", "REFfile" )
+						
 						# sIBL V2 Format Support.
 						if "Header|GEOlat" in cSIBLFileHeaderAttributes and "Header|GEOlong" in cSIBLFileHeaderAttributes :
 							cExtendedSIBL["GPS Latitude"] = cSIBLFileHeaderAttributes["Header|GEOlat"]
