@@ -135,25 +135,25 @@ global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
 
 	sIBL_Maya_VRay_DLight_ActivateVRay();
 
-	sIBL_Maya_VRay_DLight_Environment_Deletion();
+	sIBL_Maya_VRay_DLight_EnvironmentDeletion();
 
-	sIBL_Maya_VRay_DLight_CreateMainLocator();
+	sIBL_Maya_VRay_DLight_GetMainLocator();
 
 	if ($hideLights)
 		sIBL_Maya_VRay_DLight_HideLights();
 
-	sIBL_Maya_VRay_DLight_Environment_Creation($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath);
+	sIBL_Maya_VRay_DLight_GetEnvironment($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath);
 
 	if ($createFeedBack)
 	{
 		if($cBackgroundWidth > 8192)
 			{
 				confirmDialog -title "sIBL_GUI | Information" -message ( "The Background Image Is Too Large To Be Displayed On The Visual Feedback.\nCurrent Environment Image Width : " +  $cBackgroundWidth + " Pixels.\nThe Visual Feedback Will Use The Reflection Image Instead." )  -button "Ok" -defaultButton "Ok";
-				sIBL_Maya_VRay_DLight_Feedback_Creation($cReflectionFilePath, $feedbackRadius);
+				sIBL_Maya_VRay_DLight_GetFeedback($cReflectionFilePath, $feedbackRadius);
 			}
 			else
 			{
-				sIBL_Maya_VRay_DLight_Feedback_Creation($cBackgroundFilePath, $feedbackRadius);
+				sIBL_Maya_VRay_DLight_GetFeedback($cBackgroundFilePath, $feedbackRadius);
 			}
 	}
 
@@ -163,7 +163,7 @@ global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
 		{
 			if ($createSun)
 			{
-				sIBL_Maya_VRay_DLight_Sun_Creation($sunU, $sunV, $sunColor, $sunMultiplier, $feedbackRadius );
+				sIBL_Maya_VRay_DLight_GetSun($sunU, $sunV, $sunColor, $sunMultiplier, $feedbackRadius );
 			}
 		}
 
@@ -171,7 +171,7 @@ global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
 		{
 			if ($createLights)
 			{
-				sIBL_Maya_VRay_DLight_DynamicLights_Creation($dynamicLights, $feedbackRadius);
+				sIBL_Maya_VRay_DLight_GetDynamicLights($dynamicLights, $feedbackRadius);
 			}
 		}
 
@@ -179,7 +179,7 @@ global proc sIBL_Maya_VRay_DLight_Setup(string $cBackgroundFilePath,
 		sIBL_Maya_VRay_DLight_ConnectFeedBackToSIBLShaders($cFeedback, $createBackground, $createLighting, $createReflection);
 
 		if($createGround)
-			sIBL_Maya_VRay_DLight_CreateGround($feedbackRadius);
+			sIBL_Maya_VRay_DLight_GetGround($feedbackRadius);
 
 		if ($activateLinearWorkflow)
 			sIBL_Maya_VRay_DLight_ActivateLinearWorkflow();
@@ -202,7 +202,7 @@ global proc sIBL_Maya_VRay_DLight_DeleteType( string $cType, string $cFilter)
 			delete($cTypesList);
 }
 
-global proc sIBL_Maya_VRay_DLight_Environment_Deletion()
+global proc sIBL_Maya_VRay_DLight_EnvironmentDeletion()
 {
 	// sIBL Transform Group Deletion.
 	string $sceneSIBLGroup[] = `ls -fl "sIBL"`;
@@ -242,7 +242,7 @@ global proc sIBL_Maya_VRay_DLight_Environment_Deletion()
 	sIBL_Maya_VRay_DLight_DeleteType("displayLayer", "sIBL*");
 }
 
-global proc sIBL_Maya_VRay_DLight_CreateMainLocator()
+global proc sIBL_Maya_VRay_DLight_GetMainLocator()
 {
 	string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
 	string $cSIBLLocator = `createNode annotationShape`;
@@ -294,7 +294,7 @@ global proc sIBL_Maya_VRay_DLight_CreateMainLocator()
 	rename ( "sIBL" + $cSIBLLocatorTransform) "sIBL_Controls";
 }
 
-global proc sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch(string $cSlot, string $cFilePath, string $cPrefix, int $useOverride)
+global proc sIBL_Maya_VRay_DLight_GetEnvironmentTexturesBranch(string $cSlot, string $cFilePath, string $cPrefix, int $useOverride)
 {
 	string $cFile = `createNode file`;	
 	string $cGammaCorrect = `createNode gammaCorrect`;
@@ -335,13 +335,13 @@ global proc sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch(string $cSlot,
 	rename $cVrayPlacement ($cPrefix + "_" + `nodeType $cVrayPlacement`);
 }
 
-global proc sIBL_Maya_VRay_DLight_Environment_Creation(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath)
+global proc sIBL_Maya_VRay_DLight_GetEnvironment(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath)
 {
 	setAttr "vraySettings.cam_overrideEnvtex" 1;
 
 	if ($createBackground)
 	{
-		sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch("vraySettings.cam_envtexBg", $cBackgroundFilePath, "sIBL_Background", 1);
+		sIBL_Maya_VRay_DLight_GetEnvironmentTexturesBranch("vraySettings.cam_envtexBg", $cBackgroundFilePath, "sIBL_Background", 1);
 	}
 
 	if ($createLighting)
@@ -361,7 +361,7 @@ global proc sIBL_Maya_VRay_DLight_Environment_Creation(int $createBackground, in
 			setAttr ($cVRayDomeLightShapes[0] + "." + $cAttribute) 0;
 		setAttr ($cVRayDomeLightShapes[0] + ".subdivs") 64;
 
-		sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch(($cVRayDomeLightShapes[0]  + ".domeTex"), $cLightingFilePath, "sIBL_Lighting", 1);
+		sIBL_Maya_VRay_DLight_GetEnvironmentTexturesBranch(($cVRayDomeLightShapes[0]  + ".domeTex"), $cLightingFilePath, "sIBL_Lighting", 1);
 
 		parent $cVRayDomeLight $sIBLGroup;
 
@@ -370,7 +370,7 @@ global proc sIBL_Maya_VRay_DLight_Environment_Creation(int $createBackground, in
 
 	if ($createReflection)
 	{
-		sIBL_Maya_VRay_DLight_CreateEnvironmentTexturesBranch("vraySettings.cam_envtexReflect", $cReflectionFilePath, "sIBL_Reflection", 1);
+		sIBL_Maya_VRay_DLight_GetEnvironmentTexturesBranch("vraySettings.cam_envtexReflect", $cReflectionFilePath, "sIBL_Reflection", 1);
 	}
 }
 
@@ -389,7 +389,7 @@ global proc string sIBL_Maya_VRay_DLight_GetSIBLGroup()
 	return $cSIBLGroup[0];
 }
 
-global proc string sIBL_Maya_VRay_DLight_FeedbackGeometry_Creation(float $feedbackRadius)
+global proc string sIBL_Maya_VRay_DLight_GetFeedbackGeometry(float $feedbackRadius)
 {
  	string $cFeedback[] = `sphere -name "sIBL_Feedback"`;
 	rebuildSurface -ch 1 -rpo 1 -rt 0 -end 1 -kr 0 -kcp 0 -kc 0 -su 4 -du 3 -sv 8 -dv 3 -tol 0.01 -fr 0  -dir 2 $cFeedback;
@@ -413,10 +413,10 @@ global proc string sIBL_Maya_VRay_DLight_FeedbackGeometry_Creation(float $feedba
 	return $cFeedback[0];
 }
 
-global proc sIBL_Maya_VRay_DLight_Feedback_Creation(string $cBackgroundFilePath, float $feedbackRadius)
+global proc sIBL_Maya_VRay_DLight_GetFeedback(string $cBackgroundFilePath, float $feedbackRadius)
 {
  	string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
-	string $cFeedback = sIBL_Maya_VRay_DLight_FeedbackGeometry_Creation($feedbackRadius);
+	string $cFeedback = sIBL_Maya_VRay_DLight_GetFeedbackGeometry($feedbackRadius);
 	parent $cFeedback $sIBLGroup;
 
 	string $cLambertShader = `shadingNode -asShader lambert`;
@@ -518,12 +518,12 @@ global proc sIBL_Maya_VRay_DLight_GetLight( string $cLigthType, string $cLightNa
 	rename $cConstraint[0] ($cLightName + "_AimConstraint");
 }
 
-global proc sIBL_Maya_VRay_DLight_Sun_Creation(float $sunU, float $sunV, float $sunColor[], float $sunMultiplier, float $feedbackRadius )
+global proc sIBL_Maya_VRay_DLight_GetSun(float $sunU, float $sunV, float $sunColor[], float $sunMultiplier, float $feedbackRadius )
 {
 	sIBL_Maya_VRay_DLight_GetLight("directionalLight", "sIBL_Sun", ($feedbackRadius / 10), $sunColor, $sunMultiplier, $sunU, $sunV);
 }
 
-global proc sIBL_Maya_VRay_DLight_DynamicLights_Creation(string $compactedDynamicLights, float $feedbackRadius)
+global proc sIBL_Maya_VRay_DLight_GetDynamicLights(string $compactedDynamicLights, float $feedbackRadius)
 {
 	string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
 	string $cFeedback[] = `ls -fl "sIBL_Feedback"`;
@@ -546,13 +546,13 @@ global proc sIBL_Maya_VRay_DLight_BridgeFeedbackControlsAndShaders( string $cTar
 		string $gammaSubComponentsList[] = {"X", "Y", "Z"};
 		for ($gammaSubComponent in $gammaSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
+			connectAttr -f ("sIBL_Controls." + $cLowerCaseTarget + "Gamma") ("sIBL_" + $cTarget + "_gammaCorrect.gamma" + $gammaSubComponent);
 		}
 		
 		string $gainSubComponentsList[] = {"R", "G", "B"};
 		for ($gainSubComponent in $gainSubComponentsList) 
 		{
-			connectAttr - f("sIBL_Controls." + $cLowerCaseTarget + "Gain") ("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
+			connectAttr -f ("sIBL_Controls." + $cLowerCaseTarget + "Gain") ("sIBL_" + $cTarget + "_file.colorGain" + $gainSubComponent);
 		}
 }
 
@@ -583,7 +583,7 @@ global proc sIBL_Maya_VRay_DLight_ActivateLinearWorkflow()
 	setAttr "vraySettings.cmap_affectBackground" 0;
 }
 
-global proc sIBL_Maya_VRay_DLight_CreateGround(float $feedbackRadius)
+global proc sIBL_Maya_VRay_DLight_GetGround(float $feedbackRadius)
 {
 	string $sIBLGroup = sIBL_Maya_VRay_DLight_GetSIBLGroup();
 	string $cGround[] = `polyPlane -sx 15 -sy 15`;
