@@ -332,7 +332,7 @@
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>96</width>
+                   <width>84</width>
                    <height>61</height>
                   </rect>
                  </property>
@@ -365,10 +365,13 @@
                  <property name="geometry" >
                   <rect>
                    <x>0</x>
-                   <y>0</y>
+                   <y>-95</y>
                    <width>224</width>
-                   <height>240</height>
+                   <height>234</height>
                   </rect>
+                 </property>
+                 <property name="statusTip" >
+                  <string>ReWire Components : ReWire The Different Images To Each Others Or To User Defined Images.</string>
                  </property>
                  <attribute name="label" >
                   <string>ReWire Components</string>
@@ -385,7 +388,7 @@
                     <property name="flat" >
                      <bool>true</bool>
                     </property>
-                    <layout class="QGridLayout" name="Lighting_gridLayout" >
+                    <layout class="QGridLayout" name="Lighting_groupBox_gridLayout" >
                      <property name="leftMargin" >
                       <number>0</number>
                      </property>
@@ -401,7 +404,7 @@
                      <item row="0" column="0" >
                       <widget class="QLabel" name="Lighting_label" >
                        <property name="text" >
-                        <string>ReWire To :</string>
+                        <string>ReWire Lighting To :</string>
                        </property>
                       </widget>
                      </item>
@@ -409,25 +412,36 @@
                       <widget class="QComboBox" name="Lighting_comboBox" />
                      </item>
                      <item row="1" column="0" colspan="2" >
-                      <layout class="QHBoxLayout" name="Lighting_horizontalLayout" >
-                       <item>
-                        <widget class="QLineEdit" name="Lighting_Path_lineEdit" >
-                         <property name="statusTip" >
-                          <string>sIBL Edit Path LineEdit : sIBL Edit Path.</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QToolButton" name="Lighting_Path_toolButton" >
-                         <property name="text" >
-                          <string>...</string>
-                         </property>
-                         <property name="popupMode" >
-                          <enum>QToolButton::DelayedPopup</enum>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
+                      <widget class="QFrame" name="Lighting_frame" >
+                       <property name="frameShape" >
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow" >
+                        <enum>QFrame::Raised</enum>
+                       </property>
+                       <layout class="QGridLayout" name="Lighting_Frame_gridLayout" >
+                        <property name="margin" >
+                         <number>0</number>
+                        </property>
+                        <item row="1" column="0" >
+                         <widget class="QLineEdit" name="Lighting_Path_lineEdit" >
+                          <property name="statusTip" >
+                           <string>sIBL Edit Path LineEdit : sIBL Edit Path.</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1" >
+                         <widget class="QToolButton" name="Lighting_Path_toolButton" >
+                          <property name="text" >
+                           <string>...</string>
+                          </property>
+                          <property name="popupMode" >
+                           <enum>QToolButton::DelayedPopup</enum>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
                      </item>
                     </layout>
                    </widget>
@@ -459,7 +473,7 @@
                      <item row="0" column="0" >
                       <widget class="QLabel" name="Reflection_label" >
                        <property name="text" >
-                        <string>ReWire To :</string>
+                        <string>ReWire Reflection To :</string>
                        </property>
                       </widget>
                      </item>
@@ -467,25 +481,36 @@
                       <widget class="QComboBox" name="Reflection_comboBox" />
                      </item>
                      <item row="1" column="0" colspan="2" >
-                      <layout class="QHBoxLayout" name="Reflection_horizontalLayout" >
-                       <item>
-                        <widget class="QLineEdit" name="Reflection_Path_lineEdit" >
-                         <property name="statusTip" >
-                          <string>sIBL Edit Path LineEdit : sIBL Edit Path.</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QToolButton" name="Reflection_Path_toolButton" >
-                         <property name="text" >
-                          <string>...</string>
-                         </property>
-                         <property name="popupMode" >
-                          <enum>QToolButton::DelayedPopup</enum>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
+                      <widget class="QFrame" name="Reflection_frame" >
+                       <property name="frameShape" >
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow" >
+                        <enum>QFrame::Raised</enum>
+                       </property>
+                       <layout class="QGridLayout" name="Reflection_Frame_gridLayout" >
+                        <property name="margin" >
+                         <number>0</number>
+                        </property>
+                        <item row="1" column="0" >
+                         <widget class="QLineEdit" name="Reflection_Path_lineEdit" >
+                          <property name="statusTip" >
+                           <string>sIBL Edit Path LineEdit : sIBL Edit Path.</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1" >
+                         <widget class="QToolButton" name="Reflection_Path_toolButton" >
+                          <property name="text" >
+                           <string>...</string>
+                          </property>
+                          <property name="popupMode" >
+                           <enum>QToolButton::DelayedPopup</enum>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
                      </item>
                     </layout>
                    </widget>
@@ -501,7 +526,7 @@
                     <property name="flat" >
                      <bool>true</bool>
                     </property>
-                    <layout class="QGridLayout" name="Background_gridLayout" >
+                    <layout class="QGridLayout" name="Background_groupBox_gridLayout" >
                      <property name="leftMargin" >
                       <number>0</number>
                      </property>
@@ -517,7 +542,7 @@
                      <item row="0" column="0" >
                       <widget class="QLabel" name="Background_label" >
                        <property name="text" >
-                        <string>ReWire To :</string>
+                        <string>ReWire Background To :</string>
                        </property>
                       </widget>
                      </item>
@@ -525,25 +550,36 @@
                       <widget class="QComboBox" name="Background_comboBox" />
                      </item>
                      <item row="1" column="0" colspan="2" >
-                      <layout class="QHBoxLayout" name="Background_horizontalLayout" >
-                       <item>
-                        <widget class="QLineEdit" name="Background_Path_lineEdit" >
-                         <property name="statusTip" >
-                          <string>sIBL Edit Path LineEdit : sIBL Edit Path.</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QToolButton" name="Background_Path_toolButton" >
-                         <property name="text" >
-                          <string>...</string>
-                         </property>
-                         <property name="popupMode" >
-                          <enum>QToolButton::DelayedPopup</enum>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
+                      <widget class="QFrame" name="Background_frame" >
+                       <property name="frameShape" >
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow" >
+                        <enum>QFrame::Raised</enum>
+                       </property>
+                       <layout class="QGridLayout" name="Background_Frame_gridLayout" >
+                        <property name="margin" >
+                         <number>0</number>
+                        </property>
+                        <item row="1" column="0" >
+                         <widget class="QLineEdit" name="Background_Path_lineEdit" >
+                          <property name="statusTip" >
+                           <string>sIBL Edit Path LineEdit : sIBL Edit Path.</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1" >
+                         <widget class="QToolButton" name="Background_Path_toolButton" >
+                          <property name="text" >
+                           <string>...</string>
+                          </property>
+                          <property name="popupMode" >
+                           <enum>QToolButton::DelayedPopup</enum>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
                      </item>
                     </layout>
                    </widget>

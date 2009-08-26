@@ -559,6 +559,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		self.cTextEdits_List = ( self.Comment_textEdit, self.Template_Comment_textEdit )
 		self.initializeLineAndTextEditsPalette()
+		self.initalizeRewireWidget()
 
 		# sIBL V2 Format Support.
 		self.Shot_Date_groupBox.hide()
@@ -1004,6 +1005,23 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.cGlobalTemplates = self.getGlobalTemplatesExtended()
 		self.setSoftwareComboBox()
 		self.setTemplateComboBox()
+	
+	@sIBL_Common.sIBL_Execution_Call
+	def initalizeRewireWidget( self ):
+		'''
+		This Method Initializes The ReWire Widget.
+		'''
+		
+		cReWireFramesList = ( self.Background_frame, self.Lighting_frame, self.Reflection_frame )
+		for cFrame in cReWireFramesList:
+			cLogger.debug( "> Hiding '%s'.", cFrame )
+			cFrame.hide()
+		
+		cReWireComboBoxList = ( self.Background_comboBox, self.Lighting_comboBox, self.Reflection_comboBox )
+		for i in range( len( cReWireComboBoxList ) ):
+			cLogger.debug( "> Inserting Items In '%s'.", cReWireComboBoxList[i] )
+			cReWireComboBoxList[i].insertItems( 0, QStringList( ( "Background", "Lighting", "Reflection", "Custom Image" ) ) )
+			cReWireComboBoxList[i].setCurrentIndex( i )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getGlobalTemplates( self ) :
