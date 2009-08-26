@@ -559,6 +559,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		self.cTextEdits_List = ( self.Comment_textEdit, self.Template_Comment_textEdit )
 		self.initializeLineAndTextEditsPalette()
+		self.initalizeRewireWidget()
 
 		# sIBL V2 Format Support.
 		self.Shot_Date_groupBox.hide()
@@ -595,6 +596,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.connect( self.Output_Loader_Script_pushButton, SIGNAL( "clicked()" ), self.Output_Loader_Script_pushButton_OnClicked )
 		self.connect( self.Open_Output_Folder_pushButton, SIGNAL( "clicked()" ), self.Open_Output_Folder_pushButton_OnClicked )
 		self.connect( self.Send_To_Software_pushButton, SIGNAL( "clicked()" ), self.Send_To_Software_pushButton_OnClicked )
+		self.connect( self.Background_comboBox, SIGNAL( "activated(int)" ), self.setReWireWidgetFramesVisibility )
+		self.connect( self.Lighting_comboBox, SIGNAL( "activated(int)" ), self.setReWireWidgetFramesVisibility )
+		self.connect( self.Reflection_comboBox, SIGNAL( "activated(int)" ), self.setReWireWidgetFramesVisibility )
+		self.connect( self.Background_Path_toolButton, SIGNAL( "clicked()" ), self.Background_Path_toolButton_OnClicked )
+		self.connect( self.Lighting_Path_toolButton, SIGNAL( "clicked()" ), self.Lighting_Path_toolButton_OnClicked )
+		self.connect( self.Reflection_Path_toolButton, SIGNAL( "clicked()" ), self.Reflection_Path_toolButton_OnClicked )
 
 		self.connect( self.Help_Files_comboBox, SIGNAL( "activated(int)" ), self.setHelpTextBrowser )
 
@@ -1004,6 +1011,23 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.cGlobalTemplates = self.getGlobalTemplatesExtended()
 		self.setSoftwareComboBox()
 		self.setTemplateComboBox()
+	
+	@sIBL_Common.sIBL_Execution_Call
+	def initalizeRewireWidget( self ):
+		'''
+		This Method Initializes The ReWire Widget.
+		'''
+		
+		cReWireFramesList = ( self.Background_frame, self.Lighting_frame, self.Reflection_frame )
+		for cFrame in cReWireFramesList:
+			cLogger.debug( "> Hiding '%s'.", cFrame )
+			cFrame.hide()
+		
+		cReWireComboBoxList = ( self.Background_comboBox, self.Lighting_comboBox, self.Reflection_comboBox )
+		for i in range( len( cReWireComboBoxList ) ):
+			cLogger.debug( "> Inserting Items In '%s'.", cReWireComboBoxList[i] )
+			cReWireComboBoxList[i].insertItems( 0, QStringList( ( "Background", "Lighting", "Reflection", "Custom Image" ) ) )
+			cReWireComboBoxList[i].setCurrentIndex( i )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getGlobalTemplates( self ) :
@@ -1355,6 +1379,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cOverrideKeys = cOverrideKeys + str( cTableWidget.item( row, 0 ).text() ) + " = " + str( cTableWidget.cellWidget( row, 1 ).value() ) + ", "
 			else:
 				cOverrideKeys = cOverrideKeys + str( cTableWidget.item( row, 0 ).text() ) + " = " + str( cTableWidget.item( row, 1 ).text() ) + ", "
+
 		cLogger.debug( "> Override Keys : '%s'.", cOverrideKeys )
 		return cOverrideKeys
 
@@ -1379,7 +1404,18 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 					cOverrideKeys = self.addKeysToOverrideString( cOverrideKeys, self.Common_Attributes_tableWidget )
 					cOverrideKeys = self.addKeysToOverrideString( cOverrideKeys, self.Additional_Attributes_tableWidget )
-
+					
+					cComponentsList = ( ( self.Background_comboBox, self.Background_Path_lineEdit, "Background", "Background|BGfile" ), ( self.Lighting_comboBox, self.Lighting_Path_lineEdit, "Lighting", "Enviroment|EVfile" ), ( self.Reflection_comboBox, self.Reflection_Path_lineEdit, "Reflection", "Reflection|REFfile" ) )
+					cIBLAttributes = self.cGlobalCollection[self.cEditedIBL]
+					for i in range( len( cComponentsList ) ):
+						if cComponentsList[i][0].currentText() != cComponentsList[i][2] :
+							print cComponentsList[i][0].currentText
+							if cComponentsList[i][0].currentText() != "Custom Image" :
+								print "gere"
+								cOverrideKeys = cOverrideKeys + cComponentsList[i][3] + " = " + os.path.join( os.path.dirname( cIBLAttributes["sIBL Path"] ), cIBLAttributes[str( cComponentsList[i][0].currentText() ) + " Image"] ) + ", "
+							else:
+								print "cvxcvxcv"
+								cOverrideKeys = cOverrideKeys + cComponentsList[i][3] + " = " + str( cComponentsList[i][1].text() ) + ", "
 					# Removing The Last ", ".
 					cOverrideKeys = cOverrideKeys[0:-2]
 
@@ -1589,6 +1625,59 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Please Select An sIBL File In The Collection Browser !" )
 			self.sIBL_GUI_tabWidget.setCurrentIndex( 0 )
 
+	@sIBL_Common.sIBL_Execution_Call
+	def setReWireWidgetFramesVisibility( self, *__None__ ):
+		'''
+		This Method Shows / Hides ReWire Widget Frames.
+		'''
+
+		cComponentsList = ( ( self.Background_comboBox, self.Background_frame ), ( self.Lighting_comboBox, self.Lighting_frame ), ( self.Reflection_comboBox, self.Reflection_frame ) )
+
+		for i in range( len( cComponentsList ) ):
+			if cComponentsList[i][0].currentText() == "Custom Image" :
+				cLogger.debug( "> Showing ReWire Frame '%s'.", cComponentsList[i][1] )
+				cComponentsList[i][1].show()
+			else:
+				cLogger.debug( "> Hiding ReWire Frame '%s'.", cComponentsList[i][1] )
+				cComponentsList[i][1].hide()
+				
+	@sIBL_Common.sIBL_Execution_Call
+	def  setReWireCustomPath( self, cComponent ):
+		
+		cCustomFile = QFileDialog.getOpenFileName( self, self.tr( "Custom %s File :", cComponent ), QDir.currentPath() )
+		cLogger.debug( "> Chosen Custom %s : '%s'.", cComponent, cCustomFile )
+		if cCustomFile != "":
+			if cComponent == "Background":
+				self.Background_Path_lineEdit.setText( QString( cCustomFile ) )
+			elif cComponent == "Lighting":
+				self.Lighting_Path_lineEdit.setText( QString( cCustomFile ) )
+			elif cComponent == "Reflection":
+				self.Reflection_Path_lineEdit.setText( QString( cCustomFile ) )
+				
+	@sIBL_Common.sIBL_Execution_Call
+	def Background_Path_toolButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Background ToolButton Is Clicked.
+		'''
+		
+		self.setReWireCustomPath( "Background" )
+
+	@sIBL_Common.sIBL_Execution_Call
+	def Lighting_Path_toolButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Lighting ToolButton Is Clicked.
+		'''
+		
+		self.setReWireCustomPath( "Lighting" )
+	
+	@sIBL_Common.sIBL_Execution_Call
+	def Reflection_Path_toolButton_OnClicked( self ) :
+		'''
+		This Method Is Called When Reflection ToolButton Is Clicked.
+		'''
+		
+		self.setReWireCustomPath( "Reflection" )
+	
 	@sIBL_Common.sIBL_Execution_Call
 	def setTemporaryVariableErrorMessage( self ) :
 		'''
@@ -2290,7 +2379,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if hasattr( sys, "frozen" ) :
-			cLocalTemplatesPath = os.path.abspath( str( self.Templates_Path_lineEdit.text() ) )
+			cLocalTemplatesPath = os.path.abspath( str( self.Help_Files_Path_lineEdit.text() ) )
 		else :
 			cLocalTemplatesPath = "./FTP/Help/"
 
@@ -2642,7 +2731,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						cExtendedSIBL["Author"] = cSIBLFileHeaderAttributes["Header|Author"]
 						cExtendedSIBL["Location"] = cSIBLFileHeaderAttributes["Header|Location"]
 						cExtendedSIBL["Comment"] = cSIBLFileHeaderAttributes["Header|Comment"]
-
+						
+						cExtendedSIBL["Background Image"] = cSIBLFile.getAttributeValue( "Background", "BGfile" )
+						cExtendedSIBL["Lighting Image"] = cSIBLFile.getAttributeValue( "Enviroment", "EVfile" )
+						cExtendedSIBL["Reflection Image"] = cSIBLFile.getAttributeValue( "Reflection", "REFfile" )
+						
 						# sIBL V2 Format Support.
 						if "Header|GEOlat" in cSIBLFileHeaderAttributes and "Header|GEOlong" in cSIBLFileHeaderAttributes :
 							cExtendedSIBL["GPS Latitude"] = cSIBLFileHeaderAttributes["Header|GEOlat"]

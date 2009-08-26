@@ -1,38 +1,43 @@
 [sIBL_GUI]
-Release = 2.0.8
+Release = 2.1.0
 Type = "Stable"
 
 [XSI_MR]
-Release = 1.4.3
+Release = 1.5.3
 Type = "Stable"
-Comment = "This Is XSI Mental Ray Template !"
+Comment = "XSI Mental Ray Template : Enabled Pass(es) Linear Workflow."
 
 [Maya_MR]
-Release = 1.6.1
+Release = 1.6.8
 Type = "Stable"
-Comment = "This Is Maya Mental Ray Template !"
+Comment = "Maya Mental Ray Template : Code Refactoring."
 
 [Maya_VRay]
-Release = 1.0.3
+Release = 1.1.2
 Type = "Stable"
-Comment = "This Is VRay For Maya Template !"
+Comment = "VRay For Maya Template : Code Refactoring."
 
 [Maya_VRay_DLight]
-Release = 1.0.2
+Release = 1.1.2
 Type = "Stable"
-Comment = "This Is VRay For Maya Dome Light Template !"
+Comment = "VRay For Maya Dome Light Template : Code Refactoring."
 
 [Maya_Turtle]
-Release = 1.0.2
+Release = 1.1.4
 Type = "Stable"
-Comment = "This Is Maya Turtle Template !"
+Comment = "Maya Turtle Template : Corrected Drawing Overrides Preventing Rendering."
+
+[Maya_RfM]
+Release = 1.0.1
+Type = "Stable"
+Comment = "Renderman For Maya Template : Nicer Drawing Overrides."
 
 [3dsMax_MR]
 Release = 0.9.5
 Type = "Nightly"
-Comment = "This Is A 3dsMax Mental Ray Example Template !"
+Comment = "3dsMax Mental Ray Example Template : Unsupported Example Template."
 
 [3dsMax_Scanline]
 Release = 0.9.5
 Type = "Nightly"
-Comment = "This Is A 3dsMax Scanline Ray Example Template !"
+Comment = "3dsMax Scanline Ray Example Template : Unsupported Example Template."
