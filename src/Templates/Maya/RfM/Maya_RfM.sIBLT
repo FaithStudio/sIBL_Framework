@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.0.0 | String | Template Release
-Date = @Date | 25 August 2009 | String | Date
+Release = @Release | 1.0.1 | String | Template Release
+Date = @Date | 26 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -314,7 +314,7 @@ global proc sIBL_Maya_RfM_GetEnvironmentSphereBranch(float $cRadius, string $cPr
 	select -r $cEnvironmentSphereShapes[0];
 
 	setAttr ($cEnvironmentSphereShapes[0] + ".overrideEnabled") 1;
-	setAttr ($cEnvironmentSphereShapes[0] + ".overrideLevelOfDetail") 1;
+	setAttr ($cEnvironmentSphereShapes[0] + ".overrideShading") 0;
 
 	delete -ch;
 
