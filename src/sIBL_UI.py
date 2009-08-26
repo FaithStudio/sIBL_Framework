@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './UI/sIBL_GUI.ui'
 #
-# Created: Wed Aug 26 11:07:57 2009
+# Created: Wed Aug 26 14:40:19 2009
 #      by: PyQt4 UI code generator 4.4.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -916,17 +916,17 @@ class Ui_sIBL_GUI(object):
                 self.Options_toolBox.setItemText(self.Options_toolBox.indexOf(self.Common_Attributes_page), QtGui.QApplication.translate("sIBL_GUI", "Common Attributes", None, QtGui.QApplication.UnicodeUTF8))
                 self.Additional_Attributes_page.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "Additional Attributes : Additional Attributes Settings Of The Loader Script.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Options_toolBox.setItemText(self.Options_toolBox.indexOf(self.Additional_Attributes_page), QtGui.QApplication.translate("sIBL_GUI", "Additional Attributes", None, QtGui.QApplication.UnicodeUTF8))
-                self.ReWire_page.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "ReWire Components : ReWire The Different Images To Each Others Or To User Defined Images.", None, QtGui.QApplication.UnicodeUTF8))
+                self.ReWire_page.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "ReWire Components : ReWire The Different Images With Each Others Or To User Defined Images.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Lighting_groupBox.setTitle(QtGui.QApplication.translate("sIBL_GUI", "Lighting", None, QtGui.QApplication.UnicodeUTF8))
-                self.Lighting_label.setText(QtGui.QApplication.translate("sIBL_GUI", "ReWire Lighting To :", None, QtGui.QApplication.UnicodeUTF8))
+                self.Lighting_label.setText(QtGui.QApplication.translate("sIBL_GUI", "ReWire With :", None, QtGui.QApplication.UnicodeUTF8))
                 self.Lighting_Path_lineEdit.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "sIBL Edit Path LineEdit : sIBL Edit Path.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Lighting_Path_toolButton.setText(QtGui.QApplication.translate("sIBL_GUI", "...", None, QtGui.QApplication.UnicodeUTF8))
                 self.Reflection_groupBox.setTitle(QtGui.QApplication.translate("sIBL_GUI", "Reflection", None, QtGui.QApplication.UnicodeUTF8))
-                self.Reflection_label.setText(QtGui.QApplication.translate("sIBL_GUI", "ReWire Reflection To :", None, QtGui.QApplication.UnicodeUTF8))
+                self.Reflection_label.setText(QtGui.QApplication.translate("sIBL_GUI", "ReWire With :", None, QtGui.QApplication.UnicodeUTF8))
                 self.Reflection_Path_lineEdit.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "sIBL Edit Path LineEdit : sIBL Edit Path.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Reflection_Path_toolButton.setText(QtGui.QApplication.translate("sIBL_GUI", "...", None, QtGui.QApplication.UnicodeUTF8))
                 self.Background_groupBox.setTitle(QtGui.QApplication.translate("sIBL_GUI", "Background", None, QtGui.QApplication.UnicodeUTF8))
-                self.Background_label.setText(QtGui.QApplication.translate("sIBL_GUI", "ReWire Background To :", None, QtGui.QApplication.UnicodeUTF8))
+                self.Background_label.setText(QtGui.QApplication.translate("sIBL_GUI", "ReWire With :", None, QtGui.QApplication.UnicodeUTF8))
                 self.Background_Path_lineEdit.setStatusTip(QtGui.QApplication.translate("sIBL_GUI", "sIBL Edit Path LineEdit : sIBL Edit Path.", None, QtGui.QApplication.UnicodeUTF8))
                 self.Background_Path_toolButton.setText(QtGui.QApplication.translate("sIBL_GUI", "...", None, QtGui.QApplication.UnicodeUTF8))
                 self.Options_toolBox.setItemText(self.Options_toolBox.indexOf(self.ReWire_page), QtGui.QApplication.translate("sIBL_GUI", "ReWire Components", None, QtGui.QApplication.UnicodeUTF8))

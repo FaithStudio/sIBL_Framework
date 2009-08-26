@@ -371,7 +371,7 @@
                   </rect>
                  </property>
                  <property name="statusTip" >
-                  <string>ReWire Components : ReWire The Different Images To Each Others Or To User Defined Images.</string>
+                  <string>ReWire Components : ReWire The Different Images With Each Others Or To User Defined Images.</string>
                  </property>
                  <attribute name="label" >
                   <string>ReWire Components</string>
@@ -404,7 +404,7 @@
                      <item row="0" column="0" >
                       <widget class="QLabel" name="Lighting_label" >
                        <property name="text" >
-                        <string>ReWire Lighting To :</string>
+                        <string>ReWire With :</string>
                        </property>
                       </widget>
                      </item>
@@ -473,7 +473,7 @@
                      <item row="0" column="0" >
                       <widget class="QLabel" name="Reflection_label" >
                        <property name="text" >
-                        <string>ReWire Reflection To :</string>
+                        <string>ReWire With :</string>
                        </property>
                       </widget>
                      </item>
@@ -542,7 +542,7 @@
                      <item row="0" column="0" >
                       <widget class="QLabel" name="Background_label" >
                        <property name="text" >
-                        <string>ReWire Background To :</string>
+                        <string>ReWire With :</string>
                        </property>
                       </widget>
                      </item>

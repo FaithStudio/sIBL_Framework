@@ -1379,6 +1379,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cOverrideKeys = cOverrideKeys + str( cTableWidget.item( row, 0 ).text() ) + " = " + str( cTableWidget.cellWidget( row, 1 ).value() ) + ", "
 			else:
 				cOverrideKeys = cOverrideKeys + str( cTableWidget.item( row, 0 ).text() ) + " = " + str( cTableWidget.item( row, 1 ).text() ) + ", "
+
 		cLogger.debug( "> Override Keys : '%s'.", cOverrideKeys )
 		return cOverrideKeys
 
@@ -1403,7 +1404,18 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 					cOverrideKeys = self.addKeysToOverrideString( cOverrideKeys, self.Common_Attributes_tableWidget )
 					cOverrideKeys = self.addKeysToOverrideString( cOverrideKeys, self.Additional_Attributes_tableWidget )
-
+					
+					cComponentsList = ( ( self.Background_comboBox, self.Background_Path_lineEdit, "Background", "Background|BGfile" ), ( self.Lighting_comboBox, self.Lighting_Path_lineEdit, "Lighting", "Enviroment|EVfile" ), ( self.Reflection_comboBox, self.Reflection_Path_lineEdit, "Reflection", "Reflection|REFfile" ) )
+					cIBLAttributes = self.cGlobalCollection[self.cEditedIBL]
+					for i in range( len( cComponentsList ) ):
+						if cComponentsList[i][0].currentText() != cComponentsList[i][2] :
+							print cComponentsList[i][0].currentText
+							if cComponentsList[i][0].currentText() != "Custom Image" :
+								print "gere"
+								cOverrideKeys = cOverrideKeys + cComponentsList[i][3] + " = " + os.path.join( os.path.dirname( cIBLAttributes["sIBL Path"] ), cIBLAttributes[str( cComponentsList[i][0].currentText() ) + " Image"] ) + ", "
+							else:
+								print "cvxcvxcv"
+								cOverrideKeys = cOverrideKeys + cComponentsList[i][3] + " = " + str( cComponentsList[i][1].text() ) + ", "
 					# Removing The Last ", ".
 					cOverrideKeys = cOverrideKeys[0:-2]
 
@@ -1619,16 +1631,15 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Shows / Hides ReWire Widget Frames.
 		'''
 
-		cReWireFramesList = ( self.Background_frame, self.Lighting_frame, self.Reflection_frame )
-		cReWireComboBoxList = ( self.Background_comboBox, self.Lighting_comboBox, self.Reflection_comboBox )
+		cComponentsList = ( ( self.Background_comboBox, self.Background_frame ), ( self.Lighting_comboBox, self.Lighting_frame ), ( self.Reflection_comboBox, self.Reflection_frame ) )
 
-		for i in range( len( cReWireComboBoxList ) ):
-			if cReWireComboBoxList[i].currentText() == "Custom Image" :
-				cLogger.debug( "> Showing ReWire Frame '%s'.", cReWireFramesList[i] )
-				cReWireFramesList[i].show()
+		for i in range( len( cComponentsList ) ):
+			if cComponentsList[i][0].currentText() == "Custom Image" :
+				cLogger.debug( "> Showing ReWire Frame '%s'.", cComponentsList[i][1] )
+				cComponentsList[i][1].show()
 			else:
-				cLogger.debug( "> Hiding ReWire Frame '%s'.", cReWireFramesList[i] )
-				cReWireFramesList[i].hide()
+				cLogger.debug( "> Hiding ReWire Frame '%s'.", cComponentsList[i][1] )
+				cComponentsList[i][1].hide()
 				
 	@sIBL_Common.sIBL_Execution_Call
 	def  setReWireCustomPath( self, cComponent ):
