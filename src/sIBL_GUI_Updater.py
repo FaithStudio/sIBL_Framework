@@ -166,7 +166,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		self.Templates_tableWidget.setRowCount( len( cTemplatesInfos ) )
 		self.Templates_tableWidget.setColumnCount( 5 )
 		self.Templates_tableWidget.horizontalHeader().setStretchLastSection( True )
-		self.Templates_tableWidget.setHorizontalHeaderLabels( ["Local Version", "Get It!", "Repository Version", "Release Type", "Comment"] )
+		self.Templates_tableWidget.setHorizontalHeaderLabels( ["Get It!", "Local Version", "Repository Version", "Release Type", "Comment"] )
 
 		cColors = ( self.greenColor, self.redColor )
 		cVerticalHeaderLabels = []
