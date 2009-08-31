@@ -1409,12 +1409,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cIBLAttributes = self.cGlobalCollection[self.cEditedIBL]
 					for i in range( len( cComponentsList ) ):
 						if cComponentsList[i][0].currentText() != cComponentsList[i][2] :
-							print cComponentsList[i][0].currentText
 							if cComponentsList[i][0].currentText() != "Custom Image" :
-								print "gere"
 								cOverrideKeys = cOverrideKeys + cComponentsList[i][3] + " = " + os.path.join( os.path.dirname( cIBLAttributes["sIBL Path"] ), cIBLAttributes[str( cComponentsList[i][0].currentText() ) + " Image"] ) + ", "
 							else:
-								print "cvxcvxcv"
 								cOverrideKeys = cOverrideKeys + cComponentsList[i][3] + " = " + str( cComponentsList[i][1].text() ) + ", "
 					# Removing The Last ", ".
 					cOverrideKeys = cOverrideKeys[0:-2]
