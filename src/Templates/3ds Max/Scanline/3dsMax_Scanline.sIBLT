@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 0.9.5 | String | Template Release
-Date = @Date | 26 August 2008 | String | Date
+Release = @Release | 0.9.6 | String | Template Release
+Date = @Date | 1 September 2008 | String | Date
 Author = @Author | Dschaga | String | Author
 EMail = @Email | christian@cgtechniques.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -10,26 +10,26 @@ OutputScript = @OutputScript | sIBL_3dsmax_Import.ms | String | Output Script
 Comment = @Comment | This is 3dsmax 2K Template. | String | Comment
 
 [sIBL File Attributes]
-SUNu = @SUNu
-SUNv = @SUNv
-SUNcolor = @SUNcolor
-SUNmulti = @SUNmulti
-BGfile = @BGfile
-BGmap = @BGmap
-BGu = @BGu
-BGv = @BGv
-EVfile = @EVfile
-EVmap = @EVmap
-EVmulti = @EVmulti
-EVgamma = @EVgamma
-EVu = @EVu
-EVv = @EVv
-REFfile = @REFfile
-REFmap = @REFmap
-REFmulti = @REFmulti
-REFgamma = @REFgamma
-REFu = @REFu
-REFv = @REFv
+Sun|SUNu = @SUNu
+Sun|SUNv = @SUNv
+Sun|SUNcolor = @SUNcolor
+Sun|SUNmulti = @SUNmulti
+Background|BGfile = @BGfile
+Background|BGmap = @BGmap
+Background|BGu = @BGu
+Background|BGv = @BGv
+Enviroment|EVfile = @EVfile
+Enviroment|EVmap = @EVmap
+Enviroment|EVmulti = @EVmulti
+Enviroment|EVgamma = @EVgamma
+Enviroment|EVu = @EVu
+Enviroment|EVv = @EVv
+Reflection|REFfile = @REFfile
+Reflection|REFmap = @REFmap
+Reflection|REFmulti = @REFmulti
+Reflection|REFgamma = @REFgamma
+Reflection|REFu = @REFu
+Reflection|REFv = @REFv
 
 [Common Attributes]
 createBackground = @createBackground | 1 | Boolean | Create Background
@@ -40,7 +40,7 @@ createLights = @createLights | 1 | Boolean | Create Dynamic Lights
 
 [Additional Attributes]
 north = @north | 0 | Float | North
-sundistance = @sundistance | 100 | Float | Sundistance
+sundistance = @sundistance | 100 | Float | Sun Distance
 
 [Remote Connection]
 ConnectionType = @ConnectionType | Win32 | String
@@ -85,16 +85,13 @@ createLighting = "@createLighting"
 createReflection = "@createReflection"
 createSun = "@createSun"
 
-
 global a = bitmaptexture()
 global b = bitmaptexture()
 global c = bitmaptexture()
 
-
 	--------------------------------------
 	-- FIRST ..... CLEAN THE SCENE
 	--------------------------------------
-
 
 		--sIBL SUN
 		if ($sIBL_sun != undefined) then
@@ -102,13 +99,11 @@ global c = bitmaptexture()
 			--delete #($sIBL_sun, $target01)
 			delete #($sIBL_sun)
 
-
 			-- delete old floorplane
 			if ($Floor_matte != undefined) then (delete $Floor_matte)
 			-- BGmap
 			environmentMap = undefined
 		)
-
 
 	-----------------------------------------
 	--	THE SUN
@@ -142,7 +137,6 @@ global c = bitmaptexture()
 
 		if  (createBackground == "1") then
 		(
-
 			--
 			--
 			-- the scripts offer the BGimagemap as variable "a"
@@ -158,14 +152,11 @@ global c = bitmaptexture()
 			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
 			a.coordinates.mapping = ((BGmap as integer) - 1)
 
-
 			-- uv mapping writing
 			a.coordinates.U_Offset = (BGu as float) + n
 			a.coordinates.V_Offset = BGv as float
 			a.coordinates.U_Tiling = -1.0
-
 		)
-
 
 	-------------------------------------
 	-- read parameters for the ENViromentfile:
@@ -173,8 +164,6 @@ global c = bitmaptexture()
 
 		if  (createLighting == "1") then
 		(
-
-
 			--
 			--
 			-- the scripts offer the ENVIROMENTimagemap as variable "b"
@@ -193,7 +182,6 @@ global c = bitmaptexture()
 			b.coordinates.U_Offset = (EVu as float) + n
 			b.coordinates.V_Offset = EVv as float
 			b.coordinates.U_Tiling = -1.0
-
 		)
 
 	------------------------------------------
@@ -202,7 +190,6 @@ global c = bitmaptexture()
 
 		if  (createReflection == "1") then
 		(
-
 			--
 			--
 			-- the scripts offer the REFLECTIONimagemap as variable "c"
@@ -222,7 +209,6 @@ global c = bitmaptexture()
 			c.coordinates.V_Offset = REFv as float
 			c.coordinates.U_Tiling = -1.0
 
-
 			for m in sceneMaterials do
 			(
 				try
@@ -235,4 +221,3 @@ global c = bitmaptexture()
 			)
 
 		)
-

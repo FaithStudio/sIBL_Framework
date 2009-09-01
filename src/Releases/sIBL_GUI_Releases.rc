@@ -33,11 +33,16 @@ Type = "Stable"
 Comment = "Renderman For Maya Template : Color Bleeding Option Added."
 
 [3dsMax_MR]
-Release = 0.9.5
+Release = 0.9.6
 Type = "Nightly"
-Comment = "3dsMax Mental Ray Example Template : Unsupported Example Template."
+Comment = "3dsMax Mental Ray Base Template : Dschaga Code Refactoring And Patch."
 
 [3dsMax_Scanline]
-Release = 0.9.5
+Release = 0.9.6
 Type = "Nightly"
-Comment = "3dsMax Scanline Ray Example Template : Unsupported Example Template."
+Comment = "3dsMax Scanline Ray Base Template : Dschaga Code Refactoring And Patch."
+
+[3dsMax_VRay]
+Release = 0.9.6
+Type = "Nightly"
+Comment = "3dsMax VRay Base Template : Dschaga Code Refactoring And Patch."
