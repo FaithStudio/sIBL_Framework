@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.0.1 | String | Template Release
-Date = @Date | 26 August 2009 | String | Date
+Release = @Release | 1.0.2 | String | Template Release
+Date = @Date | 31 August 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -39,6 +39,7 @@ feedbackRadius = @feedbackRadius | 500 | Float | Feedback Radius
 createGround = @createGround | 1 | Boolean | Create Ground
 hideLights = @hideLights | 1 | Boolean | Hide Lights
 activateRaytracing = @activateRaytracing | 1 | Boolean | Activate Raytracing
+activateColorBleeding = @activateColorBleeding | 1 | Boolean | Activate Color Bleeding
 activateLinearWorkflow = @activateLinearWorkflow | 1 | Boolean | Activate Linear Workflow
 
 [Remote Connection]
@@ -79,6 +80,7 @@ float $feedbackRadius = @feedbackRadius;
 int $createGround = @createGround;
 int $hideLights = @hideLights;
 int $activateRaytracing = @activateRaytracing;
+int $activateColorBleeding = @activateColorBleeding;
 int $activateLinearWorkflow = @activateLinearWorkflow;
 
 sIBL_Maya_RfM_Setup($cBackgroundFilePath,
@@ -106,6 +108,7 @@ sIBL_Maya_RfM_Setup($cBackgroundFilePath,
 		$feedbackRadius,
 		$hideLights,
 		$activateRaytracing,
+		$activateColorBleeding,
 		$activateLinearWorkflow);
 
 global proc sIBL_Maya_RfM_Setup(string $cBackgroundFilePath,
@@ -133,6 +136,7 @@ global proc sIBL_Maya_RfM_Setup(string $cBackgroundFilePath,
 			float $feedbackRadius,
 			int $hideLights,
 			int $activateRaytracing,
+			int $activateColorBleeding,
 			int $activateLinearWorkflow)
 {
 	print("sIBL_GUI | Starting sIBL File Import !\n");
@@ -146,7 +150,7 @@ global proc sIBL_Maya_RfM_Setup(string $cBackgroundFilePath,
 	if ($hideLights)
 		sIBL_Maya_RfM_HideLights();
 
-	sIBL_Maya_RfM_GetEnvironment($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath, $feedbackRadius);
+	sIBL_Maya_RfM_GetEnvironment($createBackground, $createLighting, $createReflection, $cBackgroundFilePath, $cLightingFilePath, $cReflectionFilePath, $feedbackRadius, $activateColorBleeding);
 
 	if ($createFeedBack)
 	{
@@ -241,6 +245,9 @@ global proc sIBL_Maya_RfM_EnvironmentDeletion()
 
 	// sIBL displayLayer Nodes Deletion.
 	sIBL_Maya_RfM_DeleteType("displayLayer", "sIBL*");
+	
+	// sIBL RenderMan Nodes Deletion.
+	sIBL_Maya_RfM_DeleteType("RenderMan", "sIBL*");
 }
 
 global proc sIBL_Maya_RfM_GetMainLocator()
@@ -416,7 +423,7 @@ global proc sIBL_Maya_RfM_GetEnvironmentLightBranch(float $cRadius, string $cPre
 	rename ("sIBL" + $cEnvironmentLightTransform) ($cPrefix + "_EnvironmentLigtht");
 }
 
-global proc sIBL_Maya_RfM_GetEnvironment(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath, float $feedbackRadius)
+global proc sIBL_Maya_RfM_GetEnvironment(int $createBackground, int $createLighting, int $createReflection, string $cBackgroundFilePath, string $cLightingFilePath, string $cReflectionFilePath, float $feedbackRadius, int $activateColorBleeding)
 {
 	if ($createBackground)
 	{
@@ -430,15 +437,29 @@ global proc sIBL_Maya_RfM_GetEnvironment(int $createBackground, int $createLight
 	if ($createLighting)
 	{
 		sIBL_Maya_RfM_GetEnvironmentLightBranch($feedbackRadius*2 - ( $feedbackRadius * 7.5 / 100 ), "sIBL_Lighting", $cLightingFilePath);
-		setAttr "sIBL_Lighting_EnvironmentLigthtShape.rman__EnvEmitSpecular" 0;
-		rmanSetAttr("sIBL_Lighting_EnvironmentLigthtShape","rman__EnvGIScheme","occlusion");
+		
+		string $cEnvironmentLightNode = "sIBL_Lighting_EnvironmentLigthtShape";
+		setAttr ($cEnvironmentLightNode + ".rman__EnvEmitSpecular") 0;
+		
+		if ($activateColorBleeding)
+		{
+			rmanSetAttr($cEnvironmentLightNode,"rman__EnvGIScheme","colorbleeding");
+			string $cPassNode = `createRenderManNode pass:render:RenderRadiosity`;
+			connectAttr ($cPassNode + ".message") ($cEnvironmentLightNode + ".rman__GDMap");
+			
+			rename $cPassNode sIBL_rmanRenderRadiosityPass;
+		}
+		else
+			rmanSetAttr("sIBL_Lighting_EnvironmentLigthtShape","rman__EnvGIScheme","occlusion");
 	}
 
 	if ($createReflection)
 	{
 		sIBL_Maya_RfM_GetEnvironmentLightBranch($feedbackRadius*2 - ( $feedbackRadius * 10 / 100 ), "sIBL_Reflection", $cReflectionFilePath);
-		setAttr "sIBL_Reflection_EnvironmentLigthtShape.rman__EnvEmitDiffuse" 0;
-		rmanSetAttr("sIBL_Reflection_EnvironmentLigthtShape","rman__EnvGIScheme","none");
+		
+		string $cEnvironmentLightNode = "sIBL_Reflection_EnvironmentLigthtShape";
+		setAttr ($cEnvironmentLightNode + ".rman__EnvEmitDiffuse") 0;
+		rmanSetAttr($cEnvironmentLightNode,"rman__EnvGIScheme","none");
 	}
 }
 
