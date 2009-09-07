@@ -3,46 +3,46 @@ Release = 2.1.1
 Type = "Stable"
 
 [XSI_MR]
-Release = 1.5.3
+Release = 1.5.4
 Type = "Stable"
 Comment = "XSI Mental Ray Template : Enabled Pass(es) Linear Workflow."
 
 [Maya_MR]
-Release = 1.6.8
+Release = 1.6.9
 Type = "Stable"
 Comment = "Maya Mental Ray Template : Code Refactoring."
 
 [Maya_VRay]
-Release = 1.1.2
+Release = 1.1.3
 Type = "Stable"
 Comment = "VRay For Maya Template : Code Refactoring."
 
 [Maya_VRay_DLight]
-Release = 1.1.2
+Release = 1.1.3
 Type = "Stable"
 Comment = "VRay For Maya Dome Light Template : Code Refactoring."
 
 [Maya_Turtle]
-Release = 1.1.4
+Release = 1.1.5
 Type = "Stable"
 Comment = "Maya Turtle Template : Corrected Drawing Overrides Preventing Rendering."
 
 [Maya_RfM]
-Release = 1.0.2
+Release = 1.0.3
 Type = "Stable"
 Comment = "Renderman For Maya Template : Color Bleeding Option Added."
 
 [3dsMax_MR]
-Release = 0.9.6
+Release = 0.9.7
 Type = "Nightly"
 Comment = "3dsMax Mental Ray Base Template : Dschaga Code Refactoring And Patch."
 
 [3dsMax_Scanline]
-Release = 0.9.6
+Release = 0.9.7
 Type = "Nightly"
 Comment = "3dsMax Scanline Ray Base Template : Dschaga Code Refactoring And Patch."
 
 [3dsMax_VRay]
-Release = 0.9.6
+Release = 0.9.7
 Type = "Nightly"
 Comment = "3dsMax VRay Base Template : Dschaga Code Refactoring And Patch."

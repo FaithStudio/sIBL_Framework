@@ -1,11 +1,12 @@
 [Template]
-Release = @Release | 1.1.2 | String | Template Release
-Date = @Date | 24 August 2009 | String | Date
+Release = @Release | 1.1.3 | String | Template Release
+Date = @Date | 2 September 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
 Software = @Software | Maya | String | Software
 Version = @Version | 2K | String | Version
+Renderer = @Renderer | VRay | String | Renderer
 OutputScript = @OutputScript | sIBL_Maya_Import.mel | String | Output Script
 Comment = @Comment | This is Maya 2K VRay Template. | String | Comment
 
