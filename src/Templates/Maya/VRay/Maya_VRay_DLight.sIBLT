@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.1.2 | String | Template Release
-Date = @Date | 24 August 2009 | String | Date
+Release = @Release | 1.1.3 | String | Template Release
+Date = @Date | 10 September 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -408,7 +408,10 @@ global proc string sIBL_Maya_VRay_DLight_GetFeedbackGeometry(float $feedbackRadi
 	for( $cLock in $cLocksList )
 		setAttr -lock true -keyable false ($cFeedback[0] + "." + $cLock);
 
-	sIBL_Maya_VRay_DLight_AddToDisplayLayer("sIBL_FeedBack_Layer",$cFeedback[0]);
+	string $cFeedBackShapes[] = sIBL_Maya_VRay_DLight_GetShapes($cFeedback[0]);
+	setAttr ($cFeedBackShapes[0] + ".opposite") 0;
+
+	sIBL_Maya_VRay_DLight_AddToDisplayLayer("sIBL_FeedBack_Layer", $cFeedback[0]);
 
 	return $cFeedback[0];
 }
