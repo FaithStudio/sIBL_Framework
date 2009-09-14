@@ -1,6 +1,6 @@
 [Template]
-Release = @Release | 1.5.3 | String | Template Release
-Date = @Date | 26 August 2009 | String | Date
+Release = @Release | 1.5.5 | String | Template Release
+Date = @Date | 14 September 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
@@ -518,8 +518,8 @@ function sIBL_XSI_MR_EnvironmentDeletion()
 		// sIBL Color Math Basic Shaders Deletion.
 		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{6EE27300-A1E2-11D3-AE51-00A0C96E63E1}", "sIBL", false));
 
-		// sIBL Color Correction Shaders Deletion.
-		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{46B8C429-80C4-11D2-8088-00A0C906835D}", "sIBL", false));
+		// sIBL Color Math Exponent Shaders Deletion.
+		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{00288F00-AC2F-11D3-AE56-00A0C96E63E1}", "sIBL", false));
 	
 		// sIBL Color Boolean Switch Shaders Deletion.
 		DeleteObj(sIBL_XSI_MR_GetMatchingObjectsByClassID("{85C16046-BCFA-11D1-90E9-0000F804EB21}", "sIBL", false));
@@ -551,14 +551,20 @@ function sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cInputShader, cImageSourc
 	cColorMathBasicShader.Parameters("op").value = 2;
 	SIConnectShaderToCnxPoint(cEnvironmentShader, cColorMathBasicShader + ".input1", false);
 	
-	var cCCShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Image_Processing/Color_correction.Preset", cPass, "");
-	SIConnectShaderToCnxPoint(cColorMathBasicShader, cCCShader + ".input", false);
-
-	var cColorBooleanSwitchShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Switch/Color_Boolean_Switch.Preset", cPass, "");	
+	var cColor_Math_ExponentShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Math/Color_Math_Exponent.Preset", cPass, "");
+	SIConnectShaderToCnxPoint(cColorMathBasicShader, cColor_Math_ExponentShader + ".input", false);
+	
 	var cSubComponentsList = ["red", "green", "blue"];
+	var cColorMathBasicGammaShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Math/Color_Math_Basic.Preset", cPass, "");
+	for (var i = 0; i < cSubComponentsList.length; i++)
+		cColorMathBasicGammaShader.Parameters("input1").Parameters(cSubComponentsList[i]).value = 1;
+	cColorMathBasicGammaShader.Parameters("op").value = 3;
+	SIConnectShaderToCnxPoint(cColorMathBasicGammaShader, cColor_Math_ExponentShader + ".factor", false);
+
+	var cColorBooleanSwitchShader = CreateShaderFromPreset("$XSI_DSPRESETS/Shaders/Texture/Switch/Color_Boolean_Switch.Preset", cPass, "");
 	for (var i = 0; i < cSubComponentsList.length; i++)
 		cColorBooleanSwitchShader.Parameters("input2").Parameters(cSubComponentsList[i]).value = 0;
-	SIConnectShaderToCnxPoint(cCCShader, cColorBooleanSwitchShader + ".input1", false);
+	SIConnectShaderToCnxPoint(cColor_Math_ExponentShader, cColorBooleanSwitchShader + ".input1", false);
 	
 	for (var i = 0; i < connectionPorts.length; i++)
 	{
@@ -566,7 +572,8 @@ function sIBL_XSI_MR_GetEnvironmentShaderBranch(cPass, cInputShader, cImageSourc
 	}
 	
 	cColorMathBasicShader.Parameters("name").value = cName + "_Color_Math_Basic";
-	cCCShader.Parameters("name").value = cName + "_Color_Correction";
+	cColor_Math_ExponentShader.Parameters("name").value = cName + "_Color_Math_Exponent";
+	cColorMathBasicGammaShader.Parameters("name").value = cName + "_Gamma_Color_Math_Basic";
 	cColorBooleanSwitchShader.Parameters("name").value = cName + "_Color_Boolean_Switch";
 	cEnvironmentShader.Parameters("name").value = cName + "_Environment";
 }
@@ -1083,9 +1090,11 @@ function sIBL_XSI_MR_BridgeControlsAndShaders( cPass, cSlot )
 	var cSubComponentsList = ["red", "green", "blue"];
 	for (var i = 0; i < cComponentsList.length; i++)
 	{
-		for (var j = 0; j < cSubComponentsList.length; j++)
+		for (var j = 0; j < cSubComponentsList.length; j++) 
+		{
 			AddExpr(cPass + ".sIBL_" + cSlot + "_Color_Math_Basic.input2." + cSubComponentsList[j], "sIBL.Smart_IBL_Controls." + cSlot + "_Gain", true);
-		AddExpr(cPass + ".sIBL_" + cSlot + "_Color_Correction.gamma", "sIBL.Smart_IBL_Controls." + cSlot + "_Gamma", true);
+			AddExpr(cPass + ".sIBL_" + cSlot + "_Gamma_Color_Math_Basic.input2." + cSubComponentsList[j], "sIBL.Smart_IBL_Controls." + cSlot + "_Gamma", true);
+		}
 	}
 }
 

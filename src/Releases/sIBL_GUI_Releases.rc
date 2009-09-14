@@ -3,9 +3,9 @@ Release = 2.1.0
 Type = "Stable"
 
 [XSI_MR]
-Release = 1.5.3
+Release = 1.5.5
 Type = "Stable"
-Comment = "XSI Mental Ray Template : Enabled Pass(es) Linear Workflow."
+Comment = "XSI Mental Ray Template : Fixed Gamma Correction Issue."
 
 [Maya_MR]
 Release = 1.6.9
