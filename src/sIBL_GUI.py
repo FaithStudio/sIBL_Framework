@@ -1011,18 +1011,18 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.cGlobalTemplates = self.getGlobalTemplatesExtended()
 		self.setSoftwareComboBox()
 		self.setTemplateComboBox()
-	
+
 	@sIBL_Common.sIBL_Execution_Call
 	def initalizeRewireWidget( self ):
 		'''
 		This Method Initializes The ReWire Widget.
 		'''
-		
+
 		cReWireFramesList = ( self.Background_frame, self.Lighting_frame, self.Reflection_frame )
 		for cFrame in cReWireFramesList:
 			cLogger.debug( "> Hiding '%s'.", cFrame )
 			cFrame.hide()
-		
+
 		cReWireComboBoxList = ( self.Background_comboBox, self.Lighting_comboBox, self.Reflection_comboBox )
 		for i in range( len( cReWireComboBoxList ) ):
 			cLogger.debug( "> Inserting Items In '%s'.", cReWireComboBoxList[i] )
@@ -1404,7 +1404,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 					cOverrideKeys = self.addKeysToOverrideString( cOverrideKeys, self.Common_Attributes_tableWidget )
 					cOverrideKeys = self.addKeysToOverrideString( cOverrideKeys, self.Additional_Attributes_tableWidget )
-					
+
 					cComponentsList = ( ( self.Background_comboBox, self.Background_Path_lineEdit, "Background", "Background|BGfile" ), ( self.Lighting_comboBox, self.Lighting_Path_lineEdit, "Lighting", "Enviroment|EVfile" ), ( self.Reflection_comboBox, self.Reflection_Path_lineEdit, "Reflection", "Reflection|REFfile" ) )
 					cIBLAttributes = self.cGlobalCollection[self.cEditedIBL]
 					for i in range( len( cComponentsList ) ):
@@ -1637,10 +1637,10 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			else:
 				cLogger.debug( "> Hiding ReWire Frame '%s'.", cComponentsList[i][1] )
 				cComponentsList[i][1].hide()
-				
+
 	@sIBL_Common.sIBL_Execution_Call
 	def  setReWireCustomPath( self, cComponent ):
-		
+
 		cCustomFile = QFileDialog.getOpenFileName( self, self.tr( "Custom %s File :", cComponent ), QDir.currentPath() )
 		cLogger.debug( "> Chosen Custom %s : '%s'.", cComponent, cCustomFile )
 		if cCustomFile != "":
@@ -1650,13 +1650,13 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				self.Lighting_Path_lineEdit.setText( QString( cCustomFile ) )
 			elif cComponent == "Reflection":
 				self.Reflection_Path_lineEdit.setText( QString( cCustomFile ) )
-				
+
 	@sIBL_Common.sIBL_Execution_Call
 	def Background_Path_toolButton_OnClicked( self ) :
 		'''
 		This Method Is Called When Background ToolButton Is Clicked.
 		'''
-		
+
 		self.setReWireCustomPath( "Background" )
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -1664,17 +1664,17 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 		This Method Is Called When Lighting ToolButton Is Clicked.
 		'''
-		
+
 		self.setReWireCustomPath( "Lighting" )
-	
+
 	@sIBL_Common.sIBL_Execution_Call
 	def Reflection_Path_toolButton_OnClicked( self ) :
 		'''
 		This Method Is Called When Reflection ToolButton Is Clicked.
 		'''
-		
+
 		self.setReWireCustomPath( "Reflection" )
-	
+
 	@sIBL_Common.sIBL_Execution_Call
 	def setTemporaryVariableErrorMessage( self ) :
 		'''
@@ -1807,7 +1807,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 										cConnectionCommand = sIBL_Parser.sIBL_GetExtraAttributeComponents( cRemoteConnectionAttributes["Remote Connection|ExecutionCommand"], "Value" ).replace( "$loaderScriptPath", cEnvVariable.replace( "\\", "/" ) + "/" + sIBL_Parser.sIBL_GetExtraAttributeComponents( cTemplateAttributes["Template|OutputScript"], "Value" ) )
 										cLogger.debug( "> Current Connection Command : '%s'.", cConnectionCommand )
 										cConnection.ExecuteSIBLLoaderScript( cConnectionCommand )
-									except:
+									except Exception, cError:
 										sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "Remote Connection On Win32 OLE Server '" + sIBL_Parser.sIBL_GetExtraAttributeComponents( cRemoteConnectionAttributes["Remote Connection|TargetApplication"], "Value" ) + "' Failed !" )
 										sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Remote Connection Failed On Port : " + str( self.Software_Port_spinBox.value() ), True )
 										# self.sIBL_GUI_dockWidget.show()
@@ -1837,7 +1837,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def setVerboseLevelComboBox( self ) :
 		'''
-		This Method Fills Verbose Level CombBox.
+		This Method Fills Verbose Level ComboBox.
 		'''
 
 		self.Verbose_Level_comboBox.clear()
@@ -2728,11 +2728,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						cExtendedSIBL["Author"] = cSIBLFileHeaderAttributes["Header|Author"]
 						cExtendedSIBL["Location"] = cSIBLFileHeaderAttributes["Header|Location"]
 						cExtendedSIBL["Comment"] = cSIBLFileHeaderAttributes["Header|Comment"]
-						
+
 						cExtendedSIBL["Background Image"] = cSIBLFile.getAttributeValue( "Background", "BGfile" )
 						cExtendedSIBL["Lighting Image"] = cSIBLFile.getAttributeValue( "Enviroment", "EVfile" )
 						cExtendedSIBL["Reflection Image"] = cSIBLFile.getAttributeValue( "Reflection", "REFfile" )
-						
+
 						# sIBL V2 Format Support.
 						if "Header|GEOlat" in cSIBLFileHeaderAttributes and "Header|GEOlong" in cSIBLFileHeaderAttributes :
 							cExtendedSIBL["GPS Latitude"] = cSIBLFileHeaderAttributes["Header|GEOlat"]
