@@ -120,16 +120,16 @@ class sIBL_FTP( object ):
 	@sIBL_Common.sIBL_Execution_Call
 	def closeConnection( self ) :
 		'''
-		This Method Close The FTP Connection.
+		This Method Closes The FTP Connection.
 		'''
-		
+
 		self.setProgressMessage( "Connection Closed !", cWaitTime = 0.75 )
 		self.cFTP.close()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setConnection( self, cHost, cPort ) :
 		'''
-		This Method Initialize The FTP Connection.
+		This Method Initializes The FTP Connection.
 
 		@param cHost: FTP Host. ( String )
 		@param cPort: FTP Connection Port. ( Int )
@@ -153,7 +153,7 @@ class sIBL_FTP( object ):
 	@sIBL_Common.sIBL_Execution_Call
 	def setLogin( self, cLogin, cPassword ) :
 		'''
-		This Method Log The User To FTP.
+		This Method Logs The User To FTP.
 
 		@param cLogin: Connection Login. ( String )
 		@param cPassword: Connection Password. ( String )
@@ -191,7 +191,7 @@ class sIBL_FTP( object ):
 			self.setProgressMessage( "Listing Directory : '%s'." % cWorkingDirectory )
 
 			cLogger.debug( "> Current Working Directory  : '%s'.", cWorkingDirectory )
-			
+
 			cDirectories, cFiles = self.getListing()
 
 			cSubDirectories = []
@@ -262,7 +262,7 @@ class sIBL_FTP( object ):
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalDirectory( self, cLocalDirectory ) :
 		'''
-		This Method Create A Local Directory.
+		This Method Creates A Local Directory.
 
 		@param cLocalDirectory: Local Directory To Create. ( String )
 		@return: Success Of The Creation ( Boolean )
@@ -286,7 +286,7 @@ class sIBL_FTP( object ):
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalFile( self, cRemoteFile, cLocalFilePath ) :
 		'''
-		This Method Download A Remote File.
+		This Method Downloads A Remote File.
 
 		@param cRemoteFile: Remote File To Download. ( String )
 		@param cLocalFilePath: Local Target File. ( String )
@@ -309,7 +309,7 @@ class sIBL_FTP( object ):
 	@sIBL_Common.sIBL_Execution_Call
 	def getRemoteTree( self, cRemoteDirectory, cLocalDirectory, cIgnoreList ) :
 		'''
-		This Method Download A Remote Tree.
+		This Method Downloads A Remote Tree.
 
 		@param cRemoteDirectory: Remote Tree Download. ( String )
 		@param cLocalDirectory: Local Target Directory. ( String )

@@ -133,7 +133,7 @@ class Popup_QGraphicsItem( QGraphicsItem ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def paint( self, cPainter, cOptions, cWidget ) :
 		'''
-		This Method Paint The Popup.
+		This Method Paints The Popup.
 
 		@param cPainter: QPainter ( QPainter )
 		@param cOptions: QStyleOptionGraphicsItem  ( QStyleOptionGraphicsItem  )
@@ -194,7 +194,7 @@ class Marker_QGraphicsItem( QGraphicsItem ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def paint( self, cPainter, cOptions, cWidget ) :
 		'''
-		This Method Paint The Marker.
+		This Method Paints The Marker.
 
 		@param cPainter: QPainter ( QPainter )
 		@param cOptions: QStyleOptionGraphicsItem  ( QStyleOptionGraphicsItem  )
@@ -288,7 +288,7 @@ class WorldMap_QGraphicsItem( QGraphicsItem ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def paint( self, cPainter, cOptions, cWidget ) :
 		'''
-		This Method Paint The WorldMap.
+		This Method Paints The WorldMap.
 
 		@param cPainter: QPainter ( QPainter )
 		@param cOptions: QStyleOptionGraphicsItem  ( QStyleOptionGraphicsItem  )
@@ -350,7 +350,7 @@ class WorldMap_QGraphicsView( QGraphicsView ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def worldMapDraw( self ) :
 		'''
-		This Method Draw The WorldMap.
+		This Method Draws The WorldMap.
 		'''
 
 		self.cQGraphicsScene.clear()
@@ -384,7 +384,7 @@ class WorldMap_QGraphicsView( QGraphicsView ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def scaleView( self, scaleFactor ) :
 		'''
-		This Method Scale The QGraphicsView.
+		This Method Scales The QGraphicsView.
 
 		@param scaleFactor: Float ( Float )
 		'''
@@ -675,7 +675,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	#***************************************************************************************
 	def refreshLogTextEdit( self ) :
 		'''
-		This Method Refresh The Log Window ( Can't Be Decorated For Recursion Issues ).
+		This Method Refreshes The Log Window ( Can't Be Decorated For Recursion Issues ).
 		'''
 
 		try :
@@ -688,7 +688,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 	def setLogTextEdit( self ) :
 		'''
-		This Method Set The Log Window ( Can't Be Decorated For Recursion Issues ).
+		This Method Sets The Log Window ( Can't Be Decorated For Recursion Issues ).
 		'''
 
 		try :
@@ -741,7 +741,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def setGPSMap( self ) :
 		'''
-		This Method Initialize The GPS Map.
+		This Method Initializes The GPS Map.
 		'''
 
 		cLogger.debug( "> Re/Initialising WorldMap !" )
@@ -1179,7 +1179,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def setPortWidgetsVisibility( self, cVisibilityState ) :
 		'''
-		This Method Hide/UnHide Remote Connections Widgets Depending The Current Remote Connection Options
+		This Method Hides/UnHides Remote Connections Widgets Depending The Current Remote Connection Options
 
 		@param cVisibilityState: Current Port Widgets Visibility State. ( Boolean )
 		'''
@@ -1194,7 +1194,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def resetQTableWidget( self, cTableWidget ) :
 		'''
-		This Method Reset The Provided Table Widget.
+		This Method Resets The Provided Table Widget.
 
 		@param cTableWidget: Current Table Widget ( QTableWidget )
 		'''
@@ -2072,7 +2072,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def isPathUniqueInCollectionsPaths( self, cItem ) :
 		'''
-		This Method Check If An Item Is Not Unique In The Collections Paths TableWidget.
+		This Method Checks If An Item Is Not Unique In The Collections Paths TableWidget.
 
 		@param cItem: Item Uniqueness To Be Checked ( String )
 		@return: Item Uniqueness ( Boolean )
@@ -2089,7 +2089,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def isNameUniqueInCollectionsNames( self, cItem ) :
 		'''
-		This Method Check If An Item Is Not Unique In The Collections Names TableWidget.
+		This Method Checks If An Item Is Not Unique In The Collections Names TableWidget.
 
 		@param cItem: Item Uniqueness To Be Checked ( String )
 		@return: Item Uniqueness ( Boolean )
@@ -2106,7 +2106,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def isItemNotUniqueInTableWidget( self, cItem, cTableWidget , cColumn ) :
 		'''
-		This Method Check If An Item Is Not Unique In The Current TableWidget.
+		This Method Checks If An Item Is Not Unique In The Current TableWidget.
 
 		@param cItem: Item Uniqueness To Be Checked ( String )
 		@param cTableWidget: Current Table Widget ( QTableWidget )
@@ -2167,7 +2167,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def getNewCollection( self ) :
 		'''
-		This Method Add A New Collection.
+		This Method Adds A New Collection.
 		'''
 
 		cDialogMessage = "Enter Your New Collection Name !"
@@ -2410,7 +2410,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def setCheckBoxStateFromSettings( self, cCheckbox, cSection, cKey ) :
 		'''
-		This Method Restore The Provided CheckBox State From Settings.
+		This Method Restores The Provided CheckBox State From Settings.
 
 		@param cCheckbox: Current CheckBox To Set. ( QCheckBox )
 		@param cSection: Current Section To Retrieve Key From. ( String )
@@ -2453,7 +2453,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def Check_For_New_Releases_pushButton_OnClicked( self ) :
 		'''
-		This Method Launch sIBL_GUI Updater.
+		This Method Launchs sIBL_GUI Updater.
 		'''
 
 		cLogger.debug( "> Launching Online Updater UnMuted." )
@@ -2653,7 +2653,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def setCollectionsPaths( self ) :
 		'''
-		This Method Store Collections Paths In Settings File.
+		This Method Stores Collections Paths In Settings File.
 		'''
 
 		cCollections = self.getCollections()
@@ -2881,7 +2881,7 @@ def sIBL_Set_DefaultSettingsFile( cFileName ) :
 @sIBL_Common.sIBL_Execution_Call
 def sIBL_Set_KeyInSettings( cSection, cKey, cValue ) :
 	'''
-	This Method Store Provided Key In Settings File.
+	This Method Stores Provided Key In Settings File.
 
 	@param cSection: Current Section To Save The Key Into. ( String )
 	@param cKey: Current Key To Save. ( String )
@@ -2896,7 +2896,7 @@ def sIBL_Set_KeyInSettings( cSection, cKey, cValue ) :
 @sIBL_Common.sIBL_Execution_Call
 def sIBL_Get_KeyFromSettings( cSection, cKey ) :
 	'''
-	This Method Get Key Value From Settings File.
+	This Method Gets Key Value From Settings File.
 
 	@param cSection: Current Section To Retrieve Key From. ( String )
 	@param cKey: Current Key To Retrieve. ( String )

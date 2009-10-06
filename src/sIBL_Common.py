@@ -129,7 +129,7 @@ def sIBL_Execution_Call( cObject ):
 
 def sIBL_CloseHandler( cLogger, cHandler ):
 	'''
-	This Method Shut Down The Provided Handler.
+	This Method Shuts Down The Provided Handler.
 
 	@param cLogger: Current Logger. ( Object )
 	@param cHandler: Current Handler. ( Object )
@@ -148,7 +148,7 @@ def sIBL_CloseHandler( cLogger, cHandler ):
 @sIBL_Execution_Call
 def sIBL_Exit( cExitCode, cLogger, cHandlers ):
 	'''
-	This Method Shut Down The Logging And Exit The Current Process.
+	This Method Shuts Down The Logging And Exit The Current Process.
 
 	@param cExitCode: Current Exit Code. ( Int )
 	'''
@@ -163,7 +163,7 @@ def sIBL_Exit( cExitCode, cLogger, cHandlers ):
 
 class sIBL_EnvironmentVariables( object ):
 	'''
-	This Class Provide Methods To Manipulate Environment Variables.
+	This Class Provides Methods To Manipulate Environment Variables.
 	'''
 
 	@sIBL_Execution_Call
@@ -201,7 +201,7 @@ class sIBL_EnvironmentVariables( object ):
 @sIBL_Execution_Call
 def sIBL_GetTemporarySystemPath():
 	'''
-	This Definition Return A "TMP" Directory Path On Windows And "TMPDIR" Directory Path On Linux.
+	This Definition Returns A "TMP" Directory Path On Windows And "TMPDIR" Directory Path On Linux.
 
 	@return: Current Platform Temporary Directory Path ( String )
 	'''
