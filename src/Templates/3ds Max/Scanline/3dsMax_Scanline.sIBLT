@@ -4,8 +4,9 @@ Date = @Date | 1 September 2008 | String | Date
 Author = @Author | Dschaga | String | Author
 EMail = @Email | christian@cgtechniques.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
-Software = @Software | 3ds Max  | String | Software
+Software = @Software | 3dsMax  | String | Software
 Version = @Version | 2008+ | String | Version
+Renderer = @Renderer | Scanline | String | Renderer
 OutputScript = @OutputScript | sIBL_3dsmax_Import.ms | String | Output Script
 Comment = @Comment | This is 3dsmax 2K Template. | String | Comment
 

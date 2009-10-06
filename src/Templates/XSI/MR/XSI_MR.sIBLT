@@ -6,6 +6,7 @@ EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
 Software = @Software | XSI | String | Software
 Version = @Version | 7.X | String | Version
+Renderer = @Renderer | Mental Ray | String | Renderer
 OutputScript = @OutputScript | sIBL_XSI_Import.js | String | Output Script
 Comment = @Comment | This is XSI 7.X Mental Ray Template. | String | Comment
 

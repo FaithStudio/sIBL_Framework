@@ -586,7 +586,8 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.connect( self.Collections_listWidget, SIGNAL( "itemDoubleClicked(QListWidgetItem *)" ), self.sendListWidgetItemToImportTab )
 		self.connect( self, SIGNAL( "WorldMap_Refresh()" ), self.WorldMap_QGraphicsView.worldMapDraw )
 
-		self.connect( self.Software_comboBox, SIGNAL( "activated(int)" ), self.setTemplateComboBox )
+		self.connect( self.Software_comboBox, SIGNAL( "activated(int)" ), self.setRendererComboBox )
+		self.connect( self.Renderer_comboBox, SIGNAL( "activated(int)" ), self.setTemplateComboBox )
 		self.connect( self.Template_comboBox, SIGNAL( "activated(int)" ), self.setTemplateOptionsAndInfosWidgets )
 		self.connect( self.Open_Templates_Folder_pushButton, SIGNAL( "clicked()" ), self.Open_Templates_Folder_pushButton_OnClicked )
 		self.connect( self.Edit_Current_Template_pushButton, SIGNAL( "clicked()" ), self.Edit_Current_Template_pushButton_OnClicked )
@@ -1009,8 +1010,10 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		cLogger.debug( "> Initializing : '%s'.", "self.cGlobalTemplates" )
 		self.cGlobalTemplates = self.getGlobalTemplatesExtended()
+
 		self.setSoftwareComboBox()
-		self.setTemplateComboBox()
+		# self.setRendererComboBox()
+		# self.setTemplateComboBox()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def initalizeRewireWidget( self ):
@@ -1065,6 +1068,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 				cTemplateAttributes["Template Name"] = cTemplate
 				cTemplateAttributes["Template Software"] = sIBL_Parser.sIBL_GetExtraAttributeComponents( cTemplateFile.getAttributeValue( "Template", "Software" ), "Value" )
+				cTemplateAttributes["Template Renderer"] = sIBL_Parser.sIBL_GetExtraAttributeComponents( cTemplateFile.getAttributeValue( "Template", "Renderer" ), "Value" )
 				cTemplateAttributes["Template Release"] = sIBL_Parser.sIBL_GetExtraAttributeComponents( cTemplateFile.getAttributeValue( "Template", "Release" ), "Value" )
 				cTemplateAttributes["Template Path"] = cGlobalTemplates[cTemplate]
 
@@ -1076,9 +1080,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			return cGlobalTemplatesExtend
 
 	@sIBL_Common.sIBL_Execution_Call
-	def setSoftwareComboBox( self ) :
+	def setSoftwareComboBox( self, *__None__ ) :
 		'''
-		This Method Fills The Softwares ComboBox.
+		This Method Fills The Software ComboBox.
 		'''
 
 		self.Software_comboBox.clear()
@@ -1088,10 +1092,31 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		self.Software_comboBox.insertItems( 0, QStringList( cSoftwareList ) )
 
+		self.setRendererComboBox()
+
+	@sIBL_Common.sIBL_Execution_Call
+	def setRendererComboBox( self, *__None__ ) :
+		'''
+		This Method Fills The Renderer ComboBox.
+		'''
+
+		self.Renderer_comboBox.clear()
+
+		cRendererComboBoxList = []
+		for cTemplate in self.cGlobalTemplates :
+			cTemplateAttributes = self.cGlobalTemplates[cTemplate]
+			if cTemplateAttributes["Template Software"] == self.Software_comboBox.currentText() and cTemplateAttributes["Template Renderer"] not in cRendererComboBoxList:
+				cRendererComboBoxList.append( cTemplateAttributes["Template Renderer"] )
+
+		cLogger.debug( "> Inserting '%s' In 'Renderer_comboBox'.", cRendererComboBoxList )
+		self.Renderer_comboBox.insertItems( 0, QStringList( cRendererComboBoxList ) )
+
+		self.setTemplateComboBox()
+
 	@sIBL_Common.sIBL_Execution_Call
 	def setTemplateComboBox( self, *__None__ ) :
 		'''
-		This Method Fills The Templates ComboBox.
+		This Method Fills The Template ComboBox.
 		'''
 
 		self.Template_comboBox.clear()
@@ -1099,11 +1124,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cTemplateComboBoxList = []
 		for cTemplate in self.cGlobalTemplates :
 			cTemplateAttributes = self.cGlobalTemplates[cTemplate]
-			if cTemplateAttributes["Template Software"] == self.Software_comboBox.currentText() :
+			if cTemplateAttributes["Template Software"] == self.Software_comboBox.currentText() and cTemplateAttributes["Template Renderer"] == self.Renderer_comboBox.currentText():
 				cTemplateComboBoxList.append( cTemplate )
 
 		cLogger.debug( "> Inserting '%s' In 'Template_comboBox'.", cTemplateComboBoxList )
 		self.Template_comboBox.insertItems( 0, QStringList( cTemplateComboBoxList ) )
+
 		self.setTemplateOptionsAndInfosWidgets()
 
 	@sIBL_Common.sIBL_Execution_Call
