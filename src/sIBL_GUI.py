@@ -2839,7 +2839,11 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		@return: Provided Path ( QString )
 		'''
 
-		cLastVisitedPath = os.path.dirname( str( cPath ) )
+		if os.path.isfile( cPath ) :
+			cLastVisitedPath = os.path.dirname( str( cPath ) )
+		else:
+			cLastVisitedPath = cPath
+
 		cLogger.debug( "> Storing Last Browser Path : '%s'.", cLastVisitedPath )
 		self.cLastVisitedPath = cLastVisitedPath
 

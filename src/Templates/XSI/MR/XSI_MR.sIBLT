@@ -1,12 +1,11 @@
 [Template]
-Release = @Release | 1.5.6 | String | Template Release
-Date = @Date | 10 October 2009 | String | Date
+Release = @Release | 1.5.5 | String | Template Release
+Date = @Date | 14 September 2009 | String | Date
 Author = @Author | Kel Solaar | String | Author
 EMail = @Email | kelsolaar_fool@hotmail.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
 Software = @Software | XSI | String | Software
 Version = @Version | 7.X | String | Version
-Renderer = @Renderer | Mental Ray | String | Renderer
 OutputScript = @OutputScript | sIBL_XSI_Import.js | String | Output Script
 Comment = @Comment | This is XSI 7.X Mental Ray Template. | String | Comment
 

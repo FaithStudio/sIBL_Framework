@@ -2,18 +2,18 @@ Name sIBL_GUI
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 2.1.0
+!define VERSION 2.1.1
 !define COMPANY "HDRLabs"
 !define URL http://my.opera.com/KelSolaar/blog/
 
 # MUI Symbol Definitions
-!define MUI_ICON "Y:\sIBL\src\Resources\Icon_Light_32.ico"
+!define MUI_ICON "Y:\sIBL_GUI\src\Resources\Icon_Light_32.ico"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER sIBL_GUI
-!define MUI_UNICON "Y:\sIBL\src\Resources\Icon_Light_32.ico"
+!define MUI_UNICON "Y:\sIBL_GUI\src\Resources\Icon_Light_32.ico"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
 # Included files
@@ -45,7 +45,7 @@ InstallDir $PROGRAMFILES\sIBL_GUI
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion 2.1.0.0
+VIProductVersion 2.1.1.0
 VIAddVersionKey ProductName sIBL_GUI
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
@@ -61,7 +61,7 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    !include  "Y:\sIBL\src\Installers\NSIS\sIBL_GUI_Installed_Files.nsh"
+    !include  "Y:\sIBL_GUI\src\Installers\NSIS\sIBL_GUI_Installed_Files.nsh"
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
 
@@ -102,7 +102,7 @@ done${UNSECTION_ID}:
 
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
-    !include  "Y:\sIBL\src\Installers\NSIS\sIBL_GUI_Uninstalled_Files.nsh"
+    !include  "Y:\sIBL_GUI\src\Installers\NSIS\sIBL_GUI_Uninstalled_Files.nsh"
     DeleteRegValue HKLM "${REGKEY}\Components" Main
 SectionEnd
 
