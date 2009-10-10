@@ -378,12 +378,10 @@ class sIBL_FTP( object ):
 						self.cDownloadProgress += 1
 
 					self.cDownloadProgress = -1
-					self.setProgressMessage( "Downloading Done, Connection Closing !", cWaitTime = 1.5 )
-					return self.closeConnection( "Downloading Finished !", cWaitTime = 2.5 )
+					return self.closeConnection( "Download Complete, Connection Closing !", cWaitTime = 2.5 )
 				else:
 					self.cDownloadProgress = -1
-					self.setProgressMessage( "Nothing To Download, Connection Closing !", cWaitTime = 1.5 )
-					return self.closeConnection( "Nothing To Download !", cWaitTime = 2.5 )
+					return self.closeConnection( "Nothing To Download, Connection Closing !", cWaitTime = 2.5 )
 		else:
 			self.closeConnection( "Aborting Remote Directory Retrieving !" )
 #***********************************************************************************************
