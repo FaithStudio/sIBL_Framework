@@ -116,6 +116,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		# Setting Up The UI.
 		self.sIBL_GUI_groupBox.hide()
 		self.Open_Repository_pushButton.hide()
+		self.Get_Latest_Templates_pushButton.hide()
 		self.Templates_groupBox.hide()
 		self.setSIBL_GUI_ReleaseInfos()
 		self.setTemplates_ReleaseInfos()

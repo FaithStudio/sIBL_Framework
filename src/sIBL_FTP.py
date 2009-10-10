@@ -144,7 +144,7 @@ class sIBL_FTP( object ):
 
 			return True
 		else:
-			self.closeConnection( "Closing Connection : Canceling FTP Connection !" )
+			self.closeConnection( "Aborting FTP Connection !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLogin( self, cLogin, cPassword ) :
@@ -171,7 +171,7 @@ class sIBL_FTP( object ):
 
 			return True
 		else:
-			self.closeConnection( "Closing Connection : Canceling Login !" )
+			self.closeConnection( "Aborting Login !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def recursiveWalker( self, cWorkingDirectory ) :
@@ -202,9 +202,9 @@ class sIBL_FTP( object ):
 					cLogger.debug( "> Entering : '%s'.", cSubDirectory )
 					self.recursiveWalker( cSubDirectory )
 				else:
-					return self.closeConnection( "Closing Connection : Canceling " + cSubDirectory + " Recursion !" )
+					return self.closeConnection( "Aborting " + cSubDirectory + " Recursion !" )
 		else:
-			self.closeConnection( "Closing Connection : Canceling Recursive Walking !" )
+			self.closeConnection( "Aborting Recursive Walking !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getListing( self ) :
@@ -252,7 +252,7 @@ class sIBL_FTP( object ):
 
 			return cDirectories, cFiles
 		else:
-			self.closeConnection( "Closing Connection : Canceling Directory Content Listing !" )
+			self.closeConnection( "Aborting Directory Content Listing !" )
 			return {}, {}
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -277,7 +277,7 @@ class sIBL_FTP( object ):
 				cLogger.debug( "> '%s' Directory Tree Already Exist, Skipping Creation !", cLocalDirectory )
 				return True
 		else:
-			self.closeConnection( "Closing Connection : Canceling Local Directory Creation !" )
+			self.closeConnection( "Aborting Local Directory Creation !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalFile( self, cRemoteFile, cLocalFilePath ) :
@@ -300,7 +300,7 @@ class sIBL_FTP( object ):
 				sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setLocalFile() Method | '%s' Creation Failed !" % cLocalFilePath, True )
 				return False
 		else:
-			self.closeConnection( "Closing Connection : Canceling Local File Creation !" )
+			self.closeConnection( "Aborting Local File Creation !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getRemoteTree( self, cRemoteDirectory, cLocalDirectory, cIgnoreList ) :
@@ -321,14 +321,14 @@ class sIBL_FTP( object ):
 				self.cDownloadProgress = None
 
 				if self.closeFTPConnection :
-					return self.closeConnection( "Closing Connection : Canceling Remote Directory Retrieving !" )
+					return self.closeConnection( "Aborting Remote Directory Retrieving !" )
 
 				self.setProgressMessage( "Gathering Files List !", cWaitTime = 0.5 )
 
 				self.recursiveWalker( cRemoteDirectory )
 
 				if self.closeFTPConnection :
-					return self.closeConnection( "Closing Connection : Canceling Remote Directory Retrieving !" )
+					return self.closeConnection( "Aborting Remote Directory Retrieving !" )
 
 				self.setProgressMessage( "Gathering Done !", cWaitTime = 1.0 )
 
@@ -346,7 +346,7 @@ class sIBL_FTP( object ):
 				if len( self.cWalkerFilesList ) != 0 :
 
 					if self.closeFTPConnection :
-						return self.closeConnection( "Closing Connection : Canceling Remote Directory Retrieving !" )
+						return self.closeConnection( "Aborting Remote Directory Retrieving !" )
 
 					self.setProgressMessage( "Starting Download !", cWaitTime = 1.0 )
 
@@ -355,7 +355,7 @@ class sIBL_FTP( object ):
 					for cFile in self.cWalkerFilesList :
 
 						if self.closeFTPConnection :
-							return self.closeConnection( "Closing Connection : Canceling Remote Directory Retrieving !" )
+							return self.closeConnection( "Aborting Remote Directory Retrieving !" )
 
 						self.setProgressMessage( "Downloading : '%s'" % os.path.basename( cFile ) )
 
@@ -379,13 +379,13 @@ class sIBL_FTP( object ):
 
 					self.cDownloadProgress = -1
 					self.setProgressMessage( "Downloading Done, Connection Closing !", cWaitTime = 1.5 )
-					return self.closeConnection( "Connection Closed : Downloading Finished !", cWaitTime = 2.5 )
+					return self.closeConnection( "Downloading Finished !", cWaitTime = 2.5 )
 				else:
 					self.cDownloadProgress = -1
 					self.setProgressMessage( "Nothing To Download, Connection Closing !", cWaitTime = 1.5 )
-					return self.closeConnection( "Connection Closed : Nothing To Download !", cWaitTime = 2.5 )
+					return self.closeConnection( "Nothing To Download !", cWaitTime = 2.5 )
 		else:
-			self.closeConnection( "Canceling Remote Directory Retrieving !" )
+			self.closeConnection( "Aborting Remote Directory Retrieving !" )
 #***********************************************************************************************
 #***	Python End
 #***********************************************************************************************

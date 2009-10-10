@@ -173,11 +173,12 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.Download_progressBar.hide()
 		self.Download_progressBar.setValue( 0 )
 
-		self.Current_File_label.setText( QString( self.cFTP_Thread.cFTP.cProgressMessage[len( self.cFTP_Thread.cFTP.cProgressMessage ) - 1] ) )
-
 		self.cSIBL_GUI_Instance.cFTP_Session_Active = False
 
 		self.cTimer.stop()
+
+		if self.cFTP_Thread.cFTP.closeFTPConnection :
+			self.Current_File_label.setText( QString( "Connection Closed, Download Aborted !" ) )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def startWorkerThread( self ):
