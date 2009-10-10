@@ -33,16 +33,16 @@ Type = "Stable"
 Comment = "Renderman For Maya Template : Added Renderer Attribute."
 
 [3dsMax_MR]
-Release = 0.9.7
+Release = 0.9.6
 Type = "Nightly"
 Comment = "3dsMax Mental Ray Base Template : Added Renderer Attribute."
 
 [3dsMax_Scanline]
-Release = 0.9.7
+Release = 0.9.6
 Type = "Nightly"
 Comment = "3dsMax Scanline Ray Base Template : Added Renderer Attribute."
 
 [3dsMax_VRay]
-Release = 0.9.7
+Release = 0.9.6
 Type = "Nightly"
 Comment = "3dsMax VRay Base Template : Added Renderer Attribute."
