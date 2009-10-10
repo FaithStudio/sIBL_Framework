@@ -126,6 +126,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.connect( self.Start_Download_pushButton, SIGNAL( "clicked()" ), self.Start_Download_pushButton_OnClicked )
 		self.connect( self.Cancel_pushButton, SIGNAL( "clicked()" ), self.Cancel_pushButton_OnClicked )
 
+		self.Start_Download_pushButton_OnClicked()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def closeEvent( self, cEvent ):
@@ -135,6 +136,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		@param cEvent: QEvent ( QEvent )
 		'''
 		cLogger.debug( "> Closing sIBL_GUI_FTP Widget." )
+
 		if self.cFTP_Thread is not None :
 			self.stopWorkerThread()
 
@@ -197,7 +199,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 	@sIBL_Common.sIBL_Execution_Call
 	def stopWorkerThread( self ):
 		'''
-		This Method Starts The FTP Worker Thread.
+		This Method Stops The FTP Worker Thread.
 		'''
 
 		cLogger.debug( "> Stopping FTP Worker Thread !" )
@@ -205,13 +207,15 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.cFTP_Thread.cFTP.closeFTPConnection = True
 
 		self.cFTP_Thread.exit()
-		self.cFTP_Thread.wait()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def Start_Download_pushButton_OnClicked( self ):
 		'''
 		This Method Triggers The FTP Worker Starting Method.
 		'''
+
+		# Setting Up The UI.
+		self.Start_Download_pushButton.hide()
 
 		if self.cSIBL_GUI_Instance.cFTP_Session_Active != True :
 			cLogger.info( "sIBL_GUI_FTP | Initializing Online Repository Files Download !" )
@@ -241,8 +245,6 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		This Method Refreshes The GUI Progress Message.
 		'''
 
-		self.Current_File_label.setText( QString( self.cFTP_Thread.cFTP.cProgressMessage[len( self.cFTP_Thread.cFTP.cProgressMessage ) - 1] ) )
-
 		if self.cFTP_Thread.cFTP.cDownloadProgress is not None and self.cFTP_Thread.cFTP.cDownloadProgress != -1:
 			self.Cancel_pushButton.setText( "Cancel" )
 			self.Download_progressBar.show()
@@ -252,6 +254,9 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 			if self.cFTP_Thread.cFTP.cDownloadProgress == -1:
 				self.Cancel_pushButton.setText( "Close" )
 			self.Download_progressBar.hide()
+
+		self.Current_File_label.setText( QString( self.cFTP_Thread.cFTP.cProgressMessage[len( self.cFTP_Thread.cFTP.cProgressMessage ) - 1] ) )
+
 
 class sIBL_FTP_Worker( QThread ):
 	'''
