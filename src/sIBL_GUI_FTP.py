@@ -102,7 +102,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.setupUi( self )
 
 		# Setting Up The UI.
-		self.Cancel_pushButton.setText( "Close" )
+		self.Cancel_pushButton.setText( "Cancel" )
 		self.Download_progressBar.hide()
 		self.Download_progressBar.setValue( 0 )
 
@@ -123,10 +123,9 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		# sIBL_GUI_FTP Signals / Slots.
 		self.connect( self.cTimer, SIGNAL( "timeout()" ), self.updateFtpProgress )
 
-		self.connect( self.Start_Download_pushButton, SIGNAL( "clicked()" ), self.Start_Download_pushButton_OnClicked )
 		self.connect( self.Cancel_pushButton, SIGNAL( "clicked()" ), self.Cancel_pushButton_OnClicked )
 
-		self.Start_Download_pushButton_OnClicked()
+		self.startDownload()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def closeEvent( self, cEvent ):
@@ -209,22 +208,6 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 		self.cFTP_Thread.exit()
 
 	@sIBL_Common.sIBL_Execution_Call
-	def Start_Download_pushButton_OnClicked( self ):
-		'''
-		This Method Triggers The FTP Worker Starting Method.
-		'''
-
-		# Setting Up The UI.
-		self.Start_Download_pushButton.hide()
-
-		if self.cSIBL_GUI_Instance.cFTP_Session_Active != True :
-			cLogger.info( "sIBL_GUI_FTP | Initializing Online Repository Files Download !" )
-
-			self.startWorkerThread()
-		else :
-			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "FTP Session Already Active !" )
-
-	@sIBL_Common.sIBL_Execution_Call
 	def Cancel_pushButton_OnClicked( self ):
 		'''
 		This Method Stops The Download And Triggers The Connection Close.
@@ -238,6 +221,19 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 			self.close()
 		else :
 			cLogger.info( "sIBL_GUI_FTP | Stopping sIBL_GUI FTP !" )
+
+	@sIBL_Common.sIBL_Execution_Call
+	def startDownload( self ):
+		'''
+		This Method Triggers The FTP Worker Starting Method.
+		'''
+
+		if self.cSIBL_GUI_Instance.cFTP_Session_Active != True :
+			cLogger.info( "sIBL_GUI_FTP | Initializing Online Repository Files Download !" )
+
+			self.startWorkerThread()
+		else :
+			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "FTP Session Already Active !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def updateFtpProgress( self ):
