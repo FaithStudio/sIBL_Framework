@@ -125,7 +125,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 
 		self.connect( self.Cancel_pushButton, SIGNAL( "clicked()" ), self.Cancel_pushButton_OnClicked )
 
-		self.startDownload()
+		self.getDownloadWorker()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def closeEvent( self, cEvent ):
@@ -223,7 +223,7 @@ class sIBL_GUI_FTP( QWidget, sIBL_UI_FTP.Ui_sIBL_GUI_FTP_Form ):
 			cLogger.info( "sIBL_GUI_FTP | Stopping sIBL_GUI FTP !" )
 
 	@sIBL_Common.sIBL_Execution_Call
-	def startDownload( self ):
+	def getDownloadWorker( self ):
 		'''
 		This Method Triggers The FTP Worker Starting Method.
 		'''
