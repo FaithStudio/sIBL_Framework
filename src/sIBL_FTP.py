@@ -107,29 +107,25 @@ class sIBL_FTP( object ):
 		@param cProgressMessage: Progress Message. ( String )
 		'''
 
-		# Some Nasty Duplicated Message Handling.
-		if cProgressMessage not in self.cProgressMessage:
-			cLogger.debug( "> Setting Progress Message : '%s'.", cProgressMessage )
-			cLogger.info( "sIBL_FTP | '%s'.", cProgressMessage )
-			self.cProgressMessage.append( cProgressMessage )
-			if cWaitTime :
-				sIBL_Common.sIBL_Wait( cWaitTime )
-		else :
-			cLogger.debug( "> Ignored Duplicated FTP Message : '%s'.", cProgressMessage )
+		cLogger.debug( "> Setting Progress Message : '%s'.", cProgressMessage )
+		cLogger.info( "sIBL_FTP | '%s'.", cProgressMessage )
+		self.cProgressMessage.append( cProgressMessage )
+		if cWaitTime :
+			sIBL_Common.sIBL_Wait( cWaitTime )
 
 	@sIBL_Common.sIBL_Execution_Call
-	def closeConnection( self ) :
+	def closeConnection( self, cMessage, cWaitTime = 0.75 ) :
 		'''
-		This Method Close The FTP Connection.
+		This Method Closes The FTP Connection.
 		'''
-		
-		self.setProgressMessage( "Connection Closed !", cWaitTime = 0.75 )
+
+		self.setProgressMessage( cMessage, cWaitTime )
 		self.cFTP.close()
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setConnection( self, cHost, cPort ) :
 		'''
-		This Method Initialize The FTP Connection.
+		This Method Initializes The FTP Connection.
 
 		@param cHost: FTP Host. ( String )
 		@param cPort: FTP Connection Port. ( Int )
@@ -148,12 +144,12 @@ class sIBL_FTP( object ):
 
 			return True
 		else:
-			self.closeConnection()
+			self.closeConnection( "Aborting FTP Connection !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLogin( self, cLogin, cPassword ) :
 		'''
-		This Method Log The User To FTP.
+		This Method Logs The User To FTP.
 
 		@param cLogin: Connection Login. ( String )
 		@param cPassword: Connection Password. ( String )
@@ -175,7 +171,7 @@ class sIBL_FTP( object ):
 
 			return True
 		else:
-			self.closeConnection()
+			self.closeConnection( "Aborting Login !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def recursiveWalker( self, cWorkingDirectory ) :
@@ -191,7 +187,7 @@ class sIBL_FTP( object ):
 			self.setProgressMessage( "Listing Directory : '%s'." % cWorkingDirectory )
 
 			cLogger.debug( "> Current Working Directory  : '%s'.", cWorkingDirectory )
-			
+
 			cDirectories, cFiles = self.getListing()
 
 			cSubDirectories = []
@@ -206,9 +202,9 @@ class sIBL_FTP( object ):
 					cLogger.debug( "> Entering : '%s'.", cSubDirectory )
 					self.recursiveWalker( cSubDirectory )
 				else:
-					return self.closeConnection()
+					return self.closeConnection( "Aborting " + cSubDirectory + " Recursion !" )
 		else:
-			self.closeConnection()
+			self.closeConnection( "Aborting Recursive Walking !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getListing( self ) :
@@ -256,13 +252,13 @@ class sIBL_FTP( object ):
 
 			return cDirectories, cFiles
 		else:
-			self.closeConnection()
+			self.closeConnection( "Aborting Directory Content Listing !" )
 			return {}, {}
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalDirectory( self, cLocalDirectory ) :
 		'''
-		This Method Create A Local Directory.
+		This Method Creates A Local Directory.
 
 		@param cLocalDirectory: Local Directory To Create. ( String )
 		@return: Success Of The Creation ( Boolean )
@@ -281,12 +277,12 @@ class sIBL_FTP( object ):
 				cLogger.debug( "> '%s' Directory Tree Already Exist, Skipping Creation !", cLocalDirectory )
 				return True
 		else:
-			self.closeConnection()
+			self.closeConnection( "Aborting Local Directory Creation !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def setLocalFile( self, cRemoteFile, cLocalFilePath ) :
 		'''
-		This Method Download A Remote File.
+		This Method Downloads A Remote File.
 
 		@param cRemoteFile: Remote File To Download. ( String )
 		@param cLocalFilePath: Local Target File. ( String )
@@ -304,12 +300,12 @@ class sIBL_FTP( object ):
 				sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_FTP.setLocalFile() Method | '%s' Creation Failed !" % cLocalFilePath, True )
 				return False
 		else:
-			self.closeConnection()
+			self.closeConnection( "Aborting Local File Creation !" )
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getRemoteTree( self, cRemoteDirectory, cLocalDirectory, cIgnoreList ) :
 		'''
-		This Method Download A Remote Tree.
+		This Method Downloads A Remote Tree.
 
 		@param cRemoteDirectory: Remote Tree Download. ( String )
 		@param cLocalDirectory: Local Target Directory. ( String )
@@ -325,14 +321,15 @@ class sIBL_FTP( object ):
 				self.cDownloadProgress = None
 
 				if self.closeFTPConnection :
-					return self.closeConnection()
+					return self.closeConnection( "Aborting Remote Directory Retrieving !" )
 
 				self.setProgressMessage( "Gathering Files List !", cWaitTime = 0.5 )
 
 				self.recursiveWalker( cRemoteDirectory )
 
 				if self.closeFTPConnection :
-					return self.closeConnection()
+					return self.closeConnection( "Aborting Remote Directory Retrieving !" )
+
 				self.setProgressMessage( "Gathering Done !", cWaitTime = 1.0 )
 
 				if cIgnoreList is not None:
@@ -349,7 +346,8 @@ class sIBL_FTP( object ):
 				if len( self.cWalkerFilesList ) != 0 :
 
 					if self.closeFTPConnection :
-						return self.closeConnection()
+						return self.closeConnection( "Aborting Remote Directory Retrieving !" )
+
 					self.setProgressMessage( "Starting Download !", cWaitTime = 1.0 )
 
 					cStoredLocalDirectories = []
@@ -357,7 +355,8 @@ class sIBL_FTP( object ):
 					for cFile in self.cWalkerFilesList :
 
 						if self.closeFTPConnection :
-							return self.closeConnection()
+							return self.closeConnection( "Aborting Remote Directory Retrieving !" )
+
 						self.setProgressMessage( "Downloading : '%s'" % os.path.basename( cFile ) )
 
 						cRemoteFileDirectory = os.path.dirname( cFile )
@@ -379,14 +378,14 @@ class sIBL_FTP( object ):
 						self.cDownloadProgress += 1
 
 					self.cDownloadProgress = -1
-					self.setProgressMessage( "Downloading Done, Connection Closing !", cWaitTime = 2.5 )
-					return self.closeConnection()
+					self.setProgressMessage( "Downloading Done, Connection Closing !", cWaitTime = 1.5 )
+					return self.closeConnection( "Downloading Finished !", cWaitTime = 2.5 )
 				else:
 					self.cDownloadProgress = -1
-					self.setProgressMessage( "Nothing To Download, Connection Closing !", cWaitTime = 2.5 )
-					return self.closeConnection()
+					self.setProgressMessage( "Nothing To Download, Connection Closing !", cWaitTime = 1.5 )
+					return self.closeConnection( "Nothing To Download !", cWaitTime = 2.5 )
 		else:
-			self.closeConnection()
+			self.closeConnection( "Aborting Remote Directory Retrieving !" )
 #***********************************************************************************************
 #***	Python End
 #***********************************************************************************************

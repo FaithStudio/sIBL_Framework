@@ -116,6 +116,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		# Setting Up The UI.
 		self.sIBL_GUI_groupBox.hide()
 		self.Open_Repository_pushButton.hide()
+		self.Get_Latest_Templates_pushButton.hide()
 		self.Templates_groupBox.hide()
 		self.setSIBL_GUI_ReleaseInfos()
 		self.setTemplates_ReleaseInfos()
@@ -173,7 +174,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		for row, cKey in enumerate( cTemplatesInfos.keys() ) :
 			if cKey != "sIBL_GUI" :
 				cVerticalHeaderLabels.append( cKey )
-				
+
 				cItem = sIBL_GUI_QWidgets.Variable_QPushButton( True, cColors, ( "Yes", "No" ) )
 				cLogger.debug( "> Setting Item In Column '1' : ' % s'.", cItem.text() )
 				self.Templates_tableWidget.setCellWidget( row, 0, cItem )
@@ -203,10 +204,10 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 	@sIBL_Common.sIBL_Execution_Call
 	def Get_Latest_Templates_pushButton_OnClicked( self ):
 		'''
-		This Method Launch The Templates Download.
+		This Method Launchs The Templates Download.
 		'''
-		
-		cTemplatesList = deepcopy( self.cSIBL_GUI.cGlobalTemplates.keys() )		
+
+		cTemplatesList = deepcopy( self.cSIBL_GUI.cGlobalTemplates.keys() )
 
 		cDownloadList = []
 
@@ -216,14 +217,14 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 				cTemplatesList.append( cRemoteTemplate )
 			if self.Templates_tableWidget.cellWidget( row, 0 ).text() == "Yes":
 				cDownloadList.append( cRemoteTemplate )
-		
+
 		if len( cDownloadList ) != 0:
 			cIgnoreList = deepcopy( cTemplatesList )
-	
+
 			for cTemplate in cTemplatesList :
 				if cTemplate in cDownloadList:
 					cIgnoreList.remove( cTemplate )
-	
+
 			cLogger.debug( "> Current Ignore List : '%s'.", cIgnoreList )
 			self.cSIBL_GUI.getLatestTemplates( cIgnoreList )
 		else:
@@ -232,7 +233,7 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 	@sIBL_Common.sIBL_Execution_Call
 	def Open_Repository_pushButton_OnClicked( self ):
 		'''
-		This Method Open The Repository URL.
+		This Method Opens The Repository URL.
 		'''
 
 		if self.cReleasesInfos["sIBL_GUI"][1] == "Nightly" :
@@ -342,7 +343,7 @@ class sIBL_Online_Update( QObject ):
 	@sIBL_Common.sIBL_Execution_Call
 	def deleteLocalReleaseFile( self ):
 		'''
-		This Method Delete The Local Change Log.
+		This Method Deletes The Local Change Log.
 		'''
 
 		try:
