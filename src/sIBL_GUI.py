@@ -1668,7 +1668,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	@sIBL_Common.sIBL_Execution_Call
 	def setReWireCustomPath( self, cComponent ):
 
-		cCustomFile = self.storeVisitedBrowserPath( QFileDialog.getOpenFileName( self, self.tr( "Custom " + cComponent + "File :" ), self.cLastVisitedPath ) )
+		cCustomFile = self.storeVisitedBrowserPath( QFileDialog.getOpenFileName( self, self.tr( "Custom " + cComponent + " File :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen Custom %s : '%s'.", cComponent, cCustomFile )
 		if cCustomFile != "":
 			if cComponent == "Background":
