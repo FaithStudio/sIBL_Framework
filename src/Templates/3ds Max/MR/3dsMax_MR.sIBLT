@@ -1,6 +1,6 @@
 [Template]
 Release = @Release | 0.9.6 | String | Template Release
-Date = @Date | 1 September 2008 | String | Date
+Date = @Date | 10 October 2009 | String | Date
 Author = @Author | Dschaga | String | Author
 EMail = @Email | christian@cgtechniques.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
