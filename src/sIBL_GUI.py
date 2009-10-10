@@ -497,6 +497,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.cTextEdits_List = None
 		self.cLogFileSize = None
 		self.cTimer = None
+		self.cLastVisitedPath = QDir.currentPath()
 		# Initializing sIBL_GUI FTP Refresh Attributes.
 		self.cFTP_UI = None
 		self.cFTP_Session_Active = False
@@ -1665,9 +1666,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cComponentsList[i][1].hide()
 
 	@sIBL_Common.sIBL_Execution_Call
-	def  setReWireCustomPath( self, cComponent ):
+	def setReWireCustomPath( self, cComponent ):
 
-		cCustomFile = QFileDialog.getOpenFileName( self, self.tr( "Custom %s File :", cComponent ), QDir.currentPath() )
+		cCustomFile = self.storeVisitedBrowserPath( QFileDialog.getOpenFileName( self, self.tr( "Custom " + cComponent + "File :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen Custom %s : '%s'.", cComponent, cCustomFile )
 		if cCustomFile != "":
 			if cComponent == "Background":
@@ -1925,7 +1926,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Is Called When sIBL_Framework Path ToolButton Is Clicked.
 		'''
 
-		cSIBL_FrameworkExecutable = QFileDialog.getOpenFileName( self, self.tr( "sIBL_Framework Executable :" ), QDir.currentPath() )
+		cSIBL_FrameworkExecutable = self.storeVisitedBrowserPath( QFileDialog.getOpenFileName( self, self.tr( "sIBL_Framework Executable :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen sIBL_Framework Executable : '%s'.", cSIBL_FrameworkExecutable )
 		if cSIBL_FrameworkExecutable != "":
 			self.sIBL_Framework_Path_lineEdit.setText( QString( cSIBL_FrameworkExecutable ) )
@@ -1937,7 +1938,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Is Called When sIBLedit Path ToolButton Is Clicked.
 		'''
 
-		cSIBLeditExecutable = QFileDialog.getOpenFileName( self, self.tr( "sIBLedit Executable :" ), QDir.currentPath() )
+		cSIBLeditExecutable = self.storeVisitedBrowserPath( QFileDialog.getOpenFileName( self, self.tr( "sIBLedit Executable :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen sIBLedit Executable : '%s'.", cSIBLeditExecutable )
 		if cSIBLeditExecutable != "":
 			self.sIBLedit_Path_lineEdit.setText( QString( cSIBLeditExecutable ) )
@@ -1990,7 +1991,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Is Called When Templates Path ToolButton Is Clicked.
 		'''
 
-		cDirectory = QFileDialog.getExistingDirectory( self, self.tr( "Templates Directory :" ), QDir.currentPath() )
+		cDirectory = self.storeVisitedBrowserPath( QFileDialog.getExistingDirectory( self, self.tr( "Templates Directory :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen Templates Folder : '%s'.", cDirectory )
 		if cDirectory != "":
 			self.Templates_Path_lineEdit.setText( QString( cDirectory ) )
@@ -2029,7 +2030,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Is Called When Help Files Path ToolButton Is Clicked.
 		'''
 
-		cDirectory = QFileDialog.getExistingDirectory( self, self.tr( "Help Files Directory :" ), QDir.currentPath() )
+		cDirectory = self.storeVisitedBrowserPath( QFileDialog.getExistingDirectory( self, self.tr( "Help Files Directory :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen Help Files Folder : '%s'.", cDirectory )
 		if cDirectory != "":
 			self.Help_Files_Path_lineEdit.setText( QString( cDirectory ) )
@@ -2201,7 +2202,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		if nCollectionName[1] is not False :
 			isNameInCollection = self.isItemNotUniqueInTableWidget( nCollectionName[0], self.Collections_Paths_tableWidget , 0 )
 			if isNameInCollection is False :
-				cDirectory = QFileDialog.getExistingDirectory( self, self.tr( "New Collection Directory :" ), QDir.currentPath() )
+				cDirectory = self.storeVisitedBrowserPath( QFileDialog.getExistingDirectory( self, self.tr( "New Collection Directory :" ), self.cLastVisitedPath ) )
 				if cDirectory != "" :
 					if not str( cDirectory ).endswith( "/" ) :
 						cDirectory = cDirectory + "/"
@@ -2236,7 +2237,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		if len( cSelectedItems ) > 1 :
 			sIBL_GUI_QWidgets.sIBL_GUI_Message( "Warning", "Warning", "Multiple Items Selected ! Only The First One Will Be Edited !" )
 		if len( cSelectedItems ) != 0 :
-			cDirectory = QFileDialog.getExistingDirectory( self, self.tr( "Edit Collection Directory :" ), QDir.currentPath() )
+			cDirectory = self.storeVisitedBrowserPath( QFileDialog.getExistingDirectory( self, self.tr( "Edit Collection Directory :" ), self.cLastVisitedPath ) )
 			if cDirectory != "" :
 				if not str( cDirectory ).endswith( "/" ) :
 					cDirectory = cDirectory + "/"
@@ -2352,7 +2353,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Is Called When Custom Text Editor ToolButton Is Clicked.
 		'''
 
-		cCustomTextEditorExecutable = QFileDialog.getOpenFileName( self, self.tr( "Custom Text Editor Executable :" ), QDir.currentPath() )
+		cCustomTextEditorExecutable = self.storeVisitedBrowserPath( QFileDialog.getOpenFileName( self, self.tr( "Custom Text Editor Executable :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen Custom Text Editor Executable : '%s'.", cCustomTextEditorExecutable )
 		if cCustomTextEditorExecutable != "":
 			self.Custom_Text_Editor_Path_lineEdit.setText( QString( cCustomTextEditorExecutable ) )
@@ -2364,7 +2365,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		This Method Is Called When Custom Text Editor ToolButton Is Clicked.
 		'''
 
-		cFileBrowserExecutable = QFileDialog.getOpenFileName( self, self.tr( "Custom File Browser Executable :" ), QDir.currentPath() )
+		cFileBrowserExecutable = self.storeVisitedBrowserPath( QFileDialog.getOpenFileName( self, self.tr( "Custom File Browser Executable :" ), self.cLastVisitedPath ) )
 		cLogger.debug( "> Chosen Custom File Browser Executable : '%s'.", cFileBrowserExecutable )
 		if cFileBrowserExecutable != "":
 			self.Custom_File_Browser_Path_lineEdit.setText( QString( cFileBrowserExecutable ) )
@@ -2828,6 +2829,21 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		if self.cHelp_Changed :
 			self.initializeHelpRelationships()
 			self.cHelp_Changed = False
+
+	@sIBL_Common.sIBL_Execution_Call
+	def storeVisitedBrowserPath( self, cPath ):
+		'''
+		This Method Is A Wrapper Method And Store The Last Visited Directory.
+		
+		@param cPath: Provided Path ( QString )
+		@return: Provided Path ( QString )
+		'''
+
+		cLastVisitedPath = os.path.dirname( str( cPath ) )
+		cLogger.debug( "> Storing Last Browser Path : '%s'.", cLastVisitedPath )
+		self.cLastVisitedPath = cLastVisitedPath
+
+		return cPath
 
 	@sIBL_Common.sIBL_Execution_Call
 	def getFormatedShotDate( self, cDate, cTime ):
