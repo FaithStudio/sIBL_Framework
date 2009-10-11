@@ -3,9 +3,9 @@ Release = 2.1.1
 Type = "Stable"
 
 [XSI_MR]
-Release = 1.5.6
+Release = 1.5.7
 Type = "Stable"
-Comment = "XSI Mental Ray Template : Added Renderer Attribute."
+Comment = "XSI Mental Ray Template : Fixed Template Header Errors."
 
 [Maya_MR]
 Release = 1.6.9
