@@ -8,41 +8,41 @@ Type = "Stable"
 Comment = "XSI Mental Ray Template : Added Renderer Attribute."
 
 [Maya_MR]
-Release = 1.7.0
+Release = 1.6.9
 Type = "Stable"
 Comment = "Maya Mental Ray Template : Added Renderer Attribute."
 
 [Maya_VRay]
-Release = 1.1.4
+Release = 1.1.3
 Type = "Stable"
 Comment = "VRay For Maya Template : Added Renderer Attribute."
 
 [Maya_VRay_DLight]
-Release = 1.1.4
+Release = 1.1.3
 Type = "Stable"
 Comment = "VRay For Maya Dome Light Template : Added Renderer Attribute."
 
 [Maya_Turtle]
-Release = 1.1.6
+Release = 1.1.5
 Type = "Stable"
 Comment = "Maya Turtle Template : Added Renderer Attribute."
 
 [Maya_RfM]
-Release = 1.0.4
+Release = 1.0.3
 Type = "Stable"
 Comment = "Renderman For Maya Template : Added Renderer Attribute."
 
 [3dsMax_MR]
-Release = 0.9.6
+Release = 0.9.7
 Type = "Nightly"
 Comment = "3dsMax Mental Ray Base Template : Added Renderer Attribute."
 
 [3dsMax_Scanline]
-Release = 0.9.6
+Release = 0.9.7
 Type = "Nightly"
 Comment = "3dsMax Scanline Ray Base Template : Added Renderer Attribute."
 
 [3dsMax_VRay]
-Release = 0.9.6
+Release = 0.9.7
 Type = "Nightly"
 Comment = "3dsMax VRay Base Template : Added Renderer Attribute."
