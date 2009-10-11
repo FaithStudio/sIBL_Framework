@@ -1,35 +1,36 @@
 [Template]
-Release = @Release | 0.9.5 | String | Template Release
-Date = @Date | 26 August 2008 | String | Date
+Release = @Release | 0.9.7 | String | Template Release
+Date = @Date | 10 October 2009 | String | Date
 Author = @Author | Dschaga | String | Author
 EMail = @Email | christian@cgtechniques.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
-Software = @Software | 3ds Max  | String | Software
+Software = @Software | 3dsMax  | String | Software
 Version = @Version | 2008+ | String | Version
+Renderer = @Renderer | Mental Ray | String | Renderer
 OutputScript = @OutputScript | sIBL_3dsmax_Import.ms | String | Output Script
 Comment = @Comment | This is 3dsmax 2K Mental Ray Template. | String | Comment
 
 [sIBL File Attributes]
-SUNu = @SUNu
-SUNv = @SUNv
-SUNcolor = @SUNcolor
-SUNmulti = @SUNmulti
-BGfile = @BGfile
-BGmap = @BGmap
-BGu = @BGu
-BGv = @BGv
-EVfile = @EVfile
-EVmap = @EVmap
-EVmulti = @EVmulti
-EVgamma = @EVgamma
-EVu = @EVu
-EVv = @EVv
-REFfile = @REFfile
-REFmap = @REFmap
-REFmulti = @REFmulti
-REFgamma = @REFgamma
-REFu = @REFu
-REFv = @REFv
+Sun|SUNu = @SUNu
+Sun|SUNv = @SUNv
+Sun|SUNcolor = @SUNcolor
+Sun|SUNmulti = @SUNmulti
+Background|BGfile = @BGfile
+Background|BGmap = @BGmap
+Background|BGu = @BGu
+Background|BGv = @BGv
+Enviroment|EVfile = @EVfile
+Enviroment|EVmap = @EVmap
+Enviroment|EVmulti = @EVmulti
+Enviroment|EVgamma = @EVgamma
+Enviroment|EVu = @EVu
+Enviroment|EVv = @EVv
+Reflection|REFfile = @REFfile
+Reflection|REFmap = @REFmap
+Reflection|REFmulti = @REFmulti
+Reflection|REFgamma = @REFgamma
+Reflection|REFu = @REFu
+Reflection|REFv = @REFv
 
 [Common Attributes]
 createBackground = @createBackground | 1 | Boolean | Create Background
@@ -40,7 +41,7 @@ createLights = @createLights | 1 | Boolean | Create Dynamic Lights
 
 [Additional Attributes]
 north = @north | 0 | Float | North
-sundistance = @sundistance | 100 | Float | Sundistance
+sundistance = @sundistance | 100 | Float | Sun Distance
 
 [Remote Connection]
 ConnectionType = @ConnectionType | Win32 | String
@@ -85,11 +86,9 @@ createLighting = "@createLighting"
 createReflection = "@createReflection"
 createSun = "@createSun"
 
-
 global a = bitmaptexture()
 global b = bitmaptexture()
 global c = bitmaptexture()
-
 
 	--------------------------------------
 	-- FIRST ..... CLEAN THE SCENE
@@ -122,16 +121,12 @@ global c = bitmaptexture()
 			environmentMap = undefined
 		)
 
-
-
-
 	-----------------------------------------
 	--	THE SUN
 	-----------------------------------------
 
 		if  (createSun  == "1") then
 		(
-
 			SUNx = (SUNx + n + 0.75)
 			cc = filterstring SUNcolor ","
 
@@ -140,9 +135,6 @@ global c = bitmaptexture()
 			sX = sc* ((cos(SUNx*360)) * dR)
 			sY = sc* ((sin(SUNx*360)) * dR)*-1
 			sIBL_sun = TargetDirectionallight name:"sIBL_Sun" rgb:(color (cc[1] as float) (cc[2] as float) (cc[3] as float)) castShadows:on shadowColor:(color 0 0 0) multiplier:(SUNmulti as float) contrast:0 softenDiffuseEdge:0 nearAttenStart:0 nearAttenEnd:40 farAttenStart:80 farAttenEnd:200 decayRadius:40 atmosOpacity:100 atmosColorAmt:100 shadowMultiplier:1 hotSpot:43 falloff:sc aspect:1 pos:[(sx as float),(sy as float),(sz as float)] target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] [0,0,0]))
-
-
-
 		)
 
 	--------------------------------------------------------------
@@ -153,8 +145,6 @@ global c = bitmaptexture()
 
 		if  (createBackground == "1") then
 		(
-
-
 			if (a == undefined) then a = environmentMap = Bitmaptexture()
 			a.filename = (BGfile)
 			a.name = "sIBL-BGmap"
@@ -164,14 +154,11 @@ global c = bitmaptexture()
 			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
 			a.coordinates.mapping = (BGmap - 1)
 
-
 			-- uv mapping writing
 			a.coordinates.U_Offset = (BGu as float) + n
 			a.coordinates.V_Offset = BGv as float
 			a.coordinates.U_Tiling = -1.0
-
 		)
-
 
 	-------------------------------------
 	-- read parameters for the ENViromentfile:
@@ -179,8 +166,7 @@ global c = bitmaptexture()
 
 		if  (createLighting == "1") then
 		(
-
-				if (b == undefined) then b = bitmaptexture()
+			if (b == undefined) then b = bitmaptexture()
 			b.filename = (EVfile)
 			b.name = "sIBL-EVmap"
 			b.coordinates.mappingtype = 1
@@ -193,7 +179,6 @@ global c = bitmaptexture()
 			b.coordinates.U_Offset = (EVu as float) + n
 			b.coordinates.V_Offset = EVv as float
 			b.coordinates.U_Tiling = -1.0
-
 		)
 
 	------------------------------------------
@@ -217,14 +202,10 @@ global c = bitmaptexture()
 			c.coordinates.U_Tiling = -1.0
 		)
 
-
-
 		if ($sIBL_Skylight != undefined) then
 		(
 			delete #($sIBL_Skylight)
 		)
-
-
 
 		try
 		(
@@ -237,11 +218,9 @@ global c = bitmaptexture()
 
 			mr_env_shader.eye = a -- bg
 
-
 			if  (b != undefined AND createLighting == "1") then mr_env_shader.finalgather = b  --env
 
 			if  (c != undefined AND createReflection == "1") then mr_env_shader.environment = c --ref
-
 
 			Skylight name:"sIBL_Skylight" sky_mode:0 pos:[0,0,0]
 
@@ -250,4 +229,3 @@ global c = bitmaptexture()
 		(
 			print "You need MR and at least MAX2008 with the Production Shaders unhidden"
 		)
-

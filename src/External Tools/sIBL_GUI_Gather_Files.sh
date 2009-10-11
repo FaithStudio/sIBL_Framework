@@ -60,6 +60,10 @@ cp -rf ./../../sIBL_GUI_XSI_Server/Change\ Log/Change\ Log.htm ./Releases/Gather
 mkdir ./Releases/Gathering/sIBL_GUI_For_Maya\ Change\ Log
 cp -rf ./../../sIBL_GUI_For_Maya/Change\ Log/Change\ Log.htm ./Releases/Gathering/sIBL_GUI_For_Maya\ Change\ Log
 
+#! 3dsMax Startup Script Change Log Gathering.
+mkdir ./Releases/Gathering/sIBL_GUI_For_3dsMax\ Change\ Log
+cp -rf ./../../sIBL_GUI_For_3dsMax/Change\ Log/Change\ Log.htm ./Releases/Gathering/sIBL_GUI_For_3dsMax\ Change\ Log
+
 #! Releases File Gathering.
 cp ./Releases/sIBL_GUI_Releases.rc ./Releases/Gathering/
 

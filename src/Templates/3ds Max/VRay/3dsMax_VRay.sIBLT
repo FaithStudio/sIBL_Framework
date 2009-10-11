@@ -6,9 +6,9 @@ EMail = @Email | christian@cgtechniques.com | String | Email
 Url = @Url | http://my.opera.com/KelSolaar/blog/ | String | Url
 Software = @Software | 3dsMax  | String | Software
 Version = @Version | 2008+ | String | Version
-Renderer = @Renderer | Scanline | String | Renderer
+Renderer = @Renderer | VRay | String | Renderer
 OutputScript = @OutputScript | sIBL_3dsmax_Import.ms | String | Output Script
-Comment = @Comment | This is 3dsmax 2K Template. | String | Comment
+Comment = @Comment | This is 3dsmax 2K* VRay Template with maps. | String | Comment
 
 [sIBL File Attributes]
 Sun|SUNu = @SUNu
@@ -94,6 +94,30 @@ global c = bitmaptexture()
 	-- FIRST ..... CLEAN THE SCENE
 	--------------------------------------
 
+		-- RESET to Defaults --------------------
+			
+		renderers.current.environment_gi_on = off
+		renderers.current.environment_gi_map_on = off
+		renderers.current.environment_gi_map = undefined
+		
+		renderers.current.environment_rr_on = off
+		renderers.current.environment_rr_map_on = off
+		renderers.current.environment_rr_map = undefined
+
+		-- ev. daylight
+		if ($Daylight01 != undefined) then
+		(
+
+			delete #($Daylight01)
+		)
+
+		-- ev. skylight
+		if ($sIBL_skylight != undefined) then
+		(
+
+			delete #($sIBL_skylight)
+		)
+
 		--sIBL SUN
 		if ($sIBL_sun != undefined) then
 		(
@@ -105,20 +129,13 @@ global c = bitmaptexture()
 			-- BGmap
 			environmentMap = undefined
 		)
-
+	
 	-----------------------------------------
 	--	THE SUN
 	-----------------------------------------
 
-		if  (createSun  == "1" AND SUNmulti > 0) then
+		if  (createSun  == "1") then
 		(
-			/*
-			-- read parameter for the Sun:
-			SUNmulti = GetINISetting sIBLfile "Sun" "SUNmulti"
-			SUNcolor = GetINISetting sIBLfile "Sun" "SUNcolor"
-			SUNx = (GetINISetting sIBLfile "Sun" "SUNu") as float
-			SUNy = (GetINISetting sIBLfile "Sun" "SUNv" ) as float
-			*/
 
 			SUNx = (SUNx + n + 0.75)
 			cc = filterstring SUNcolor ","
@@ -126,10 +143,26 @@ global c = bitmaptexture()
 			sZ = sc* (sin((0.5 - SUNy)*180))
 			dR = cos((0.5 - SUNy)*180)
 			sX = sc* ((cos(SUNx*360)) * dR)
-			sY = sc* ((sin(SUNx*360)) * dR)*-1
-			sIBL_sun = TargetDirectionallight name:"sIBL_Sun" rgb:(color (cc[1] as float) (cc[2] as float) (cc[3] as float)) castShadows:on shadowColor:(color 0 0 0) multiplier:(SUNmulti as float) contrast:0 softenDiffuseEdge:0 nearAttenStart:0 nearAttenEnd:40 farAttenStart:80 farAttenEnd:200 decayRadius:40 atmosOpacity:100 atmosColorAmt:100 shadowMultiplier:1 hotSpot:43 falloff:sc aspect:1 pos:[(sx as float),(sy as float),(sz as float)] target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] [0,0,0]))
-		)
+			sY = sc* ((sin(SUNx*360)) * dR)*-1	
+			
+--------------------- VRAY SUN dedicated settings start ---
 
+					-- getting the values
+					sun_color = (color (cc[1] as float) (cc[2] as float) (cc[3] as float))
+					sun_pos = [(sX as float),(sY as float),(sZ as float)]
+					
+					try
+					(
+						sIBL_sun = VRayLight name:"sIBL_Sun" color:sun_color normalizeColor:off noDecay:on type:2 size0:(sc/150 as float) size1:(sc/150 as float) size2:(sc/150 as float) multiplier:(SUNmulti as float) pos:sun_pos
+					)
+					catch
+					(	-- workaround for newer vray versions...
+						sIBL_sun = VRayLight name:"sIBL_Sun" color:sun_color noDecay:on type:2 size0:(sc/150 as float) size1:(sc/150 as float) size2:(sc/150 as float) multiplier:(SUNmulti as float) pos:sun_pos
+					)					
+					
+---------------------- VRAY SUN dedicated settings end ---
+		)
+	
 	--------------------------------------------------------------
 	-- BACKGROUND image
 	-- "a" is a objectholder for the enviroment map,
@@ -138,25 +171,23 @@ global c = bitmaptexture()
 
 		if  (createBackground == "1") then
 		(
-			--
-			--
-			-- the scripts offer the BGimagemap as variable "a"
-			--
-			--
-			if (a == undefined) then a = Bitmaptexture()
+			if (a == undefined) then environmentMap = Bitmaptexture()
+			
 			environmentMap = a
-			a.filename = (BGfile)
+			a.filename = BGfile
 			a.name = "sIBL-BGmap"
 			a.coordinates.mappingtype = 1
 
 			-- here we define the projection type
 			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
-			a.coordinates.mapping = ((BGmap as integer) - 1)
+			a.coordinates.mapping = (BGmap - 1)
 
 			-- uv mapping writing
 			a.coordinates.U_Offset = (BGu as float) + n
 			a.coordinates.V_Offset = BGv as float
 			a.coordinates.U_Tiling = -1.0
+
+---------------------- NO CHANGES FOR VRAY NEEDED ---
 		)
 
 	-------------------------------------
@@ -165,60 +196,87 @@ global c = bitmaptexture()
 
 		if  (createLighting == "1") then
 		(
-			--
-			--
-			-- the scripts offer the ENVIROMENTimagemap as variable "b"
-			--
-			--
 			if (b == undefined) then b = bitmaptexture()
-			b.filename = (EVfile)
+			b.filename = EVfile
 			b.name = "sIBL-EVmap"
 			b.coordinates.mappingtype = 1
 
 			-- here we define the projection type
 			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
-			b.coordinates.mapping = ((EVmap as integer) - 1)
+			b.coordinates.mapping = (EVmap- 1)
 
 			-- uv mapping writing
 			b.coordinates.U_Offset = (EVu as float) + n
 			b.coordinates.V_Offset = EVv as float
 			b.coordinates.U_Tiling = -1.0
+
+---------------------- VRAY ENVmap dedicated settings start ---
+					
+					-- some renderrollout changes
+					renderers.current.environment_gi_on = on
+					renderers.current.environment_gi_map_on = on
+					
+					try  -- here we offer a native way of loading the hdr with the Vrayhdri
+					(
+						-- since this is the not standardmap i call the Vrayhdri map "bv"
+						bv = renderers.current.environment_gi_map = VRayHDRI()  --we overwrite the before declared EVmap "b"
+						bv.name = "sIBL-ENVmap" 
+						bv.HDRIMapName = EVfile
+						bv.maptype = 2
+						bv.horizontalRotation = ((EVu as float) + (90 as float) + (north as float))
+						bv.horizontalFlip = on
+						bv.verticalRotation = (EVv as float)	
+					)
+					catch   --or go basic
+					(
+						renderers.current.environment_gi_map = b
+					
+					)
+					
+---------------------- VRAY ENVmap dedicated settings end ---	
 		)
 
 	------------------------------------------
-	-- read parameters fot the REFlectionfile:
+	-- read parameters for the REFlectionfile:
 	------------------------------------------
 
 		if  (createReflection == "1") then
 		(
-			--
-			--
-			-- the scripts offer the REFLECTIONimagemap as variable "c"
-			--
-			--
 			if (c == undefined) then c = bitmaptexture()
-			c.filename = (REFfile)
+			c.filename = REFfile
 			c.name = "sIBL-REFmap"
 			c.coordinates.mappingtype = 1
 
 			-- here we define the projection type
 			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
-			c.coordinates.mapping = ((REFmap as integer) - 1)
+			c.coordinates.mapping = (REFmap - 1)
 
 			-- uv mapping writing
 			c.coordinates.U_Offset = (REFu as float) + n
 			c.coordinates.V_Offset = REFv as float
 			c.coordinates.U_Tiling = -1.0
 
-			for m in sceneMaterials do
-			(
-				try
-				m.texmap_environment = c
-				catch()
-
-				try
-				m.reflectionMap = c
-				catch()
-			)
-
+---------------------- VRAY REFmap dedicated settings start ---
+					
+					-- some renderrollout changes
+					renderers.current.environment_rr_on = on
+					renderers.current.environment_rr_map_on = on
+				
+					try  -- here we offer a native way of loading the hdr with the Vrayhdri
+					(
+						-- since this is the not standardmap i call the Vrayhdri map "cv"
+						cv = renderers.current.environment_rr_map = VRayHDRI()  --we overwrite the before declared REFmap "c"
+						cv.name = "sIBL-REFmap" 
+						cv.HDRIMapName = REFfile
+						cv.maptype = 2
+						cv.horizontalRotation = ((REFu as float) + (90 as float) + (north as float))
+						cv.horizontalFlip = on
+						cv.verticalRotation = (REFv as float)
+					)
+					catch  --or go basic 
+					(
+						renderers.current.environment_rr_map = c   -- else it will load the bitmaptexture
+					)
+								
+---------------------- VRAY REFmap dedicated settings end ---	
 		)

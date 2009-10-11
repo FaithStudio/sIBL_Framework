@@ -74,7 +74,7 @@ cLogger = logging.getLogger( "sIBL_Overall_Logger" )
 #***********************************************************************************************
 class sIBL_Parser( sIBL_Common.sIBL_File ):
 	'''
-	This Class Provide Methods To Reads .IBL / Templates Files And Return Associated Dictionnary.
+	This Class Provides Methods To Reads .IBL / Templates Files And Return Associated Dictionnary.
 	'''
 
 	@sIBL_Common.sIBL_Execution_Call
