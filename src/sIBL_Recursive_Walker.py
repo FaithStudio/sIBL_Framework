@@ -74,7 +74,7 @@ cLogger = logging.getLogger( "sIBL_Overall_Logger" )
 #***********************************************************************************************
 class sIBL_Recursive_Walker( object ):
 	'''
-	This Class Provides Methods For sIBL Templates Tasks.
+	This Class Provides Methods For sIBL Walking Tasks.
 	'''
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -96,6 +96,7 @@ class sIBL_Recursive_Walker( object ):
 		'''
 		This Method Gets Root Directory Files List As A Dictionnary.
 
+		@param cFilter: Filtering String. ( String )
 		@return: Files List. ( Dictionary Or None )
 		'''
 		if cFilter :

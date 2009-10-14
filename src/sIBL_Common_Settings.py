@@ -55,7 +55,7 @@
 #***********************************************************************************************
 #***	Global Variables
 #***********************************************************************************************
-cReleaseVersion = "2.1.1"
+cReleaseVersion = "2.1.2"
 cSIBL_Framework_LogFile = "sIBL_Framework_LogFile.log"
 
 cVerboseSeparators = 96
