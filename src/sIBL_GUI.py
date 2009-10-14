@@ -753,7 +753,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			self.WorldMap_QGraphicsView.deleteLater()
 			QApplication.sendPostedEvents( self, QEvent.DeferredDelete )
 
-		cWorldMap_Texture_Path = "./Resources/Earth_Map.svg"
+		cWorldMap_Texture_Path = "./Resources/Earth_Map.png"
 		if os.path.exists( cWorldMap_Texture_Path ) :
 			self.WorldMap_QGraphicsView = WorldMap_QGraphicsView( self, cWorldMap_Texture_Path, 670, 320 )
 			self.GPS_Map_Page_gridLayout.addWidget( self.WorldMap_QGraphicsView )
