@@ -114,7 +114,7 @@ cSIBL_GUI_AboutMessage = """
 	</p>
 	*
 	</center>
-""" % ( sIBL_Common_Settings.cReleaseVersion.replace( ".", "  .  " ) )
+""" % ( sIBL_Common_Settings.gReleaseVersion.replace( ".", "  .  " ) )
 
 #***********************************************************************************************
 #***	Python End

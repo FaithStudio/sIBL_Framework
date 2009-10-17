@@ -132,16 +132,16 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 		This Method Sets sIBL_GUI Updater Related Informations.
 		'''
 
-		if sIBL_Common_Settings.cReleaseVersion != self.cReleasesInfos["sIBL_GUI"][0] :
+		if sIBL_Common_Settings.gReleaseVersion != self.cReleasesInfos["sIBL_GUI"][0] :
 			# Setting Up The UI.
 			self.sIBL_GUI_groupBox.show()
 			self.Open_Repository_pushButton.show()
 
-			self.Your_Version_label.setText( QString( sIBL_Common_Settings.cReleaseVersion.replace( ".", " . " ) ) )
+			self.Your_Version_label.setText( QString( sIBL_Common_Settings.gReleaseVersion.replace( ".", " . " ) ) )
 			self.Latest_Version_label.setText( QString( self.cReleasesInfos["sIBL_GUI"][0].replace( ".", " . " ) ) )
 
 			cLogger.debug( "> Loading Change Log : '%s'.", self.cLocalReleasesFile )
-			cLocalReleasesFileUrl = QUrl.fromEncoded( QByteArray( sIBL_GUI_Settings.cChangeLog ) )
+			cLocalReleasesFileUrl = QUrl.fromEncoded( QByteArray( sIBL_GUI_Settings.gChangeLog ) )
 			self.Change_Log_webView.load( cLocalReleasesFileUrl )
 
 	def setTemplates_ReleaseInfos( self ):
@@ -242,11 +242,11 @@ class sIBL_GUI_Updater( QWidget, sIBL_UI_Updater.Ui_sIBL_GUI_Updater_Form ):
 			cBranch = "Stable/"
 
 		if platform.system() == "Windows" or platform.system() == "Microsoft":
-			cReleaseURL = sIBL_GUI_Settings.cReleasesURL + cBranch + "Windows"
+			cReleaseURL = sIBL_GUI_Settings.gReleasesURL + cBranch + "Windows"
 		elif platform.system() == "Linux":
-			cReleaseURL = sIBL_GUI_Settings.cReleasesURL + cBranch + "Linux"
+			cReleaseURL = sIBL_GUI_Settings.gReleasesURL + cBranch + "Linux"
 		elif platform.system() == "Darwin":
-			cReleaseURL = sIBL_GUI_Settings.cReleasesURL + cBranch + "MacOsX"
+			cReleaseURL = sIBL_GUI_Settings.gReleasesURL + cBranch + "MacOsX"
 
 		cLogger.debug( "> Opening URL : '%s'.", cReleaseURL )
 		QDesktopServices.openUrl( QUrl( QString( cReleaseURL ) ) )
@@ -277,8 +277,8 @@ class sIBL_Online_Update( QObject ):
 		cLogger.debug( "> Initializing sIBL_Online_Update() Class." )
 
 		# --- Setting Class Attributes. ---
-		cLogger.debug( "> Change Log URL : '%s'.", sIBL_GUI_Settings.cReleasesFile )
-		self.cReleasesFilePath = sIBL_GUI_Settings.cReleasesFile
+		cLogger.debug( "> Change Log URL : '%s'.", sIBL_GUI_Settings.gReleasesFile )
+		self.gReleasesFilePath = sIBL_GUI_Settings.gReleasesFile
 
 		self.cLocalReleasesFile = None
 		self.cReleases = None
@@ -299,7 +299,7 @@ class sIBL_Online_Update( QObject ):
 
 		# Initializing The FTP Worker Thread
 		if self.cLocalReleasesFile is not None :
-			self.cFTP_Thread = sIBL_GUI_FTP.sIBL_FTP_Worker( sIBL_GUI_Settings.cFTP_Host, sIBL_GUI_Settings.cFTP_Port, sIBL_GUI_Settings.cFTP_Login, sIBL_GUI_Settings.cFTP_Password, { "Downloads" : [ ( self.cReleasesFilePath, self.cLocalReleasesFile, "Files" )]}, self )
+			self.cFTP_Thread = sIBL_GUI_FTP.sIBL_FTP_Worker( sIBL_GUI_Settings.gFTP_Host, sIBL_GUI_Settings.gFTP_Port, sIBL_GUI_Settings.gFTP_Login, sIBL_GUI_Settings.gFTP_Password, { "Downloads" : [ ( self.gReleasesFilePath, self.cLocalReleasesFile, "Files" )]}, self )
 
 			self.connect( self.cFTP_Thread, SIGNAL( "finished()" ), self.workerThreadFinished )
 
@@ -334,7 +334,7 @@ class sIBL_Online_Update( QObject ):
 
 		@return: Change Log Local Path. ( String )
 		'''
-		self.cLocalReleasesFile = os.path.join( sIBL_Common.sIBL_GetTemporarySystemPath(), os.path.basename( self.cReleasesFilePath ) )
+		self.cLocalReleasesFile = os.path.join( sIBL_Common.sIBL_GetTemporarySystemPath(), os.path.basename( self.gReleasesFilePath ) )
 
 		cLogger.debug( "> Current Change Log Local Path : '%s'.", self.cLocalReleasesFile )
 
@@ -367,7 +367,7 @@ class sIBL_Online_Update( QObject ):
 
 			cReleasesInfos["sIBL_GUI"] = ( self.cReleases.getAttributeValue( "sIBL_GUI", "Release" ), self.cReleases.getAttributeValue( "sIBL_GUI", "Type" ) )
 
-			if sIBL_Common_Settings.cReleaseVersion != self.cReleases.getAttributeValue( "sIBL_GUI", "Release" ) :
+			if sIBL_Common_Settings.gReleaseVersion != self.cReleases.getAttributeValue( "sIBL_GUI", "Release" ) :
 				cUpdaterStartState = True
 
 			cReleasesSections = self.cReleases.getSections()

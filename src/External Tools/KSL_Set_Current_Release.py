@@ -70,7 +70,7 @@ def KSL_Set_Current_Release( cFilePath, cAttribute, cVariable, cWindowsBat ) :
 				print( "export '%s'='%s'\n" % ( cVariable, cVersion ) )
 			break
 
-KSL_Set_Current_Release( "./sIBL_Common_Settings.py", "cReleaseVersion", "sIBL_GUI_Release", "./sIBL_Set_Release_Environment_Variable.bat" )
+KSL_Set_Current_Release( "./sIBL_Common_Settings.py", "gReleaseVersion", "sIBL_GUI_Release", "./sIBL_Set_Release_Environment_Variable.bat" )
 
 #***********************************************************************************************
 #***	Python End

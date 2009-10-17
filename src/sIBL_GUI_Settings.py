@@ -55,23 +55,23 @@
 #***********************************************************************************************
 #***	Global Variables
 #***********************************************************************************************
-cSIBL_GUI_SettingsFile = "sIBL_GUI_Settings.rc"
-cSIBL_GUI_LogFile = "sIBL_GUI_LogFile.log"
-cSIBL_GUI_ManualFile = "sIBL_GUI Manual.htm"
+gSIBL_GUI_SettingsFile = "sIBL_GUI_Settings.rc"
+gSIBL_GUI_LogFile = "sIBL_GUI_LogFile.log"
+gSIBL_GUI_ManualFile = "sIBL_GUI Manual.htm"
 
-cFTP_Host = "ftp.hdrlabs.com"
-cFTP_Port = 21
-cFTP_Login = "noob4kel@hdrlabs.com"
-cFTP_Password = "k1dy0un0t"
-cOnlineRepository = "/sIBL_GUI/"
-cReleasesFile = "/sIBL_GUI/Releases/sIBL_GUI_Releases.rc"
+gFTP_Host = "ftp.hdrlabs.com"
+gFTP_Port = 21
+gFTP_Login = "noob4kel@hdrlabs.com"
+gFTP_Password = "k1dy0un0t"
+gOnlineRepository = "/sIBL_GUI/"
+gReleasesFile = "/sIBL_GUI/Releases/sIBL_GUI_Releases.rc"
 
-cChangeLog = "http://kelsolaar.hdrlabs.com/sIBL_Framework/sIBL_GUI/Change%20Log/Change%20Log.htm"
+gChangeLog = "http://kelsolaar.hdrlabs.com/sIBL_Framework/sIBL_GUI/Change%20Log/Change%20Log.htm"
 
-cReleasesURL = "http://kelsolaar.hdrlabs.com/?dir=./sIBL_Framework/sIBL_GUI/"
+gReleasesURL = "http://kelsolaar.hdrlabs.com/?dir=./sIBL_Framework/sIBL_GUI/"
 
-cLinuxTextEditorsList = ( "gedit", "kwrite", "nedit", "mousepad" )
-cLinuxBrowsersList = ( "nautilus", "konqueror", "thunar" )
+gLinuxTextEditorsList = ( "gedit", "kwrite", "nedit", "mousepad" )
+gLinuxBrowsersList = ( "nautilus", "konqueror", "thunar" )
 
 #***********************************************************************************************
 #***	Python End

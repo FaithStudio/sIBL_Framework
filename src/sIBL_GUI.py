@@ -474,7 +474,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		cLogger.debug( "> Initializing sIBL_GUI() Class." )
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Setting GUI Widgets." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Setting GUI Widgets." )
 
 		# Visual Style Choice.
 		if not platform.system() == "Darwin":
@@ -509,7 +509,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.redColor = QColor( 192, 128, 128 )
 
 		# Replacing QFileSystemWatcher By A Custom HXC Faster File Watcher
-		self.cLogFileSize = os.path.getsize( cSIBL_GUI_LogFile )
+		self.cLogFileSize = os.path.getsize( gSIBL_GUI_LogFile )
 		self.cTimer = QTimer( self )
 		self.cTimer.start( 20 )
 
@@ -520,12 +520,12 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.setLogTextEdit()
 
 		# Setting Window Title, Closing The Log Window And Ensuring Minimum Size.
-		self.setWindowTitle( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion )
+		self.setWindowTitle( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion )
 		self.sIBL_GUI_dockWidget.close()
 		self.resize( 1, 1 )
 
 		# --- sIBL_GUI Preferences Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Restoring Settings." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Restoring Settings." )
 
 		self.setVerboseLevelComboBox()
 		self.setCollectionsPathsTableWidget()
@@ -542,21 +542,21 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.setCheckBoxStateFromSettings( self.Ignore_Missing_Templates_checkBox, "Settings", "IgnoreMissingTemplates" )
 
 		# --- sIBL_GUI Collection Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Gathering sIBL Sets." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Gathering sIBL Sets." )
 
 		# Collections Initialization.
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initializing Thumbnails." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Initializing Thumbnails." )
 		self.Collections_listWidget.setSpacing( 4 )
 		self.Collections_listWidget.setIconSize( QSize( 128, 128 ) )
 
 		self.initializeCollectionsRelationships()
 
 		# --- sIBL_GUI GPS Map Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initializing GPS Map." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Initializing GPS Map." )
 		self.setGPSMap()
 
 		# --- sIBL_GUI Import Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Gathering Templates." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Gathering Templates." )
 
 		self.cTextEdits_List = ( self.Comment_textEdit, self.Template_Comment_textEdit )
 		self.initializeLineAndTextEditsPalette()
@@ -573,7 +573,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		self.setHelpTextBrowser()
 
 		# --- sIBL_GUI About Tab Initialization. ---
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Setting Version Number And About Message." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Setting Version Number And About Message." )
 		self.setAboutMessage()
 
 		# --- sIBL_GUI Signals / Slots. ---
@@ -638,7 +638,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 
 		# Hiding Splashscreen.
 		cLogger.debug( "> Hiding SplashScreen." )
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initialization Finished." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Initialization Finished." )
 		cSpashScreen.hide()
 
 		# Wizard If Empty Collection.
@@ -662,9 +662,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		cLogger.info( "sIBL_GUI | Closing Interface !" )
-		cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+		cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 		cLogger.info( "sIBL_GUI | Session Ended At : " + time.strftime( '%X - %x' ) )
-		cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+		cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 
 		sIBL_Common.sIBL_CloseHandler( cLogger, cConsoleHandler )
 		sIBL_Common.sIBL_CloseHandler( cLogger, cFileHandler )
@@ -681,7 +681,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		try :
-			cFileSize = os.path.getsize( cSIBL_GUI_LogFile )
+			cFileSize = os.path.getsize( gSIBL_GUI_LogFile )
 			if  cFileSize != self.cLogFileSize :
 				self.setLogTextEdit()
 				self.cLogFileSize = cFileSize
@@ -694,7 +694,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		try :
-			cLogFile = open( cSIBL_GUI_LogFile, "r" )
+			cLogFile = open( gSIBL_GUI_LogFile, "r" )
 			cLogFileContent = cLogFile.read()
 
 			self.Log_textEdit.setPlainText( QString( cLogFileContent ) )
@@ -704,9 +704,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 			pass
 
 	# def setLogTextEdit( self ) :
-	#	cLogFile = sIBL_Common.sIBL_File( cSIBL_GUI_LogFile )
+	#	cLogFile = sIBL_Common.sIBL_File( gSIBL_GUI_LogFile )
 	#	cLogFileContent = cLogFile.getFileContent()
-	#	cLogFile = open( cSIBL_GUI_LogFile, "r" )
+	#	cLogFile = open( gSIBL_GUI_LogFile, "r" )
 	#	cLogFileContent = cLogFile.read()
 	#	self.Log_textEdit.setPlainText( QString( cLogFileContent ) )
 	#	self.Log_textEdit.moveCursor( QTextCursor.End )
@@ -1457,20 +1457,20 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 							cArgumentLine = cArgumentLine + " " + "\"" + str( cArgument ) + "\""
 
 					cLogger.info( "Launching sIBL_Framework With Arguments : '%s'.", cArgumentLine )
-					cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+					cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 					cLogger.info( "sIBL_GUI | Starting sIBL_Framework !" )
-					cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+					cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 					cSIBL_FrameworkProcess.start( os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) ), cSIBL_FrameworkArguments )
 					cSIBL_FrameworkProcess.waitForFinished( 5000 )
 					cSIBL_FrameworkProcess.close()
 
 					# Merging sIBL_Framework Verbose
 					if platform.system() != "Darwin":
-						cLogFilePath = os.path.join( os.path.dirname( os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) ) ), sIBL_Common_Settings.cSIBL_Framework_LogFile )
+						cLogFilePath = os.path.join( os.path.dirname( os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) ) ), sIBL_Common_Settings.gSIBL_Framework_LogFile )
 					else :
 						csIBL_Framework_AbsolutePath = os.path.abspath( str( self.sIBL_Framework_Path_lineEdit.text() ) )
 						cPath_Tokens = csIBL_Framework_AbsolutePath.partition( ".app" )
-						cLogFilePath = cPath_Tokens[0] + cPath_Tokens[1] + "/Contents/Resources/" + sIBL_Common_Settings.cSIBL_Framework_LogFile
+						cLogFilePath = cPath_Tokens[0] + cPath_Tokens[1] + "/Contents/Resources/" + sIBL_Common_Settings.gSIBL_Framework_LogFile
 
 					if os.path.exists( cLogFilePath ):
 						cLogFile = sIBL_Common.sIBL_File( cLogFilePath )
@@ -1480,9 +1480,9 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Error", "Error", "sIBL_Framework Log File Not Found, Loader Script Output Failed !" )
 						return False
 
-					cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+					cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 					cLogger.info( "sIBL_GUI | Exiting sIBL_Framework !" )
-					cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+					cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 
 					if cSIBL_FrameworkProcess.exitCode() == 0 :
 						sIBL_GUI_QWidgets.sIBL_GUI_Message( "Information", "Information", "Loader Script Output Done !" )
@@ -1565,7 +1565,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 					cEditCommand = None
 					cEditorFound = None
 
-					for cTextEditor in sIBL_GUI_Settings.cLinuxTextEditorsList :
+					for cTextEditor in sIBL_GUI_Settings.gLinuxTextEditorsList :
 						if not cEditorFound :
 							for cPath in cPathsTokens:
 								if os.path.exists( os.path.join( cPath, cTextEditor ) ) :
@@ -1746,7 +1746,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 				cBrowserCommand = None
 				cBrowserFound = None
 
-				for cBrowser in sIBL_GUI_Settings.cLinuxBrowsersList :
+				for cBrowser in sIBL_GUI_Settings.gLinuxBrowsersList :
 					if not cBrowserFound :
 						for cPath in cPathsTokens:
 							if os.path.exists( os.path.join( cPath, cBrowser ) ) :
@@ -2383,7 +2383,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		'''
 
 		if not self.cFTP_Session_Active :
-			self.cFTP_UI = sIBL_GUI_FTP.sIBL_GUI_FTP( self, sIBL_GUI_Settings.cFTP_Host, sIBL_GUI_Settings.cFTP_Port, sIBL_GUI_Settings.cFTP_Login, sIBL_GUI_Settings.cFTP_Password, cRemoteDirectory , cLocalDirectory, cIgnoreList )
+			self.cFTP_UI = sIBL_GUI_FTP.sIBL_GUI_FTP( self, sIBL_GUI_Settings.gFTP_Host, sIBL_GUI_Settings.gFTP_Port, sIBL_GUI_Settings.gFTP_Login, sIBL_GUI_Settings.gFTP_Password, cRemoteDirectory , cLocalDirectory, cIgnoreList )
 			self.cFTP_UI.setWindowTitle( cWindowTitle )
 			self.cFTP_UI.show()
 		else :
@@ -2407,7 +2407,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		else :
 			cLocalTemplatesPath = "./FTP/Help/"
 
-		self.setSIBL_GUI_FTPWindow( "sIBL_GUI FTP - Online Help Download ", sIBL_GUI_Settings.cOnlineRepository + "Help/" , cLocalTemplatesPath )
+		self.setSIBL_GUI_FTPWindow( "sIBL_GUI FTP - Online Help Download ", sIBL_GUI_Settings.gOnlineRepository + "Help/" , cLocalTemplatesPath )
 		self.cHelp_Changed = True
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -2431,7 +2431,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		else :
 			cLocalTemplatesPath = "./FTP/Templates/"
 
-		self.setSIBL_GUI_FTPWindow( "sIBL_GUI FTP - Online Templates Download", sIBL_GUI_Settings.cOnlineRepository + "Templates/" , cLocalTemplatesPath, cIgnoreList )
+		self.setSIBL_GUI_FTPWindow( "sIBL_GUI FTP - Online Templates Download", sIBL_GUI_Settings.gOnlineRepository + "Templates/" , cLocalTemplatesPath, cIgnoreList )
 		self.cTemplates_Changed = True
 
 	@sIBL_Common.sIBL_Execution_Call
@@ -2596,10 +2596,10 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 		cSIBL_GUI_Manual_Exists = False
 		cManualBaseName = ""
 		for cItem in cHelpFiles_Keys :
-			if cItem in sIBL_GUI_Settings.cSIBL_GUI_ManualFile :
+			if cItem in sIBL_GUI_Settings.gSIBL_GUI_ManualFile :
 				cSIBL_GUI_Manual_Exists = True
 				cManualBaseName = cItem
-				cLogger.debug( "> Inserting '%s' In 'Help_Files_comboBox'.", sIBL_GUI_Settings.cSIBL_GUI_ManualFile )
+				cLogger.debug( "> Inserting '%s' In 'Help_Files_comboBox'.", sIBL_GUI_Settings.gSIBL_GUI_ManualFile )
 				self.Help_Files_comboBox.insertItem( 0, QString( cItem ) )
 				self.Help_Files_comboBox.insertSeparator( 1 )
 
@@ -2977,19 +2977,19 @@ if __name__ == "__main__":
 	cLogger.addHandler( cConsoleHandler )
 
 	# Getting An Absolute LogFile Path.
-	cSIBL_GUI_LogFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_GUI_Settings.cSIBL_GUI_LogFile )
+	gSIBL_GUI_LogFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_GUI_Settings.gSIBL_GUI_LogFile )
 
 	try :
-		if os.path.exists( cSIBL_GUI_LogFile ) :
-			os.remove( cSIBL_GUI_LogFile )
+		if os.path.exists( gSIBL_GUI_LogFile ) :
+			os.remove( gSIBL_GUI_LogFile )
 	except :
-		sIBL_GUI_QWidgets.sIBL_Standalone_Message( "Error", "Error", "'%s' File Is Currently Locked By Another Process, Unpredictable Logging Behavior !" % cSIBL_GUI_LogFile )
+		sIBL_GUI_QWidgets.sIBL_Standalone_Message( "Error", "Error", "'%s' File Is Currently Locked By Another Process, Unpredictable Logging Behavior !" % gSIBL_GUI_LogFile )
 	finally:
 		# Retrieving sIBL_GUI Verbose Level From Settings File.
 		cLogger.debug( "> %s", "Initializing sIBL_GUI !" )
 		cLogger.debug( "> %s", "Retrieving Stored Verbose Level." )
 
-		cSettingsFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_GUI_Settings.cSIBL_GUI_SettingsFile )
+		cSettingsFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_GUI_Settings.gSIBL_GUI_SettingsFile )
 		if not os.path.exists( cSettingsFile ) :
 			sIBL_Set_DefaultSettingsFile( cSettingsFile )
 			cSettings = QSettings( cSettingsFile, QSettings.IniFormat )
@@ -3005,7 +3005,7 @@ if __name__ == "__main__":
 			cLogger.removeHandler( cConsoleHandler )
 
 		try :
-			cFileHandler = logging.FileHandler( cSIBL_GUI_LogFile )
+			cFileHandler = logging.FileHandler( gSIBL_GUI_LogFile )
 			cFileHandler.setFormatter( sIBL_Common.cFormatter )
 			cLogger.addHandler( cFileHandler )
 
@@ -3014,13 +3014,13 @@ if __name__ == "__main__":
 			sIBL_GUI_QWidgets.sIBL_Standalone_Message( "Critical", "Critical", "Exception In sIBL_GUI Module | '%s'" % "Failed Accessing The Log File !" )
 			sIBL_Common.sIBL_Exit( 1, cLogger, ( cConsoleHandler ) )
 
-		cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+		cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 		cLogger.info( "sIBL_GUI | Copyright ( C ) 2009 Thomas Mansencal - kelsolaar_fool@hotmail.com" )
 		cLogger.info( "sIBL_GUI | This Software Is Released Under Terms Of GNU GPL V3 License." )
 		cLogger.info( "sIBL_GUI | http: // www.gnu.org / licenses / " )
-		cLogger.info( "sIBL_GUI | Version : " + sIBL_Common_Settings.cReleaseVersion )
+		cLogger.info( "sIBL_GUI | Version : " + sIBL_Common_Settings.gReleaseVersion )
 		cLogger.info( "sIBL_GUI | Session Started At : " + time.strftime( '%X - %x' ) )
-		cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+		cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 		cLogger.info( "sIBL_GUI | Starting Interface !" )
 
 		cApplication = QApplication( sys.argv )
@@ -3030,7 +3030,7 @@ if __name__ == "__main__":
 
 		cSplashScreenPicture = QPixmap( ":/sIBL_GUI/Resources/sIBL_GUI_SpashScreen.png" )
 		cSpashScreen = sIBL_GUI_SplashScreen( cSplashScreenPicture, 0.25 )
-		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.cReleaseVersion + " | Initializing Interface." )
+		cSpashScreen.setMessage( "sIBL_GUI - " + sIBL_Common_Settings.gReleaseVersion + " | Initializing Interface." )
 		cSpashScreen.show()
 
 		cUI = sIBL_GUI()

@@ -55,10 +55,10 @@
 #***********************************************************************************************
 #***	Global Variables
 #***********************************************************************************************
-cReleaseVersion = "2.1.2"
-cSIBL_Framework_LogFile = "sIBL_Framework_LogFile.log"
+gReleaseVersion = "2.1.2"
+gSIBL_Framework_LogFile = "sIBL_Framework_LogFile.log"
 
-cVerboseSeparators = 96
+gVerboseSeparators = 96
 
 #***********************************************************************************************
 #***	Python End

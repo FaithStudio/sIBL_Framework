@@ -83,7 +83,7 @@ def sIBL_About_Framework( *cArgs, **cKwArgs ):
 	This Definition Prints The About Argument Stuff.
 	'''
 
-	print "sIBL_Framework - Version '%s'" % sIBL_Common_Settings.cReleaseVersion
+	print "sIBL_Framework - Version '%s'" % sIBL_Common_Settings.gReleaseVersion
 	print "Thomas Mansencal - 2008"
 	print "kelsolaar_fool@hotmail.com"
 
@@ -374,28 +374,28 @@ if __name__ == '__main__':
 	cLogger.addHandler( cConsoleHandler )
 
 	# Getting An Absolute LogFile Path.
-	cSIBL_Framework_LogFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_Common_Settings.cSIBL_Framework_LogFile )
-	cLogger.critical( cSIBL_Framework_LogFile )
+	gSIBL_Framework_LogFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_Common_Settings.gSIBL_Framework_LogFile )
+	cLogger.critical( gSIBL_Framework_LogFile )
 	try :
-		if os.path.exists( cSIBL_Framework_LogFile ):
-			os.remove( cSIBL_Framework_LogFile )
+		if os.path.exists( gSIBL_Framework_LogFile ):
+			os.remove( gSIBL_Framework_LogFile )
 	except Exception, cError:
 		sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, None, True )
 	finally :
 		try :
-			cFileHandler = logging.FileHandler( cSIBL_Framework_LogFile )
+			cFileHandler = logging.FileHandler( gSIBL_Framework_LogFile )
 			cFileHandler.setFormatter( sIBL_Common.cFormatter )
 			cLogger.addHandler( cFileHandler )
 		except Exception, cError:
 			sIBL_Exceptions.sIBL_Exceptions_Feedback ( cError, "Exception In sIBL_Framework Module | '%s'" % "Failed Accessing The Log File !", True )
 
-		cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+		cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 		cLogger.info( "sIBL_Framework | Copyright (C) 2009 Thomas Mansencal - kelsolaar_fool@hotmail.com" )
 		cLogger.info( "sIBL_Framework | This Software Is Released Under Terms Of GNU GPL V3 License." )
 		cLogger.info( "sIBL_Framework | http://www.gnu.org/licenses/" )
-		cLogger.info( "sIBL_Framework | Version : " + sIBL_Common_Settings.cReleaseVersion )
+		cLogger.info( "sIBL_Framework | Version : " + sIBL_Common_Settings.gReleaseVersion )
 		cLogger.info( "sIBL_Framework | Session Started At : " + time.strftime( '%X - %x' ) )
-		cLogger.info( "-" * sIBL_Common_Settings.cVerboseSeparators )
+		cLogger.info( "-" * sIBL_Common_Settings.gVerboseSeparators )
 		cLogger.info( "sIBL_Framework | " + "Starting Processing !" )
 
 		sys.exit( sIBL_Framework_Executable() )
