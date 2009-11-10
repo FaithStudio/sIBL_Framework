@@ -57,168 +57,188 @@ Homepage : @Url
 Template Last Modified : @Date
 sIBL_Framework
 */
+(
+	local SUNx = @SUNu
+	local SUNy = @SUNv
+	local SUNcolor = "@SUNcolor"
+	local SUNmulti = @SUNmulti
+	local BGfile = "@BGfile"
+	local BGmap = @BGmap
+	local BGu = @BGu as float -- convert to float just in case the sIBL file stored the value as an int.
+	local BGv = @BGv as float -- convert to float just in case the sIBL file stored the value as an int.
+	local EVfile = "@EVfile"
+	local EVmap = @EVmap
+	local EVmulti = @EVmulti
+	local EVgamma = @EVgamma
+	local EVu = @EVu as float -- convert to float just in case the sIBL file stored the value as an int.
+	local EVv = @EVv as float -- convert to float just in case the sIBL file stored the value as an int.
+	local REFfile = "@REFfile"
+	local REFmap = @REFmap
+	local REFmulti = @REFmulti
+	local REFgamma = @REFgamma
+	local REFu = @REFu as float -- convert to float just in case the sIBL file stored the value as an int.
+	local REFv = @REFv as float -- convert to float just in case the sIBL file stored the value as an int.
+	local sc = @sundistance
+	local n = @north
 
-SUNx = @SUNu
-SUNy = @SUNv
-SUNcolor = "@SUNcolor"
-SUNmulti = @SUNmulti
-BGfile = "@BGfile"
-BGmap = @BGmap
-BGu = @BGu
-BGv = @BGv
-EVfile = "@EVfile"
-EVmap = @EVmap
-EVmulti = @EVmulti
-EVgamma = @EVgamma
-EVu = @EVu
-EVv = @EVv
-REFfile = "@REFfile"
-REFmap = @REFmap
-REFmulti = @REFmulti
-REFgamma = @REFgamma
-REFu = @REFu
-REFv = @REFv
-sc = @sundistance
-n = @north
+	local createBackground = "@createBackground" as integer
+	local createLighting = "@createLighting" as integer
+	local createReflection = "@createReflection" as integer
+	local createSun = "@createSun" as integer
 
-createBackground = "@createBackground"
-createLighting = "@createLighting"
-createReflection = "@createReflection"
-createSun = "@createSun"
+	local a = bitmaptexture()
+	local b = bitmaptexture()
+	local c = bitmaptexture()
 
-global a = bitmaptexture()
-global b = bitmaptexture()
-global c = bitmaptexture()
+	local delObjsList = #()
+
+
+	fn delOldObjs &objsList =
+	(
+		-- <ARRAY> objsList	Array of nodes to delete. Passed in by reference
+		-- TO DO: Should assert that objsList is an array class on Max 2010 or later.
+
+		for i = objsList.count to 1 by -1 do
+		(
+			if ( not (isValidNode objsList[i])) then
+			(
+				deleteItem objsList i	-- since delete() is a mapped method it is more
+			)									-- efficient to build up an array of objects to
+		)										-- delete and call the method once.
+
+		delete objsList
+	)
+
+	fn setHDRImage bmp bmpFilename bmpName bmpMappingType bmpUOffset bmpVOffset envMap:false =
+	(
+		-- Populates the
+		--
+		-- <bitmapTexture> bmp	The texture to be applied
+		-- <str>bmpFilename		The path to where bmp resides on the local machine
+		-- <str>bmpName			A friendly display name for bmp
+		-- <int>bmpMappingType	An enumeration for the type of mapping type to use for bmap
+		-- <float>bmpUOffset		The U tiling offset for bmp
+		-- <float>bmpVOffset		The V tiling offset for bmp
+		-- <bool>envMap			OPTIONAL: Should bmp be set as the environment map of the scene
+
+		if (bmp == undefined) then
+		(
+			bmp = Bitmaptexture()
+
+			if (envMap) then
+			(
+				environmentMap = bmp
+			)
+		)
+
+		bmp.filename = bmpFilename
+		bmp.name = bmpName
+		bmp.coordinates.mappingtype = 1
+
+		-- here we define the projection type
+		-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
+		bmp.coordinates.mapping = bmpMappingType - 1
+
+		-- uv mapping writing
+		bmp.coordinates.U_Offset = bmpUOffset + n
+		bmp.coordinates.V_Offset = bmpVOffset
+		bmp.coordinates.U_Tiling = -1.0
+	)
+
+
+	mapped fn applyMapsToMaterials mtl &envMap &refMap =
+	(
+		-- Walks the provided array of scene materials and tries
+		-- to put environment and reflectionMap bitmaps on them.
+		-- if mtl is a multisub this function recurses into itself
+		-- to process the mtls in the multisub
+		--
+		-- <material>mtl				The scene material to modify
+		-- <bitmapTexture>envMap	The bitmap to apply to the material's .texmap_environment property.
+		-- <bitmapTexture>refMap	The bitmap to apply to the material's .reflectioMap property.
+		--									The map paramters are passed in as references to keep memory
+		--									usage down if the function ends up recursing.
+
+		if (classOf mtl != Multimaterial) then (
+		(
+			try
+			(
+				mtl.texmap_environment = envMap
+			) catch()
+
+			try
+			(
+				mtl.reflectionMap = refMap
+			) catch()
+		)
+		else
+		(
+			applyMapsToMaterials (mtl.materialList as array) &envMap &refMap
+		)
+	)
 
 	--------------------------------------
 	-- FIRST ..... CLEAN THE SCENE
 	--------------------------------------
+	--sIBL SUN
+	append delObjsList $sIBL_Sun
 
-		--sIBL SUN
-		if ($sIBL_sun != undefined) then
-		(
-			--delete #($sIBL_sun, $target01)
-			delete #($sIBL_sun)
+	-- Old floorplane
+	append delObjsList $Floor_matte
 
-			-- delete old floorplane
-			if ($Floor_matte != undefined) then (delete $Floor_matte)
-			-- BGmap
-			environmentMap = undefined
-		)
+	delOldObjs &delObjsList
+
+	-- BGmap
+	environmentMap = undefined
 
 	-----------------------------------------
 	--	THE SUN
 	-----------------------------------------
+	-- Double check createSun and SUNcolor. Some sIBL sets
+	-- (Mono Lake C, Studio Backlot, probably others) have
+	-- createSun set to 1 but SUN color set to "-1". This
+	-- this causes the 'cc = filterstring SUN color ","' to create
+	-- an array of a single "-1" index, which in turn causes the
+	--'sIBL_sun = Target...' line to break and crash the script.
 
-		if  (createSun  == "1" AND SUNmulti > 0) then
-		(
-			/*
-			-- read parameter for the Sun:
-			SUNmulti = GetINISetting sIBLfile "Sun" "SUNmulti"
-			SUNcolor = GetINISetting sIBLfile "Sun" "SUNcolor"
-			SUNx = (GetINISetting sIBLfile "Sun" "SUNu") as float
-			SUNy = (GetINISetting sIBLfile "Sun" "SUNv" ) as float
-			*/
+	if ((createSun == 1) AND (SUNmulti > 0) AND ((striCmp SUNcolor "-1") != 0)) then
+	(
+		SUNx = SUNx + n + 0.75
+		cc = filterstring SUNcolor ","
 
-			SUNx = (SUNx + n + 0.75)
-			cc = filterstring SUNcolor ","
-
-			sZ = sc* (sin((0.5 - SUNy)*180))
-			dR = cos((0.5 - SUNy)*180)
-			sX = sc* ((cos(SUNx*360)) * dR)
-			sY = sc* ((sin(SUNx*360)) * dR)*-1
-			sIBL_sun = TargetDirectionallight name:"sIBL_Sun" rgb:(color (cc[1] as float) (cc[2] as float) (cc[3] as float)) castShadows:on shadowColor:(color 0 0 0) multiplier:(SUNmulti as float) contrast:0 softenDiffuseEdge:0 nearAttenStart:0 nearAttenEnd:40 farAttenStart:80 farAttenEnd:200 decayRadius:40 atmosOpacity:100 atmosColorAmt:100 shadowMultiplier:1 hotSpot:43 falloff:sc aspect:1 pos:[(sx as float),(sy as float),(sz as float)] target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] [0,0,0]))
-		)
+		sZ = sc * (sin((0.5 - SUNy) * 180))
+		dR = cos((0.5 - SUNy) * 180)
+		sX = sc * ((cos(SUNx * 360)) * dR)
+		sY = sc * ((sin(SUNx * 360)) * dR) * -1
+		sIBL_sun = TargetDirectionallight name:"sIBL_Sun" rgb:(color (cc[1] as float) (cc[2] as float) (cc[3] as float)) castShadows:on shadowColor:(color 0 0 0) multiplier:(SUNmulti as float) contrast:0 softenDiffuseEdge:0 nearAttenStart:0 nearAttenEnd:40 farAttenStart:80 farAttenEnd:200 decayRadius:40 atmosOpacity:100 atmosColorAmt:100 shadowMultiplier:1 hotSpot:43 falloff:sc aspect:1 pos:[(sx as float),(sy as float),(sz as float)] target:(Targetobject transform:(matrix3 [1,0,0] [0,1,0] [0,0,1] [0,0,0]))
+	)
 
 	--------------------------------------------------------------
 	-- BACKGROUND image
 	-- "a" is a objectholder for the enviroment map,
 	-- this object have additonal variables which i can use with a.variable
 	--------------------------------------------------------------
-
-		if  (createBackground == "1") then
-		(
-			--
-			--
-			-- the scripts offer the BGimagemap as variable "a"
-			--
-			--
-			if (a == undefined) then a = Bitmaptexture()
-			environmentMap = a
-			a.filename = (BGfile)
-			a.name = "sIBL-BGmap"
-			a.coordinates.mappingtype = 1
-
-			-- here we define the projection type
-			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
-			a.coordinates.mapping = ((BGmap as integer) - 1)
-
-			-- uv mapping writing
-			a.coordinates.U_Offset = (BGu as float) + n
-			a.coordinates.V_Offset = BGv as float
-			a.coordinates.U_Tiling = -1.0
-		)
+	if (createBackground == 1) then
+	(
+		setHDRImage a BGFile "sIBL-BGmap" BGmap BGu BGv envMap:true
+	)
 
 	-------------------------------------
 	-- read parameters for the ENViromentfile:
 	-------------------------------------
-
-		if  (createLighting == "1") then
-		(
-			--
-			--
-			-- the scripts offer the ENVIROMENTimagemap as variable "b"
-			--
-			--
-			if (b == undefined) then b = bitmaptexture()
-			b.filename = (EVfile)
-			b.name = "sIBL-EVmap"
-			b.coordinates.mappingtype = 1
-
-			-- here we define the projection type
-			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
-			b.coordinates.mapping = ((EVmap as integer) - 1)
-
-			-- uv mapping writing
-			b.coordinates.U_Offset = (EVu as float) + n
-			b.coordinates.V_Offset = EVv as float
-			b.coordinates.U_Tiling = -1.0
-		)
+	if (createLighting == 1) then
+	(
+		setHDRImage b EVFile "sIBL-EVmap" EVmap EVu EVv
+	)
 
 	------------------------------------------
 	-- read parameters fot the REFlectionfile:
 	------------------------------------------
+	if (createReflection == 1) then
+	(
+		setHDRImage c REFfile "sIBL-REFmap" REFmap REFu REFv
 
-		if  (createReflection == "1") then
-		(
-			--
-			--
-			-- the scripts offer the REFLECTIONimagemap as variable "c"
-			--
-			--
-			if (c == undefined) then c = bitmaptexture()
-			c.filename = (REFfile)
-			c.name = "sIBL-REFmap"
-			c.coordinates.mappingtype = 1
-
-			-- here we define the projection type
-			-- 0 - Spherical; 1 - Cylindrical; 2 - Shrink-Wrap; 3 - Screen
-			c.coordinates.mapping = ((REFmap as integer) - 1)
-
-			-- uv mapping writing
-			c.coordinates.U_Offset = (REFu as float) + n
-			c.coordinates.V_Offset = REFv as float
-			c.coordinates.U_Tiling = -1.0
-
-			for m in sceneMaterials do
-			(
-				try
-				m.texmap_environment = c
-				catch()
-
-				try
-				m.reflectionMap = c
-				catch()
-			)
-
-		)
+		local mtlList = for mtl in SceneMaterials collect mtl -- SceneMaterials isn't an array so it can't be passed to a mapped fn.
+		applyMapsToMaterials mtlList &b &c
+	)
+)
