@@ -2834,7 +2834,7 @@ class sIBL_GUI( QMainWindow, sIBL_UI.Ui_sIBL_GUI ) :
 	def storeVisitedBrowserPath( self, cPath ):
 		'''
 		This Method Is A Wrapper Method And Store The Last Visited Directory.
-		
+
 		@param cPath: Provided Path ( QString )
 		@return: Provided Path ( QString )
 		'''
@@ -2977,8 +2977,18 @@ if __name__ == "__main__":
 	cLogger.addHandler( cConsoleHandler )
 
 	# Getting An Absolute LogFile Path.
-	cSIBL_GUI_LogFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_GUI_Settings.cSIBL_GUI_LogFile )
+	# If running on Windows set the LogFile path to the 'sIBL_GUI' folder in the user's home\Documents folder.
+	# On Windows Vista and newer applications can not write to their install directory unless they are run on
+	# an Administrator account.
+	if platform.system() == "Windows" or platform.system() == "Microsoft":
+		cSIBL_GUI_SettingsDir = os.path.abspath( os.environ['home'] + r'\Documents\sIBL_GUI')
+		# If the settings dir doesn't exist, create it.
+		if not os.path.exists( cSIBL_GUI_SettingsDir ):
+			os.mkdir( cSIBL_GUI_SettingsDir )
+	else:
+		cSIBL_GUI_SettingsDir = os.path.abspath( os.getcwd() )
 
+	cSIBL_GUI_LogFile = os.path.join( cSIBL_GUI_SettingsDir, sIBL_GUI_Settings.cSIBL_GUI_LogFile )
 	try :
 		if os.path.exists( cSIBL_GUI_LogFile ) :
 			os.remove( cSIBL_GUI_LogFile )
@@ -2989,7 +2999,7 @@ if __name__ == "__main__":
 		cLogger.debug( "> %s", "Initializing sIBL_GUI !" )
 		cLogger.debug( "> %s", "Retrieving Stored Verbose Level." )
 
-		cSettingsFile = os.path.join( os.path.abspath( os.getcwd() ), sIBL_GUI_Settings.cSIBL_GUI_SettingsFile )
+		cSettingsFile = os.path.join( cSIBL_GUI_SettingsDir, sIBL_GUI_Settings.cSIBL_GUI_SettingsFile )
 		if not os.path.exists( cSettingsFile ) :
 			sIBL_Set_DefaultSettingsFile( cSettingsFile )
 			cSettings = QSettings( cSettingsFile, QSettings.IniFormat )
