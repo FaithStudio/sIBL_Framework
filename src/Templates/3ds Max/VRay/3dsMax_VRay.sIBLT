@@ -134,7 +134,7 @@ global c = bitmaptexture()
 	--	THE SUN
 	-----------------------------------------
 
-		if  (createSun  == "1") then
+		if  (createSun  == "1" AND SUNx >=0 ) then
 		(
 
 			SUNx = (SUNx + n + 0.75)
